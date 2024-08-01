@@ -35,7 +35,7 @@
     <h1>DEPARTMENT OF CORRECTIONS AND REHABILITATION</h1>
     <h2>DIVISION OF ADULT PAROLE OPERATIONS</h2>
     <h3>Parole Tracking Program</h3>
-    <img src="MDC_PICTURE_HERE.jpg" alt="Department Picture" width="200px">
+    <input type="text" id="pictureLink" class="input-field" placeholder="Enter MDC Picture Link">
 
     <div class="form-container">
         <h3>Case Handler:</h3>
@@ -104,6 +104,7 @@
 
     <script>
         function generate() {
+            const pictureLink = document.getElementById('pictureLink').value;
             const caseHandler = document.getElementById('caseHandler').value;
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
@@ -113,34 +114,63 @@
             const work = document.getElementById('work').value;
             const aliases = document.getElementById('aliases').value;
             const relatives = document.getElementById('relatives').value;
-            const serious = document.getElementById('serious').checked ? "Serious (S)" : "";
-            const nonSerious = document.getElementById('nonSerious').checked ? "Non-Serious (NS)" : "";
-            const unsupervised = document.getElementById('unsupervised').checked ? "Unsupervised (US)" : "";
-            const specialCase = document.getElementById('specialCase').checked ? "Special Case (SC)" : "";
+            const serious = document.getElementById('serious').checked ? "[cb]Serious (S)[/cb]" : "";
+            const nonSerious = document.getElementById('nonSerious').checked ? "[cb]Non-Serious (NS)[/cb]" : "";
+            const unsupervised = document.getElementById('unsupervised').checked ? "[cb]Unsupervised (US)[/cb]" : "";
+            const specialCase = document.getElementById('specialCase').checked ? "[cb]Special Case (SC)[/cb]" : "";
             const additionalNotes = document.getElementById('additionalNotes').value;
 
             const output = `
-            DEPARTMENT OF CORRECTIONS AND REHABILITATION
-            DIVISION OF ADULT PAROLE OPERATIONS
-            Parole Tracking Program
+[center][size=175]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
+[size=165]DIVISION OF ADULT PAROLE OPERATIONS[/size]
+[size=160]Parole Tracking Program[/size]
 
-            Case Handler: ${caseHandler}
+[img]${pictureLink}[/img]
 
-            GENERAL INFORMATION
-            NAME: ${name}
-            PHONE NUMBER: ${phone}
-            ADDRESS: ${address}
+[size=130][b]Case Handler: ${caseHandler}[/b][/size][/center]
 
-            DATE OF BIRTH: ${dob}
-            GENDER: ${gender}
-            PLACE OF WORK: ${work}
-            KNOWN ALIASES: ${aliases}
+[table=2,black,transparent,Roboto]
+[tr][td][center][b][size=120]GENERAL INFORMATION[/size][/b][/center][/td][/tr][/table]
+[table=2,black,transparent,Roboto]
+[tr]
+[td][b]NAME[/b][/td]
+[td][b]PHONE NUMBER[/b][/td]
+[td][b]ADDRESS[/b][/td]
+[/tr]
+[tr]
+[td]${name}[/td]
+[td]${phone}[/td]
+[td]${address}[/td]
+[/tr]
+[tr]
+[td][b]DATE OF BIRTH[/b][/td]
+[td][b]GENDER[/b][/td]
+[td][b]PLACE OF WORK[/b][/td]
+[td][b]KNOWN ALIASES[/b][/td]
+[/tr]
+[tr]
+[td]${dob}[/td]
+[td]${gender}[/td]
+[td]${work}[/td]
+[td]${aliases}[/td]
+[/tr]
+[/table]
 
-            RELATIVES:
-            ${relatives}
+[b]RELATIVES[/b]
+[list]
+${relatives}
+[/list]
 
-            CLASSIFICATION: ${serious} ${nonSerious} ${unsupervised} ${specialCase}
-            ADDITIONAL CLASSIFICATION NOTES: ${additionalNotes}
+[table=2,black,transparent,Roboto]
+[tr]
+[td][b]CLASSIFICATION[/b][/td]
+[td][b]ADDITIONAL CLASSIFICATION NOTES[/b][/td]
+[/tr]
+[tr]
+[td]${serious} ${nonSerious} ${unsupervised} ${specialCase}[/td]
+[td]${additionalNotes}[/td]
+[/tr]
+[/table]
             `;
             document.getElementById('output').innerText = output;
         }
