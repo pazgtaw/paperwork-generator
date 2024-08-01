@@ -101,6 +101,7 @@
 
     <h3>Generated Output:</h3>
     <pre id="output"></pre>
+    <button onclick="copyCode()">Copy Code</button>
 
     <script>
         function generate() {
@@ -114,10 +115,10 @@
             const work = document.getElementById('work').value;
             const aliases = document.getElementById('aliases').value;
             const relatives = document.getElementById('relatives').value;
-            const serious = document.getElementById('serious').checked ? "[cb]Serious (S)[/cb]" : "";
-            const nonSerious = document.getElementById('nonSerious').checked ? "[cb]Non-Serious (NS)[/cb]" : "";
-            const unsupervised = document.getElementById('unsupervised').checked ? "[cb]Unsupervised (US)[/cb]" : "";
-            const specialCase = document.getElementById('specialCase').checked ? "[cb]Special Case (SC)[/cb]" : "";
+            const serious = document.getElementById('serious').checked ? "[cb][/cb] Serious (S)" : "";
+            const nonSerious = document.getElementById('nonSerious').checked ? "[cb][/cb] Non-Serious (NS)" : "";
+            const unsupervised = document.getElementById('unsupervised').checked ? "[cb][/cb] Unsupervised (US)" : "";
+            const specialCase = document.getElementById('specialCase').checked ? "[cb][/cb] Special Case (SC)" : "";
             const additionalNotes = document.getElementById('additionalNotes').value;
 
             const output = `
@@ -129,48 +130,54 @@
 
 [size=130][b]Case Handler: ${caseHandler}[/b][/size][/center]
 
-[table=2,black,transparent,Roboto]
-[tr][td][center][b][size=120]GENERAL INFORMATION[/size][/b][/center][/td][/tr][/table]
-[table=2,black,transparent,Roboto]
+[table2=1,black,transparent,Roboto]
+[tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]GENERAL INFORMATION[/size][/b][/center]
+[/tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
 [tr]
-[td][b]NAME[/b][/td]
-[td][b]PHONE NUMBER[/b][/td]
-[td][b]ADDRESS[/b][/td]
+[tdwidth=1,black,transparent,top,left,33,5][b]NAME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]PHONE NUMBER[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]ADDRESS[/b][/tdwidth]
 [/tr]
 [tr]
-[td]${name}[/td]
-[td]${phone}[/td]
-[td]${address}[/td]
+[tdwidth=1,black,transparent,top,left,33,5]${name}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5]${phone}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5]${address}[/tdwidth]
+[/tr]
+[/table2]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5][b]DATE OF BIRTH[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]GENDER[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]PLACE OF WORK[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]KNOWN ALIASES[/b][/tdwidth]
 [/tr]
 [tr]
-[td][b]DATE OF BIRTH[/b][/td]
-[td][b]GENDER[/b][/td]
-[td][b]PLACE OF WORK[/b][/td]
-[td][b]KNOWN ALIASES[/b][/td]
+[tdwidth=1,black,transparent,top,left,25,5]${dob}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${gender}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${work}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${aliases}[/tdwidth]
+[/tr]
+[/table2]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,100,5][b]RELATVES[/b][/tdwidth]
 [/tr]
 [tr]
-[td]${dob}[/td]
-[td]${gender}[/td]
-[td]${work}[/td]
-[td]${aliases}[/td]
+[tdwidth=1,black,transparent,top,left,100,5][list]${relatives}[/list][/tdwidth]
 [/tr]
-[/table]
-
-[b]RELATIVES[/b]
-[list]
-${relatives}
-[/list]
-
-[table=2,black,transparent,Roboto]
+[/table2]
+[table2=1,black,transparent,Roboto]
 [tr]
-[td][b]CLASSIFICATION[/b][/td]
-[td][b]ADDITIONAL CLASSIFICATION NOTES[/b][/td]
+[tdwidth=1,black,transparent,top,left,60,5][b]CLASSIFICATION[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,5][b]ADDITIONAL CLASSIFICATION NOTES[/b][/tdwidth]
 [/tr]
 [tr]
-[td]${serious} ${nonSerious} ${unsupervised} ${specialCase}[/td]
-[td]${additionalNotes}[/td]
+[tdwidth=1,black,transparent,top,left,60,5]${serious} ${nonSerious} ${unsupervised} ${specialCase}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,5]${additionalNotes}[/tdwidth]
 [/tr]
-[/table]
+[/table2]
             `;
             document.getElementById('output').innerText = output;
         }
