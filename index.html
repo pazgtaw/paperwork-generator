@@ -6,7 +6,7 @@
     <title>BBCode Generator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 20px;
         }
         .container {
@@ -21,7 +21,8 @@
             margin-bottom: 5px;
         }
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
@@ -39,13 +40,40 @@
         button {
             padding: 10px 20px;
             cursor: pointer;
+            margin-top: 10px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>BBCode Generator</h1>
+    <h1>DEPARTMENT OF CORRECTIONS AND REHABILITATION</h1>
+    <h2>DIVISION OF ADULT PAROLE OPERATIONS</h2>
+    <h3>Parole Tracking Program</h3>
+
+    <div class="form-group">
+        <label for="mdc-picture">MDC Picture Link</label>
+        <input type="text" id="mdc-picture" required>
+    </div>
+
     <form id="bbcode-form">
         <div class="form-group">
             <label for="name">Name</label>
@@ -141,6 +169,7 @@
 
 <script>
     function generateBBCode() {
+        const mdcPicture = document.getElementById('mdc-picture').value;
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
         const address = document.getElementById('address').value;
@@ -166,7 +195,7 @@
 [size=165]DIVISION OF ADULT PAROLE OPERATIONS[/size]
 [size=160]Parole Tracking Program[/size]
 
-[img]MDC PICTURE HERE[/img]
+[img]${mdcPicture}[/img]
 [/center]
 
 [table2=1,black,transparent,Roboto]
@@ -184,7 +213,7 @@
 [tdwidth=1,black,transparent,top,left,33,5]${phone}[/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5]${address}[/tdwidth]
 [/tr]
-[/table2]
+</table2>
 [table2=1,black,transparent,Roboto]
 [tr]
 [tdwidth=1,black,transparent,top,left,25,5][b]DATE OF BIRTH[/b][/tdwidth]
@@ -198,15 +227,15 @@
 [tdwidth=1,black,transparent,top,left,25,5]${work}[/tdwidth]
 [tdwidth=1,black,transparent,top,left,25,5]${aliases}[/tdwidth]
 [/tr]
-[/table2]
+</table2>
 [table2=1,black,transparent,Roboto]
 [tr]
 [tdwidth=1,black,transparent,top,left,100,5][b]RELATVES[/b][/tdwidth]
-[/tr]
+</tr]
 [tr]
 [tdwidth=1,black,transparent,top,left,100,5][list] ${relatives} [/list][/tdwidth]
-</tr>
-[/table2]
+</tr]
+</table2>
 [table2=1,black,transparent,Roboto]
 [tr]
 [tdwidth=1,black,transparent,top,left,60,5][b]CLASSIFICATION[/b][/tdwidth]
@@ -215,7 +244,7 @@
 <tr>
 [tdwidth=1,black,transparent,top,left,60,5][cb][/cb] Serious (S) [cb][/cb] Non-Serious (NS) [cb][/cb] Unsupervised (US) [cb][/cb] Special Case (SC) [/tdwidth]
 [tdwidth=1,black,transparent,top,left,40,5]${classificationNotes}[/tdwidth]
-</tr>
+</tr]
 </table2>
 
 [table2=1,black,transparent,Roboto]
@@ -223,24 +252,23 @@
 [center][b][size=120]GANG AFFILIATION[/size][/b][/center]
 </tdwidth][/tr][/table2]
 [table2=1,black,transparent,Roboto]
-<tr>
+<tr]
 [tdwidth=1,black,transparent,top,left,33,5][b]MONIKER[/b][/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][b]GANG[/b][/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][b]SANGANG PROFILE[/b][/tdwidth]
-</tr>
-<tr>
+</tr]
+<tr]
 [tdwidth=1,black,transparent,top,left,33,5]${moniker}[/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5]${gang}[/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][url=${sangang}]ACCESS[/url][/tdwidth]
-</tr>
+</tr]
 </table2>
 [table2=1,black,transparent,Roboto]
-<tr>
+<tr]
 [tdwidth=1,black,transparent,top,left,25,5][b]ADDITIONAL AFFILIATION NOTES[/b][/tdwidth]
 </tr]
 <tr]
 [tdwidth=1,black,transparent,top,left,25,5]${affiliationNotes}
-
 </tdwidth>
 </tr]
 </table2>
@@ -250,19 +278,19 @@
 [center][b][size=120]IMPORTANT INFORMATION[/size][/b][/center]
 </tdwidth][/tr][/table2]
 [table2=1,black,transparent,Roboto]
-<tr>
+<tr]
 [tdwidth=1,black,transparent,top,left,33,5][b]MDC PROFILE[/b][/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][b]INMATE PROFILE[/b][/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][b]PAROLE APPLICATION[/b][/tdwidth]
 </tr]
-<tr>
+<tr]
 [tdwidth=1,black,transparent,top,left,33,5][url=${mdc}]ACCESS[/url][/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][url=${inmateProfile}]ACCESS[/url][/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5][url=${paroleApplication}]ACCESS[/url][/tdwidth]
 </tr]
 </table2>
 [table2=1,black,transparent,Roboto]
-<tr>
+<tr]
 [tdwidth=1,black,transparent,top,left,50,5][b]CASE HANDLER(S)[/b][/tdwidth]
 [tdwidth=1,black,transparent,top,left,50,5][b]CASE SUPERVISOR[/b][/tdwidth]
 </tr]
@@ -277,14 +305,12 @@
 [center][b][size=120]ADDITIONAL INFORMATION[/size][/b][/center]
 </tdwidth][/tr][/table2]
 [table2=1,black,transparent,Roboto]
-<tr>
+<tr]
 [tdwidth=1,black,transparent,top,left,100,5][b]ADDITIONAL NOTES[/b][/tdwidth]
 </tr]
 <tr]
 [tdwidth=1,black,transparent,top,left,33,5]${additionalNotes}
-
 </tdwidth]
-
 </tr]
 </table2]`;
 
