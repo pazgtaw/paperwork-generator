@@ -3,132 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parole Tracking Program</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <title>BBCode Generator</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        table {
-            width: 100%;
-            margin: 20px 0;
-            border-collapse: collapse;
-        }
-        td, th {
-            border: 1px solid black;
-            padding: 10px;
-            text-align: left;
-        }
-        .input-field {
-            width: calc(100% - 22px);
-            padding: 10px;
-        }
-        .form-container {
-            margin: 20px auto;
-            width: 80%;
+        .container {
             max-width: 800px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+        }
+        .output {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>DEPARTMENT OF CORRECTIONS AND REHABILITATION</h1>
-    <h2>DIVISION OF ADULT PAROLE OPERATIONS</h2>
-    <h3>Parole Tracking Program</h3>
-    <input type="text" id="pictureLink" class="input-field" placeholder="Enter MDC Picture Link">
 
-    <div class="form-container">
-        <h3>Case Handler:</h3>
-        <input type="text" id="caseHandler" class="input-field" placeholder="Enter Case Handler Name">
+<div class="container">
+    <h1>BBCode Generator</h1>
+    <form id="bbcode-form">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" required>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="text" id="dob" required>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" required>
+        </div>
+        <div class="form-group">
+            <label for="work">Place of Work</label>
+            <input type="text" id="work" required>
+        </div>
+        <div class="form-group">
+            <label for="aliases">Known Aliases</label>
+            <input type="text" id="aliases" required>
+        </div>
+        <div class="form-group">
+            <label for="relatives">Relatives (separate by commas)</label>
+            <input type="text" id="relatives" required>
+        </div>
+        <div class="form-group">
+            <label for="classification">Classification</label>
+            <select id="classification" required>
+                <option value="Serious (S)">Serious (S)</option>
+                <option value="Non-Serious (NS)">Non-Serious (NS)</option>
+                <option value="Unsupervised (US)">Unsupervised (US)</option>
+                <option value="Special Case (SC)">Special Case (SC)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="classification-notes">Additional Classification Notes</label>
+            <input type="text" id="classification-notes" required>
+        </div>
+        <div class="form-group">
+            <label for="moniker">Moniker</label>
+            <input type="text" id="moniker" required>
+        </div>
+        <div class="form-group">
+            <label for="gang">Gang</label>
+            <input type="text" id="gang" required>
+        </div>
+        <div class="form-group">
+            <label for="sangang">Sangang Profile Link</label>
+            <input type="text" id="sangang" required>
+        </div>
+        <div class="form-group">
+            <label for="affiliation-notes">Additional Affiliation Notes</label>
+            <input type="text" id="affiliation-notes" required>
+        </div>
+        <div class="form-group">
+            <label for="mdc">MDC Profile Link</label>
+            <input type="text" id="mdc" required>
+        </div>
+        <div class="form-group">
+            <label for="inmate-profile">Inmate Profile Link</label>
+            <input type="text" id="inmate-profile" required>
+        </div>
+        <div class="form-group">
+            <label for="parole-application">Parole Application Link</label>
+            <input type="text" id="parole-application" required>
+        </div>
+        <div class="form-group">
+            <label for="case-handlers">Case Handler(s)</label>
+            <input type="text" id="case-handlers" required>
+        </div>
+        <div class="form-group">
+            <label for="case-supervisor">Case Supervisor</label>
+            <input type="text" id="case-supervisor" required>
+        </div>
+        <div class="form-group">
+            <label for="additional-notes">Additional Notes</label>
+            <textarea id="additional-notes" required></textarea>
+        </div>
+        <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+    </form>
 
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="3">GENERAL INFORMATION</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>NAME</td>
-                    <td>PHONE NUMBER</td>
-                    <td>ADDRESS</td>
-                </tr>
-                <tr>
-                    <td><input type="text" id="name" class="input-field"></td>
-                    <td><input type="text" id="phone" class="input-field"></td>
-                    <td><input type="text" id="address" class="input-field"></td>
-                </tr>
-                <tr>
-                    <td>DATE OF BIRTH</td>
-                    <td>GENDER</td>
-                    <td>PLACE OF WORK</td>
-                    <td>KNOWN ALIASES</td>
-                </tr>
-                <tr>
-                    <td><input type="text" id="dob" class="input-field"></td>
-                    <td><input type="text" id="gender" class="input-field"></td>
-                    <td><input type="text" id="work" class="input-field"></td>
-                    <td><input type="text" id="aliases" class="input-field"></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="output" id="output"></div>
+    <button onclick="copyBBCode()">Copy BBCode</button>
+</div>
 
-        <h3>RELATIVES</h3>
-        <textarea id="relatives" class="input-field" rows="5" placeholder="List relatives here"></textarea>
+<script>
+    function generateBBCode() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const dob = document.getElementById('dob').value;
+        const gender = document.getElementById('gender').value;
+        const work = document.getElementById('work').value;
+        const aliases = document.getElementById('aliases').value;
+        const relatives = document.getElementById('relatives').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n');
+        const classification = document.getElementById('classification').value;
+        const classificationNotes = document.getElementById('classification-notes').value;
+        const moniker = document.getElementById('moniker').value;
+        const gang = document.getElementById('gang').value;
+        const sangang = document.getElementById('sangang').value;
+        const affiliationNotes = document.getElementById('affiliation-notes').value;
+        const mdc = document.getElementById('mdc').value;
+        const inmateProfile = document.getElementById('inmate-profile').value;
+        const paroleApplication = document.getElementById('parole-application').value;
+        const caseHandlers = document.getElementById('case-handlers').value;
+        const caseSupervisor = document.getElementById('case-supervisor').value;
+        const additionalNotes = document.getElementById('additional-notes').value;
 
-        <table>
-            <thead>
-                <tr>
-                    <th>CLASSIFICATION</th>
-                    <th>ADDITIONAL CLASSIFICATION NOTES</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <label><input type="checkbox" id="serious"> Serious (S)</label><br>
-                        <label><input type="checkbox" id="nonSerious"> Non-Serious (NS)</label><br>
-                        <label><input type="checkbox" id="unsupervised"> Unsupervised (US)</label><br>
-                        <label><input type="checkbox" id="specialCase"> Special Case (SC)</label>
-                    </td>
-                    <td><textarea id="additionalNotes" class="input-field" rows="5" placeholder="Additional notes here"></textarea></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <button onclick="generate()">Generate</button>
-    </div>
-
-    <h3>Generated Output:</h3>
-    <pre id="output"></pre>
-    <button onclick="copyCode()">Copy Code</button>
-
-    <script>
-        function generate() {
-            const pictureLink = document.getElementById('pictureLink').value;
-            const caseHandler = document.getElementById('caseHandler').value;
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            const dob = document.getElementById('dob').value;
-            const gender = document.getElementById('gender').value;
-            const work = document.getElementById('work').value;
-            const aliases = document.getElementById('aliases').value;
-            const relatives = document.getElementById('relatives').value;
-            const serious = document.getElementById('serious').checked ? "[cb][/cb] Serious (S)" : "";
-            const nonSerious = document.getElementById('nonSerious').checked ? "[cb][/cb] Non-Serious (NS)" : "";
-            const unsupervised = document.getElementById('unsupervised').checked ? "[cb][/cb] Unsupervised (US)" : "";
-            const specialCase = document.getElementById('specialCase').checked ? "[cb][/cb] Special Case (SC)" : "";
-            const additionalNotes = document.getElementById('additionalNotes').value;
-
-            const output = `
-[center][size=175]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
+        const bbcode = `[center][size=175]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
 [size=165]DIVISION OF ADULT PAROLE OPERATIONS[/size]
 [size=160]Parole Tracking Program[/size]
 
-[img]${pictureLink}[/img]
-
-[size=130][b]Case Handler: ${caseHandler}[/b][/size][/center]
+[img]MDC PICTURE HERE[/img]
+[/center]
 
 [table2=1,black,transparent,Roboto]
 [tr][tdwidth=2,black,transparent,top,center,500,5]
@@ -165,22 +204,101 @@
 [tdwidth=1,black,transparent,top,left,100,5][b]RELATVES[/b][/tdwidth]
 [/tr]
 [tr]
-[tdwidth=1,black,transparent,top,left,100,5][list]${relatives}[/list][/tdwidth]
-[/tr]
+[tdwidth=1,black,transparent,top,left,100,5][list] ${relatives} [/list][/tdwidth]
+</tr>
 [/table2]
 [table2=1,black,transparent,Roboto]
 [tr]
 [tdwidth=1,black,transparent,top,left,60,5][b]CLASSIFICATION[/b][/tdwidth]
 [tdwidth=1,black,transparent,top,left,40,5][b]ADDITIONAL CLASSIFICATION NOTES[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,60,5]${serious} ${nonSerious} ${unsupervised} ${specialCase}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,40,5]${additionalNotes}[/tdwidth]
-[/tr]
-[/table2]
-            `;
-            document.getElementById('output').innerText = output;
-        }
-    </script>
+</tr]
+<tr>
+[tdwidth=1,black,transparent,top,left,60,5][cb][/cb] Serious (S) [cb][/cb] Non-Serious (NS) [cb][/cb] Unsupervised (US) [cb][/cb] Special Case (SC) [/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,5]${classificationNotes}[/tdwidth]
+</tr>
+</table2>
+
+[table2=1,black,transparent,Roboto]
+<tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]GANG AFFILIATION[/size][/b][/center]
+</tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
+<tr>
+[tdwidth=1,black,transparent,top,left,33,5][b]MONIKER[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]GANG[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]SANGANG PROFILE[/b][/tdwidth]
+</tr>
+<tr>
+[tdwidth=1,black,transparent,top,left,33,5]${moniker}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5]${gang}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][url=${sangang}]ACCESS[/url][/tdwidth]
+</tr>
+</table2>
+[table2=1,black,transparent,Roboto]
+<tr>
+[tdwidth=1,black,transparent,top,left,25,5][b]ADDITIONAL AFFILIATION NOTES[/b][/tdwidth]
+</tr]
+<tr]
+[tdwidth=1,black,transparent,top,left,25,5]${affiliationNotes}
+
+</tdwidth>
+</tr]
+</table2>
+
+[table2=1,black,transparent,Roboto]
+<tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]IMPORTANT INFORMATION[/size][/b][/center]
+</tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
+<tr>
+[tdwidth=1,black,transparent,top,left,33,5][b]MDC PROFILE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]INMATE PROFILE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]PAROLE APPLICATION[/b][/tdwidth]
+</tr]
+<tr>
+[tdwidth=1,black,transparent,top,left,33,5][url=${mdc}]ACCESS[/url][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][url=${inmateProfile}]ACCESS[/url][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][url=${paroleApplication}]ACCESS[/url][/tdwidth]
+</tr]
+</table2>
+[table2=1,black,transparent,Roboto]
+<tr>
+[tdwidth=1,black,transparent,top,left,50,5][b]CASE HANDLER(S)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,50,5][b]CASE SUPERVISOR[/b][/tdwidth]
+</tr]
+<tr]
+[tdwidth=1,black,transparent,top,left,50,5]${caseHandlers}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,50,5]${caseSupervisor}[/tdwidth]
+</tr]
+</table2>
+
+[table2=1,black,transparent,Roboto]
+<tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]ADDITIONAL INFORMATION[/size][/b][/center]
+</tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
+<tr>
+[tdwidth=1,black,transparent,top,left,100,5][b]ADDITIONAL NOTES[/b][/tdwidth]
+</tr]
+<tr]
+[tdwidth=1,black,transparent,top,left,33,5]${additionalNotes}
+
+</tdwidth]
+
+</tr]
+</table2]`;
+
+        document.getElementById('output').textContent = bbcode;
+    }
+
+    function copyBBCode() {
+        const bbcode = document.getElementById('output').textContent;
+        navigator.clipboard.writeText(bbcode).then(() => {
+            alert('BBCode copied to clipboard');
+        });
+    }
+</script>
+
+</div>
 </body>
 </html>
