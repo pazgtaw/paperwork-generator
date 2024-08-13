@@ -25,19 +25,36 @@
             margin-bottom: 20px;
         }
 
-        .btn {
-            display: inline-block;
+        .dropdown {
             margin: 10px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .dropdown select {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            appearance: none;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown button {
             padding: 15px 30px;
             font-size: 1.2em;
             color: #fff;
             background-color: #007BFF;
-            text-decoration: none;
+            border: none;
             border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
 
-        .btn:hover {
+        .dropdown button:hover {
             background-color: #0056b3;
         }
     </style>
@@ -46,16 +63,57 @@
 
     <div class="container">
         <h1>Paz?'s Paperwork Generator</h1>
-        <a href="#" class="btn" id="btn-1">Parole Central File</a>
-        <a href="#" class="btn" id="btn-2">LSSD TSD Collision Report</a>
-        <a href="#" class="btn" id="btn-3">PLACEHOLDER</a>
+
+        <div class="dropdown">
+            <select id="dropdown-1">
+                <option value="" disabled selected>Misc Generators</option>
+                <option value="parole">Parole Central File</option>
+                <option value="placeholder">PLACEHOLDER</option>
+            </select>
+            <button onclick="navigateToDropdown('dropdown-1')">Go</button>
+        </div>
+
+        <div class="dropdown">
+            <select id="dropdown-2">
+                <option value="" disabled selected>LSSD generators</option>
+                <option value="sebgen">SEB Deployment Report</option>
+                <option value="csdgen">CSD Incident Log</option>
+                <option value="dvsk9gen">DVS K9 Incident Log</option>
+                <option value="senk9gen">SEN Incident Log</option>
+                <option value="pkbgen">PKB Incident Log</option>
+                <option value="tsdgen">TSD Traffic Collision Report</option>
+            </select>
+            <button onclick="navigateToDropdown('dropdown-2')">Go</button>
+        </div>
     </div>
 
     <script>
-        // Control the button links here
-        document.getElementById('btn-1').href = "https://pazgtaw.github.io/paperwork-generator/parolegenerator/";
-        document.getElementById('btn-2').href = "https://pazgtaw.github.io/paperwork-generator/trafficgenerator/";
-        document.getElementById('btn-3').href = "";
+        function navigateToDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const selectedValue = dropdown.value;
+
+            if (selectedValue === 'parole') {
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/parolegenerator/";
+            } else if (selectedValue === 'sebgen') {
+                // Add the URL for Example Report 1
+                window.location.href = "#";
+            } else if (selectedValue === 'csdgen') {
+                // Add the URL for Example Report 2
+                window.location.href = "#";
+            } else if (selectedValue === 'dvsk9gen') {
+                // Add the URL for Example Report 3
+                window.location.href = "#";
+            } else if (selectedValue === 'senk9gen') {
+                // Add the URL for Example Report 3
+                window.location.href = "#";
+            } else if (selectedValue === 'pkbgen') {
+                // Add the URL for Example Report 3
+                window.location.href = "#";
+            } else if (selectedValue === 'tsdgen') {
+                // Add the URL for Example Report 3
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/trafficgenerator/";
+            }
+        }
     </script>
 
 </body>
