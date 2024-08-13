@@ -192,9 +192,10 @@
             bbcode += `[b]Handling Investigator:[/b] ${document.getElementById('handling_investigator').value}\n`;
             bbcode += `[b]Additional Investigator(s):[/b] ${document.getElementById('additional_investigators').value}\n`;
             bbcode += '[/indent]\n\n';
-            bbcode += '[size=105][b]Involved Persons[/b][/size]\n[indent]\n';
 
-            for (let i = 1; i <= document.getElementById('persons-section').children.length; i++) {
+            bbcode += '[size=105][b]Involved Persons[/b][/size]\n[indent]\n';
+            const personsSection = document.getElementById('persons-section');
+            for (let i = 1; i <= personsSection.children.length; i++) {
                 bbcode += `[u]Person #${i} - ${document.getElementById('person_' + i).value}[/u] [aligntable=right,0,0,55,0,0,0][img]${document.getElementById('person_' + i + '_mdc_link').value}[/img][/aligntable]\n`;
                 bbcode += `[b]Classification:[/b] ${document.getElementById('person_' + i + '_classification').value}\n`;
                 bbcode += `[b]Date of Birth:[/b] ${document.getElementById('person_' + i + '_dob').value}\n`;
@@ -203,13 +204,16 @@
                 bbcode += `[b]Other Properties:[/b] ${document.getElementById('person_' + i + '_properties').value}\n`;
                 bbcode += `[b]Gang Affiliation:[/b] ${document.getElementById('person_' + i + '_gang_affiliation').value}\n\n`;
             }
+            bbcode += '[/indent]\n\n';
 
-            bbcode += '[/indent]\n\n[size=105][b]Narrative[/b][/size]\n[indent]\n';
+            bbcode += '[size=105][b]Narrative[/b][/size]\n[indent]\n';
             bbcode += `[b]BRIEF:[/b] ${document.getElementById('brief').value}\n\n`;
             bbcode += `${document.getElementById('narrative').value}\n`;
-            bbcode += '[/indent]\n\n[size=105][b]Evidence[/b][/size]\n';
+            bbcode += '[/indent]\n\n';
 
-            for (let i = 1; i <= document.getElementById('exhibits-section').children.length; i++) {
+            bbcode += '[size=105][b]Evidence[/b][/size]\n';
+            const exhibitsSection = document.getElementById('exhibits-section');
+            for (let i = 1; i <= exhibitsSection.children.length; i++) {
                 bbcode += `[list][*][b]Exhibit ${String.fromCharCode(64 + i)}; ${document.getElementById('exhibit_' + String.fromCharCode(64 + i)).value}[/b]\n`;
                 bbcode += `[spoiler]${document.getElementById('exhibit_' + String.fromCharCode(64 + i) + '_spoiler').value}[/spoiler][/list]\n`;
             }
