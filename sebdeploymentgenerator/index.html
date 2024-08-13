@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEB Deployment Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .output-section {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .copy-btn, .clear-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .personnel-entry {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SEB Deployment Report</h1>
+
+    <div class="form-section">
+        <label for="dateTime">DATE & TIME:</label><br>
+        <input type="text" id="dateTime" oninput="updateBBCode()"><br><br>
+
+        <label for="activationNo">S.E.B. ACTIVATION NO.:</label><br>
+        <input type="text" id="activationNo" oninput="updateBBCode()"><br><br>
+
+        <label for="location">LOCATION:</label><br>
+        <input type="text" id="location" oninput="updateBBCode()"><br><br>
+
+        <label for="incidentType">TYPE OF INCIDENT:</label><br>
+        <input type="text" id="incidentType" oninput="updateBBCode()"><br><br>
+
+        <label for="unitStation">STATION/UNIT REQUESTING:</label><br>
+        <input type="text" id="unitStation" oninput="updateBBCode()"><br><br>
+
+        <label for="authorizedBy">AUTHORIZED BY:</label><br>
+        <input type="text" id="authorizedBy" oninput="saveName(); updateBBCode()"><br><br>
+
+        <label for="incidentCommander">Incident Commander:</label><br>
+        <input type="text" id="incidentCommander" oninput="saveName(); updateBBCode()"><br><br>
+
+        <label for="teamCommander">Team Commander:</label><br>
+        <input type="text" id="teamCommander" oninput="saveName(); updateBBCode()"><br><br>
+
+        <label for="teamLeader">Team Leader:</label><br>
+        <input type="text" id="teamLeader" oninput="saveName(); updateBBCode()"><br><br>
+
+        <label for="respondingPersonnel">RESPONDING PERSONNEL:</label><br>
+        <div id="personnelList">
+            <div class="personnel-entry">
+                <input type="text" placeholder="Deputy Name Lastname" oninput="updateBBCode()">
+                <button onclick="removePersonnel(this)">Remove</button>
+            </div>
+        </div>
+        <button onclick="addPersonnel()">Add Another Deputy</button><br><br>
+
+        <label for="narrative">INCIDENT NARRATIVE & EXTERNAL REFERENCES:</label><br>
+        <textarea id="narrative" rows="5" oninput="updateBBCode()"></textarea><br><br>
+
+        <button class="clear-btn" onclick="clearForm()">Clear Boxes</button>
+    </div>
+
+    <div class="output-section">
+        <button class="copy-btn" onclick="copyBBCode()">Copy BBCode</button>
+        <pre id="bbcodeOutput">[hr][/hr]
+[center][b][size=125]LOS SANTOS COUNTY SHERIFF'S DEPARTMENT
+SPECIAL ENFORCEMENT BUREAU[/size][/b]
+[size=110]SPECIAL WEAPONS TEAM INCIDENT LOG[/size][/center]
+[hr][/hr]
+[divbox=black][color=white][b][center]INCIDENT INFORMATION[/center][/b][/color][/divbox]
+[table=Arial][tr]
+[td][b]DATE & TIME:[/b][/td]
+[td][b]S.E.B. ACTIVATION NO.:[/b][/td]
+[td][b]LOCATION:[/b][/td]
+[/tr]
+[tr]
+[td]DD/MMM/YY[/td]
+[td]YY-NO (E.G 22-001)[/td]
+[td]ADDRESS, AREA, CITY[/td]
+[/tr]
+[tr]
+[td][b]TYPE OF INCIDENT:[/b][/td]
+[td][b]STATION/UNIT REQUESTING:[/b][/td]
+[td][b]AUTHORIZED BY:[/b][/td]
+[/tr]
+[tr]
+[td]INCIDENT (E.G. 605B BARRICADED - 998) [/td]
+[td]UNIT or STATION (E.G OSS or 60D)[/td]
+[td]SEB LT/SGT NAME[/td]
+[/tr][/table]
+
+[divbox=black][color=white][b][center]PERSONNEL[/center][/b][/color][/divbox]
+[divbox=white][center][size=85][b]PERSONNEL LOG[/b][/size][/center]
+[size=85][u][b]FIELD/SEB COMMAND[/b][/u]
+[list][*][b]Incident Commander:[/b] Name Lastname
+[*][b]Team Commander:[/b] Name Lastname
+[*][b]Team Leader:[/b] Name Lastname[/list] 
+[u][b]RESPONDING PERSONNEL[/b][/u]
+[list][*]Deputy Name Lastname
+[*]Deputy Name Lastname
+[*]Deputy Name Lastname [/list][/size]
+[/divbox]
+
+[divbox=black][color=white][b][center]NARRATIVE[/center][/b][/color][/divbox]
+[divbox=white][center][size=85][b]INCIDENT NARRATIVE & EXTERNAL REFERENCES[/b][/size][/center]
+[size=85]List as needed.
+
+[/size][/divbox]</pre>
+    </div>
+
+    <script>
+        function updateBBCode() {
+            const dateTime = document.getElementById('dateTime').value || 'DD/MMM/YY';
+            const activationNo = document.getElementById('activationNo').value || 'YY-NO (E.G 22-001)';
+            const location = document.getElementById('location').value || 'ADDRESS, AREA, CITY';
+            const incidentType = document.getElementById('incidentType').value || 'INCIDENT (E.G. 605B BARRICADED - 998)';
+            const unitStation = document.getElementById('unitStation').value || 'UNIT or STATION (E.G OSS or 60D)';
+            const authorizedBy = document.getElementById('authorizedBy').value || 'SEB LT/SGT NAME';
+            const incidentCommander = document.getElementById('incidentCommander').value || 'Name Lastname';
+            const teamCommander = document.getElementById('teamCommander').value || 'Name Lastname';
+            const teamLeader = document.getElementById('teamLeader').value || 'Name Lastname';
+            const personnelInputs = document.querySelectorAll('#personnelList input');
+            let respondingPersonnel = '';
+            personnelInputs.forEach((input) => {
+                if (input.value) {
+                    respondingPersonnel += `[*]${input.value}\n`;
+                }
+            });
+            if (!respondingPersonnel) {
+                respondingPersonnel = '[*]Deputy Name Lastname\n[*]Deputy Name Lastname\n[*]Deputy Name Lastname';
+            }
+            const narrative = document.getElementById('narrative').value || 'List as needed.';
+
+            document.getElementById('bbcodeOutput').textContent = `[hr][/hr]
+[center][b][size=125]LOS SANTOS COUNTY SHERIFF'S DEPARTMENT
+SPECIAL ENFORCEMENT BUREAU[/size][/b]
+[size=110]SPECIAL WEAPONS TEAM INCIDENT LOG[/size][/center]
+[hr][/hr]
+[divbox=black][color=white][b][center]INCIDENT INFORMATION[/center][/b][/color][/divbox]
+[table=Arial][tr]
+[td][b]DATE & TIME:[/b][/td]
+[td][b]S.E.B. ACTIVATION NO.:[/b][/td]
+[td][b]LOCATION:[/b][/td]
+[/tr]
+[tr]
+[td]${dateTime}[/td]
+[td]${activationNo}[/td]
+[td]${location}[/td]
+[/tr]
+[tr]
+[td][b]TYPE OF INCIDENT:[/b][/td]
+[td][b]STATION/UNIT REQUESTING:[/b][/td]
+[td][b]AUTHORIZED BY:[/b][/td]
+[/tr]
+[tr]
+[td]${incidentType}[/td]
+[td]${unitStation}[/td]
+[td]${authorizedBy}[/td]
+[/tr][/table]
+
+[divbox=black][color=white][b][center]PERSONNEL[/center][/b][/color][/divbox]
+[divbox=white][center][size=85][b]PERSONNEL LOG[/b][/size][/center]
+[size=85][u][b]FIELD/SEB COMMAND[/b][/u]
+[list][*][b]Incident Commander:[/b] ${incidentCommander}
+[*][b]Team Commander:[/b] ${teamCommander}
+[*][b]Team Leader:[/b] ${teamLeader}[/list] 
+[u][b]RESPONDING PERSONNEL[/b][/u]
+[list]${respondingPersonnel}[/list][/size]
+[/divbox]
+
+[divbox=black][color=white][b][center]NARRATIVE[/center][/b][/color][/divbox]
+[divbox=white][center][size=85][b]INCIDENT NARRATIVE & EXTERNAL REFERENCES[/b][/size][/center]
+[size=85]${narrative}[/size][/divbox]`;
+        }
+
+        function copyBBCode() {
+            const bbcodeOutput = document.getElementById('bbcodeOutput');
+            navigator.clipboard.writeText(bbcodeOutput.textContent).then(() => {
+                alert('BBCode copied to clipboard!');
+            });
+        }
+
+        function saveName() {
+            const authorizedBy = document.getElementById('authorizedBy').value;
+            const incidentCommander = document.getElementById('incidentCommander').value;
+            const teamCommander = document.getElementById('teamCommander').value;
+            const teamLeader = document.getElementById('teamLeader').value;
+
+            document.cookie = `authorizedBy=${authorizedBy}; max-age=31536000; path=/`;
+            document.cookie = `incidentCommander=${incidentCommander}; max-age=31536000; path=/`;
+            document.cookie = `teamCommander=${teamCommander}; max-age=31536000; path=/`;
+            document.cookie = `teamLeader=${teamLeader}; max-age=31536000; path=/`;
+        }
+
+        function loadName() {
+            const cookies = document.cookie.split('; ').reduce((acc, cookie) => {
+                const [key, value] = cookie.split('=');
+                acc[key] = value;
+                return acc;
+            }, {});
+
+            document.getElementById('authorizedBy').value = cookies.authorizedBy || '';
+            document.getElementById('incidentCommander').value = cookies.incidentCommander || '';
+            document.getElementById('teamCommander').value = cookies.teamCommander || '';
+            document.getElementById('teamLeader').value = cookies.teamLeader || '';
+
+            updateBBCode();
+        }
+
+        function addPersonnel() {
+            const personnelList = document.getElementById('personnelList');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'personnel-entry';
+            newEntry.innerHTML = `
+                <input type="text" placeholder="Deputy Name Lastname" oninput="updateBBCode()">
+                <button onclick="removePersonnel(this)">Remove</button>
+            `;
+            personnelList.appendChild(newEntry);
+            updateBBCode();
+        }
+
+        function removePersonnel(button) {
+            button.parentElement.remove();
+            updateBBCode();
+        }
+
+        function clearForm() {
+            document.getElementById('dateTime').value = '';
+            document.getElementById('activationNo').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('incidentType').value = '';
+            document.getElementById('unitStation').value = '';
+            document.getElementById('authorizedBy').value = '';
+            document.getElementById('incidentCommander').value = '';
+            document.getElementById('teamCommander').value = '';
+            document.getElementById('teamLeader').value = '';
+            document.getElementById('narrative').value = '';
+            document.getElementById('personnelList').innerHTML = `
+                <div class="personnel-entry">
+                    <input type="text" placeholder="Deputy Name Lastname" oninput="updateBBCode()">
+                    <button onclick="removePersonnel(this)">Remove</button>
+                </div>
+            `;
+
+            updateBBCode();
+        }
+
+        window.onload = loadName;
+    </script>
+</body>
+</html>
