@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K9 Deployment Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .output-section {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .copy-btn, .clear-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>K9 Deployment Report</h1>
+
+    <div class="form-section">
+        <label for="timeDate">TIME AND DATE:</label><br>
+        <input type="text" id="timeDate" oninput="updateBBCode()"><br><br>
+
+        <label for="location">LOCATION:</label><br>
+        <input type="text" id="location" oninput="updateBBCode()"><br><br>
+
+        <label for="callsign">CALLSIGN:</label><br>
+        <input type="text" id="callsign" oninput="updateBBCode()"><br><br>
+
+        <label for="deploymentType">DEPLOYMENT TYPE:</label><br>
+        <input type="checkbox" id="bite" onchange="updateBBCode()"> Bite<br>
+        <input type="checkbox" id="searchWarrant" onchange="updateBBCode()"> Search Warrant<br>
+        <input type="checkbox" id="tracking" onchange="updateBBCode()"> Tracking<br>
+        <input type="checkbox" id="other" onchange="updateBBCode()"> Other (Please detail in the narrative)<br><br>
+
+        <label for="narrative">DEPLOYMENT NARRATIVE:</label><br>
+        <textarea id="narrative" oninput="updateBBCode()"></textarea><br><br>
+
+        <label for="evidence">EVIDENCE FOUND:</label><br>
+        <textarea id="evidence" oninput="updateBBCode()"></textarea><br><br>
+
+        <label for="signedBy">Signed by:</label><br>
+        <input type="text" id="signedBy" oninput="saveName(); updateBBCode()"><br><br>
+
+        <label for="rank">Rank:</label><br>
+        <input type="text" id="rank" oninput="saveName(); updateBBCode()"><br><br>
+
+        <button class="clear-btn" onclick="clearForm()">Clear Boxes</button>
+    </div>
+
+    <div class="output-section">
+        <button class="copy-btn" onclick="copyBBCode()">Copy BBCode</button>
+        <pre id="bbcodeOutput">[divbox=white]
+[center][img]https://i.imgur.com/Oln4e7O.png[/img][/center]
+[b][u][center]Canine Services Detail Deployment Report[/center][/u][/b]
+
+[center][table=Arial]
+[tr]
+[td][b]TIME AND DATE:[/b][/td]
+[td][b]LOCATION:[/b][/td]
+[td][b]CALLSIGN:[/b][/td]
+[/tr]
+[tr]
+[td]DD/MMM/YYYY - HH:MM[/td]
+[td]STREET, AREA, CITY[/td]
+[td]CALLSIGN HERE[/td]
+[/tr]
+[/table][/center]
+[divbox=white]
+DEPLOYMENT TYPE:
+[cb][/cb] Bite 
+[cb][/cb] Search Warrant 
+[cb][/cb] Tracking 
+[cb][/cb] Other:(Please detail in the narrative)
+
+[hr][/hr]
+
+[center][b][u]DEPLOYMENT NARRATIVE:[/u][/b][/center]
+
+FILL IN NARRATIVE HERE.
+
+[hr][/hr]
+
+[u][b][center]EVIDENCE FOUND:[/center][/b][/u]
+
+LIST THE EVIDENCE HERE
+
+
+((ATTACH SCREENSHOT HERE))
+
+[hr][/hr]
+
+Signed by:
+FIRSTNAME LASTNAME, RANK
+[/divbox]</pre>
+    </div>
+
+    <script>
+        function updateBBCode() {
+            const timeDate = document.getElementById('timeDate').value || 'DD/MMM/YYYY - HH:MM';
+            const location = document.getElementById('location').value || 'STREET, AREA, CITY';
+            const callsign = document.getElementById('callsign').value || 'CALLSIGN HERE';
+
+            const deploymentType = `
+[cb]${document.getElementById('bite').checked ? 'X' : ''}[/cb] Bite 
+[cb]${document.getElementById('searchWarrant').checked ? 'X' : ''}[/cb] Search Warrant 
+[cb]${document.getElementById('tracking').checked ? 'X' : ''}[/cb] Tracking 
+[cb]${document.getElementById('other').checked ? 'X' : ''}[/cb] Other:(Please detail in the narrative)`;
+
+            const narrative = document.getElementById('narrative').value || 'FILL IN NARRATIVE HERE.';
+            const evidence = document.getElementById('evidence').value || 'LIST THE EVIDENCE HERE';
+            const signedBy = document.getElementById('signedBy').value || 'FIRSTNAME LASTNAME';
+            const rank = document.getElementById('rank').value || 'RANK';
+
+            document.getElementById('bbcodeOutput').textContent = `[divbox=white]
+[center][img]https://i.imgur.com/Oln4e7O.png[/img][/center]
+[b][u][center]Canine Services Detail Deployment Report[/center][/u][/b]
+
+[center][table=Arial]
+[tr]
+[td][b]TIME AND DATE:[/b][/td]
+[td][b]LOCATION:[/b][/td]
+[td][b]CALLSIGN:[/b][/td]
+[/tr]
+[tr]
+[td]${timeDate}[/td]
+[td]${location}[/td]
+[td]${callsign}[/td]
+[/tr]
+[/table][/center]
+[divbox=white]
+DEPLOYMENT TYPE:
+${deploymentType}
+
+[hr][/hr]
+
+[center][b][u]DEPLOYMENT NARRATIVE:[/u][/b][/center]
+
+${narrative}
+
+[hr][/hr]
+
+[u][b][center]EVIDENCE FOUND:[/center][/b][/u]
+
+${evidence}
+
+
+((ATTACH SCREENSHOT HERE))
+
+[hr][/hr]
+
+Signed by:
+${signedBy}, ${rank}
+[/divbox]`;
+        }
+
+        function copyBBCode() {
+            const bbcodeOutput = document.getElementById('bbcodeOutput');
+            navigator.clipboard.writeText(bbcodeOutput.textContent).then(() => {
+                alert('BBCode copied to clipboard!');
+            });
+        }
+
+        function saveName() {
+            const signedBy = document.getElementById('signedBy').value;
+            const rank = document.getElementById('rank').value;
+
+            document.cookie = `signedBy=${signedBy}; max-age=31536000; path=/`;
+            document.cookie = `rank=${rank}; max-age=31536000; path=/`;
+        }
+
+        function loadName() {
+            const cookies = document.cookie.split('; ').reduce((acc, cookie) => {
+                const [key, value] = cookie.split('=');
+                acc[key] = value;
+                return acc;
+            }, {});
+
+            document.getElementById('signedBy').value = cookies.signedBy || '';
+            document.getElementById('rank').value = cookies.rank || '';
+
+            updateBBCode();
+        }
+
+        function clearForm() {
+            document.getElementById('timeDate').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('callsign').value = '';
+            document.getElementById('bite').checked = false;
+            document.getElementById('searchWarrant').checked = false;
+            document.getElementById('tracking').checked = false;
+            document.getElementById('other').checked = false;
+            document.getElementById('narrative').value = '';
+            document.getElementById('evidence').value = '';
+            document.getElementById('signedBy').value = '';
+            document.getElementById('rank').value = '';
+
+            updateBBCode();
+        }
+
+        window.onload = loadName;
+    </script>
+</body>
+</html>
