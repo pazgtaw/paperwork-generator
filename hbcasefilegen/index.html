@@ -64,6 +64,8 @@
         <label for="additional-investigators">Additional Investigator(s) (Rank Forename Surname):</label>
         <input type="text" id="additional-investigators">
     </div>
+
+    <!-- Person #1 -->
     <div class="form-group">
         <label for="person1-name">Person #1 - Forename Surname:</label>
         <input type="text" id="person1-name">
@@ -77,10 +79,95 @@
         <input type="text" id="person1-dob">
     </div>
     <div class="form-group">
+        <label for="person1-phone">Person #1 Phone Number:</label>
+        <input type="text" id="person1-phone">
+    </div>
+    <div class="form-group">
+        <label for="person1-residence">Person #1 Residence:</label>
+        <input type="text" id="person1-residence">
+    </div>
+    <div class="form-group">
+        <label for="person1-properties">Person #1 Other Properties:</label>
+        <input type="text" id="person1-properties">
+    </div>
+    <div class="form-group">
+        <label for="person1-gang">Person #1 Gang Affiliation:</label>
+        <input type="text" id="person1-gang">
+    </div>
+    <div class="form-group">
         <label for="person1-link">Person #1 Profile Picture Link:</label>
         <input type="text" id="person1-link">
     </div>
-    <!-- Repeat similar fields for Person #2 and Person #3 -->
+
+    <!-- Person #2 -->
+    <div class="form-group">
+        <label for="person2-name">Person #2 - Forename Surname:</label>
+        <input type="text" id="person2-name">
+    </div>
+    <div class="form-group">
+        <label for="person2-classification">Person #2 Classification:</label>
+        <input type="text" id="person2-classification">
+    </div>
+    <div class="form-group">
+        <label for="person2-dob">Person #2 Date of Birth:</label>
+        <input type="text" id="person2-dob">
+    </div>
+    <div class="form-group">
+        <label for="person2-phone">Person #2 Phone Number:</label>
+        <input type="text" id="person2-phone">
+    </div>
+    <div class="form-group">
+        <label for="person2-residence">Person #2 Residence:</label>
+        <input type="text" id="person2-residence">
+    </div>
+    <div class="form-group">
+        <label for="person2-properties">Person #2 Other Properties:</label>
+        <input type="text" id="person2-properties">
+    </div>
+    <div class="form-group">
+        <label for="person2-gang">Person #2 Gang Affiliation:</label>
+        <input type="text" id="person2-gang">
+    </div>
+    <div class="form-group">
+        <label for="person2-link">Person #2 Profile Picture Link:</label>
+        <input type="text" id="person2-link">
+    </div>
+
+    <!-- Person #3 -->
+    <div class="form-group">
+        <label for="person3-name">Person #3 - Forename Surname:</label>
+        <input type="text" id="person3-name">
+    </div>
+    <div class="form-group">
+        <label for="person3-classification">Person #3 Classification:</label>
+        <input type="text" id="person3-classification">
+    </div>
+    <div class="form-group">
+        <label for="person3-dob">Person #3 Date of Birth:</label>
+        <input type="text" id="person3-dob">
+    </div>
+    <div class="form-group">
+        <label for="person3-phone">Person #3 Phone Number:</label>
+        <input type="text" id="person3-phone">
+    </div>
+    <div class="form-group">
+        <label for="person3-residence">Person #3 Residence:</label>
+        <input type="text" id="person3-residence">
+    </div>
+    <div class="form-group">
+        <label for="person3-properties">Person #3 Other Properties:</label>
+        <input type="text" id="person3-properties">
+    </div>
+    <div class="form-group">
+        <label for="person3-gang">Person #3 Gang Affiliation:</label>
+        <input type="text" id="person3-gang">
+    </div>
+    <div class="form-group">
+        <label for="person3-link">Person #3 Profile Picture Link:</label>
+        <input type="text" id="person3-link">
+    </div>
+
+    <!-- Narrative -->
     <div class="form-group">
         <label for="narrative-brief">Narrative Brief:</label>
         <textarea id="narrative-brief"></textarea>
@@ -89,7 +176,21 @@
         <label for="narrative">Narrative:</label>
         <textarea id="narrative"></textarea>
     </div>
-    <!-- Add fields for Evidence, Exhibit A, B, C -->
+
+    <!-- Exhibits -->
+    <div class="form-group">
+        <label for="exhibit-a">Exhibit A; Description of evidence:</label>
+        <textarea id="exhibit-a"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="exhibit-b">Exhibit B; Description of evidence:</label>
+        <textarea id="exhibit-b"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="exhibit-c">Exhibit C; Description of evidence:</label>
+        <textarea id="exhibit-c"></textarea>
+    </div>
+
     <button onclick="generateBBCode()">Generate BBCode</button>
     <button onclick="clearForm()">Clear Boxes</button>
 
@@ -115,76 +216,68 @@
             return null;
         }
 
-        document.getElementById("handling-investigator").value = getFromCookie("investigatorName") || "";
+        document.getElementById("handling-investigator").value = getFromCookie("investigator");
+        document.getElementById("additional-investigators").value = getFromCookie("additional-investigators");
 
         function generateBBCode() {
-            let classification = document.getElementById("classification").value;
-            let timeDate = document.getElementById("time-date").value;
-            let location = document.getElementById("location").value;
-            let handlingInvestigator = document.getElementById("handling-investigator").value;
-            let additionalInvestigators = document.getElementById("additional-investigators").value;
-            let person1Name = document.getElementById("person1-name").value;
-            let person1Classification = document.getElementById("person1-classification").value;
-            let person1DOB = document.getElementById("person1-dob").value;
-            let person1Link = document.getElementById("person1-link").value;
-            let narrativeBrief = document.getElementById("narrative-brief").value;
-            let narrative = document.getElementById("narrative").value;
-            
-            // Save investigator's name to cookie
-            saveToCookie("investigatorName", handlingInvestigator);
+            const classification = document.getElementById('classification').value;
+            const timeDate = document.getElementById('time-date').value;
+            const location = document.getElementById('location').value;
+            const handlingInvestigator = document.getElementById('handling-investigator').value;
+            const additionalInvestigators = document.getElementById('additional-investigators').value;
 
-            let bbcode = `[font=Arial][color=black]
+            const person1Name = document.getElementById('person1-name').value;
+            const person1Classification = document.getElementById('person1-classification').value;
+            const person1Dob = document.getElementById('person1-dob').value;
+            const person1Phone = document.getElementById('person1-phone').value;
+            const person1Residence = document.getElementById('person1-residence').value;
+            const person1Properties = document.getElementById('person1-properties').value;
+            const person1Gang = document.getElementById('person1-gang').value;
+            const person1Link = document.getElementById('person1-link').value;
 
-[center][img]https://i.imgur.com/LEWTXbL.png[/img]
+            const person2Name = document.getElementById('person2-name').value;
+            const person2Classification = document.getElementById('person2-classification').value;
+            const person2Dob = document.getElementById('person2-dob').value;
+            const person2Phone = document.getElementById('person2-phone').value;
+            const person2Residence = document.getElementById('person2-residence').value;
+            const person2Properties = document.getElementById('person2-properties').value;
+            const person2Gang = document.getElementById('person2-gang').value;
+            const person2Link = document.getElementById('person2-link').value;
 
-[size=125][b]SHERIFF'S DEPARTMENT
-COUNTY OF LOS SANTOS[/b]
-[i]"A Tradition of Service Since 1850"[/i][/size]
+            const person3Name = document.getElementById('person3-name').value;
+            const person3Classification = document.getElementById('person3-classification').value;
+            const person3Dob = document.getElementById('person3-dob').value;
+            const person3Phone = document.getElementById('person3-phone').value;
+            const person3Residence = document.getElementById('person3-residence').value;
+            const person3Properties = document.getElementById('person3-properties').value;
+            const person3Gang = document.getElementById('person3-gang').value;
+            const person3Link = document.getElementById('person3-link').value;
 
-[size=110][u]CASE PACKAGE[/u][/size][/center][hr][/hr]
+            const narrativeBrief = document.getElementById('narrative-brief').value;
+            const narrative = document.getElementById('narrative').value;
 
-[font=arial][color=black][indent][size=105][b]Investigative Background and Assignment[/b][/size]
+            const exhibitA = document.getElementById('exhibit-a').value;
+            const exhibitB = document.getElementById('exhibit-b').value;
+            const exhibitC = document.getElementById('exhibit-c').value;
 
-[indent]
-[b]Classification / Penal Code(s):[/b] ${classification}
-[b]Time & Date:[/b] ${timeDate}
-[b]Location:[/b] ${location}
+            saveToCookie("investigator", handlingInvestigator);
+            saveToCookie("additional-investigators", additionalInvestigators);
 
-[b]Handling Investigator:[/b] ${handlingInvestigator}
-[b]Additional Investigator(s):[/b] ${additionalInvestigators}
-[/indent]
+            let output = `[font=Arial][color=black]\n\n[center][img]https://i.imgur.com/LEWTXbL.png[/img]\n\n[size=125][b]SHERIFF'S DEPARTMENT\nCOUNTY OF LOS SANTOS[/b]\n[i]"A Tradition of Service Since 1850"[/i][/size]\n\n[size=110][u]CASE PACKAGE[/u][/size][/center][hr][/hr]\n\n[font=arial][color=black][indent][size=105][b]Investigative Background and Assignment[/b][/size]\n\n[indent]\n[b]Classification / Penal Code(s):[/b] ${classification}\n[b]Time & Date:[/b] ${timeDate}\n[b]Location:[/b] ${location}\n\n[b]Handling Investigator:[/b] ${handlingInvestigator}\n[b]Additional Investigator(s):[/b] ${additionalInvestigators}\n[/indent]\n\n[size=105][b]Involved Persons[/b][/size]\n[indent][u]Person #1 - ${person1Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person1Link}[/img][/aligntable]\n[b]Classification:[/b] ${person1Classification}\n[b]Date of Birth:[/b] ${person1Dob}\n[b]Phone Number:[/b] ${person1Phone}\n[b]Residence:[/b] ${person1Residence}\n[b]Other Properties:[/b] ${person1Properties}\n[b]Gang Affiliation:[/b] ${person1Gang}\n\n[u]Person #2 - ${person2Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person2Link}[/img][/aligntable]\n[b]Classification:[/b] ${person2Classification}\n[b]Date of Birth:[/b] ${person2Dob}\n[b]Phone Number:[/b] ${person2Phone}\n[b]Residence:[/b] ${person2Residence}\n[b]Other Properties:[/b] ${person2Properties}\n[b]Gang Affiliation:[/b] ${person2Gang}\n\n[u]Person #3 - ${person3Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person3Link}[/img][/aligntable]\n[b]Classification:[/b] ${person3Classification}\n[b]Date of Birth:[/b] ${person3Dob}\n[b]Phone Number:[/b] ${person3Phone}\n[b]Residence:[/b] ${person3Residence}\n[b]Other Properties:[/b] ${person3Properties}\n[b]Gang Affiliation:[/b] ${person3Gang}[/indent]\n[18:59]\n[size=105][b]Narrative[/b][/size]\n[indent][b]BRIEF:[/b] ${narrativeBrief}\n\n${narrative}[/indent]\n\n[size=105][b]Evidence[/b][/size]\n\n[list][*][b]Exhibit A; Description of evidence[/b]\n[spoiler]${exhibitA}[/spoiler][/list]\n[list][*][b]Exhibit B; Description of evidence[/b]\n[spoiler]${exhibitB}[/spoiler][/list]\n[list][*][b]Exhibit C; Description of evidence[/b]\n[spoiler]${exhibitC}[/spoiler][/list]\n\n[/font]`;
 
-[size=105][b]Involved Persons[/b][/size]
-[indent][u]Person #1 - ${person1Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person1Link}[/img][/aligntable]
-[b]Classification:[/b] ${person1Classification}
-[b]Date of Birth:[/b] ${person1DOB}
-
-[size=105][b]Narrative[/b][/size]
-[indent][b]BRIEF:[/b] ${narrativeBrief}
-
-${narrative}[/indent]
-
-[size=105][b]Evidence[/b][/size]
-
-[list][*][b]Exhibit A; Description of evidence[/b]
-[spoiler][/spoiler][/list]
-[list][*][b]Exhibit B; Description of evidence[/b]
-[spoiler][/spoiler][/list]
-[list][*][b]Exhibit C; Description of evidence[/b]
-[spoiler][/spoiler][/list]`;
-
-            document.getElementById("output").value = bbcode;
+            document.getElementById('output').value = output;
         }
 
         function copyBBCode() {
-            let output = document.getElementById("output");
+            const output = document.getElementById('output');
             output.select();
-            document.execCommand("copy");
-            alert("BBCode copied to clipboard!");
+            document.execCommand('copy');
+            alert('BBCode copied to clipboard!');
         }
 
         function clearForm() {
-            document.querySelectorAll("input[type='text'], textarea").forEach(input => input.value = "");
+            document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
+            document.getElementById('output').value = '';
         }
     </script>
 </body>
