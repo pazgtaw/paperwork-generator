@@ -116,10 +116,10 @@ FIRSTNAME LASTNAME, RANK
             const callsign = document.getElementById('callsign').value || 'CALLSIGN HERE';
 
             const deploymentType = `
-[cb]${document.getElementById('bite').checked ? 'X' : ''}[/cb] Bite 
-[cb]${document.getElementById('searchWarrant').checked ? 'X' : ''}[/cb] Search Warrant 
-[cb]${document.getElementById('tracking').checked ? 'X' : ''}[/cb] Tracking 
-[cb]${document.getElementById('other').checked ? 'X' : ''}[/cb] Other:(Please detail in the narrative)`;
+${document.getElementById('bite').checked ? '[cbc]Bite[/cbc]' : '[cb][/cb] Bite'}
+${document.getElementById('searchWarrant').checked ? '[cbc]Search Warrant[/cbc]' : '[cb][/cb] Search Warrant'}
+${document.getElementById('tracking').checked ? '[cbc]Tracking[/cbc]' : '[cb][/cb] Tracking'}
+${document.getElementById('other').checked ? '[cbc]Other[/cbc]:(Please detail in the narrative)' : '[cb][/cb] Other:(Please detail in the narrative)'}`;
 
             const narrative = document.getElementById('narrative').value || 'FILL IN NARRATIVE HERE.';
             const evidence = document.getElementById('evidence').value || 'LIST THE EVIDENCE HERE';
