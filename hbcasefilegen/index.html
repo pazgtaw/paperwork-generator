@@ -7,229 +7,184 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
+        label {
+            font-weight: bold;
         }
-
-        .form-group input,
-        .form-group textarea {
+        input[type="text"], textarea {
             width: 100%;
             padding: 8px;
+            margin-top: 5px;
             box-sizing: border-box;
         }
-
-        .output-box {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #000;
-            background-color: #f9f9f9;
-            white-space: pre-wrap;
-        }
-
-        .output-box .copy-btn {
-            display: block;
-            margin-bottom: 10px;
-        }
-
         button {
-            margin-top: 10px;
             padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #333;
+            color: white;
             border: none;
             cursor: pointer;
         }
-
-        button.clear-btn {
-            background-color: #dc3545;
+        button:hover {
+            background-color: #555;
+        }
+        .output-container {
+            margin-top: 20px;
+        }
+        .output-container textarea {
+            height: 400px;
+            font-family: 'Courier New', Courier, monospace;
         }
     </style>
 </head>
 <body>
-    <h1>Homicide Bureau Casefile</h1>
-
+    <h1>Homicide Bureau Casefile Form</h1>
     <div class="form-group">
         <label for="classification">Classification / Penal Code(s):</label>
-        <input type="text" id="classification" placeholder="Enter Classification / Penal Code(s)" oninput="updateBBCode()">
+        <input type="text" id="classification">
     </div>
-
     <div class="form-group">
-        <label for="time_date">Time & Date:</label>
-        <input type="text" id="time_date" placeholder="Enter Time & Date" oninput="updateBBCode()">
+        <label for="time-date">Time & Date:</label>
+        <input type="text" id="time-date">
     </div>
-
     <div class="form-group">
         <label for="location">Location:</label>
-        <input type="text" id="location" placeholder="Enter Location" oninput="updateBBCode()">
+        <input type="text" id="location">
     </div>
-
     <div class="form-group">
-        <label for="handling_investigator">Handling Investigator:</label>
-        <input type="text" id="handling_investigator" placeholder="Enter Handling Investigator" oninput="updateBBCode()">
+        <label for="handling-investigator">Handling Investigator (Rank Forename Surname):</label>
+        <input type="text" id="handling-investigator">
     </div>
-
     <div class="form-group">
-        <label for="additional_investigators">Additional Investigator(s):</label>
-        <textarea id="additional_investigators" placeholder="Enter Additional Investigator(s)" oninput="updateBBCode()"></textarea>
+        <label for="additional-investigators">Additional Investigator(s) (Rank Forename Surname):</label>
+        <input type="text" id="additional-investigators">
     </div>
-
-    <div id="persons-section">
-        <div class="form-group">
-            <label for="person_1">Person #1</label>
-            <input type="text" id="person_1" placeholder="Enter Person #1 Name" oninput="updateBBCode()">
-            <input type="text" id="person_1_classification" placeholder="Enter Classification (Victim / Suspect / Witness / Informant)" oninput="updateBBCode()">
-            <input type="text" id="person_1_dob" placeholder="Enter Date of Birth" oninput="updateBBCode()">
-            <input type="text" id="person_1_phone" placeholder="Enter Phone Number" oninput="updateBBCode()">
-            <input type="text" id="person_1_residence" placeholder="Enter Residence" oninput="updateBBCode()">
-            <input type="text" id="person_1_properties" placeholder="Enter Other Properties" oninput="updateBBCode()">
-            <input type="text" id="person_1_gang_affiliation" placeholder="Enter Gang Affiliation" oninput="updateBBCode()">
-            <input type="url" id="person_1_mdc_link" placeholder="Enter MDC Profile Picture Link" oninput="updateBBCode()">
-        </div>
-    </div>
-    <button onclick="addPerson()">Add More Persons</button>
-
     <div class="form-group">
-        <label for="brief">Brief:</label>
-        <textarea id="brief" placeholder="Enter Brief" oninput="updateBBCode()"></textarea>
+        <label for="person1-name">Person #1 - Forename Surname:</label>
+        <input type="text" id="person1-name">
     </div>
-
+    <div class="form-group">
+        <label for="person1-classification">Person #1 Classification:</label>
+        <input type="text" id="person1-classification">
+    </div>
+    <div class="form-group">
+        <label for="person1-dob">Person #1 Date of Birth:</label>
+        <input type="text" id="person1-dob">
+    </div>
+    <div class="form-group">
+        <label for="person1-link">Person #1 Profile Picture Link:</label>
+        <input type="text" id="person1-link">
+    </div>
+    <!-- Repeat similar fields for Person #2 and Person #3 -->
+    <div class="form-group">
+        <label for="narrative-brief">Narrative Brief:</label>
+        <textarea id="narrative-brief"></textarea>
+    </div>
     <div class="form-group">
         <label for="narrative">Narrative:</label>
-        <textarea id="narrative" placeholder="Enter Narrative" oninput="updateBBCode()"></textarea>
+        <textarea id="narrative"></textarea>
     </div>
+    <!-- Add fields for Evidence, Exhibit A, B, C -->
+    <button onclick="generateBBCode()">Generate BBCode</button>
+    <button onclick="clearForm()">Clear Boxes</button>
 
-    <div id="exhibits-section">
-        <div class="form-group">
-            <label for="exhibit_a">Exhibit A</label>
-            <input type="text" id="exhibit_a" placeholder="Enter Exhibit A Description" oninput="updateBBCode()">
-            <textarea id="exhibit_a_spoiler" placeholder="Enter Exhibit A Spoiler" oninput="updateBBCode()"></textarea>
-        </div>
-    </div>
-    <button onclick="addExhibit()">Add More Exhibits</button>
-
-    <button class="clear-btn" onclick="clearForm()">Clear Boxes</button>
-
-    <div class="output-box" id="output-box">
-        <button class="copy-btn" onclick="copyBBCode()">Copy BBCode</button>
-        <div id="bbcode-output"></div>
+    <div class="output-container">
+        <h2>Generated BBCode</h2>
+        <button onclick="copyBBCode()">Copy BBCode</button>
+        <textarea id="output" readonly></textarea>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedNameRank = getCookie('handling_investigator');
-            if (savedNameRank) {
-                document.getElementById('handling_investigator').value = savedNameRank;
-                updateBBCode(); // Update BBCode after loading saved data
+        function saveToCookie(name, value) {
+            document.cookie = name + "=" + value + ";path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        }
+
+        function getFromCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
             }
-        });
-
-        document.getElementById('handling_investigator').addEventListener('input', () => {
-            setCookie('handling_investigator', document.getElementById('handling_investigator').value, 365);
-        });
-
-        function setCookie(name, value, days) {
-            const d = new Date();
-            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+            return null;
         }
 
-        function getCookie(name) {
-            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-            return match ? match[2] : null;
-        }
+        document.getElementById("handling-investigator").value = getFromCookie("investigatorName") || "";
 
-        function addPerson() {
-            const personsSection = document.getElementById('persons-section');
-            const personCount = personsSection.children.length + 1;
+        function generateBBCode() {
+            let classification = document.getElementById("classification").value;
+            let timeDate = document.getElementById("time-date").value;
+            let location = document.getElementById("location").value;
+            let handlingInvestigator = document.getElementById("handling-investigator").value;
+            let additionalInvestigators = document.getElementById("additional-investigators").value;
+            let person1Name = document.getElementById("person1-name").value;
+            let person1Classification = document.getElementById("person1-classification").value;
+            let person1DOB = document.getElementById("person1-dob").value;
+            let person1Link = document.getElementById("person1-link").value;
+            let narrativeBrief = document.getElementById("narrative-brief").value;
+            let narrative = document.getElementById("narrative").value;
+            
+            // Save investigator's name to cookie
+            saveToCookie("investigatorName", handlingInvestigator);
 
-            const newPerson = document.createElement('div');
-            newPerson.className = 'form-group';
-            newPerson.innerHTML = `
-                <label for="person_${personCount}">Person #${personCount}</label>
-                <input type="text" id="person_${personCount}" placeholder="Enter Person #${personCount} Name" oninput="updateBBCode()">
-                <input type="text" id="person_${personCount}_classification" placeholder="Enter Classification (Victim / Suspect / Witness / Informant)" oninput="updateBBCode()">
-                <input type="text" id="person_${personCount}_dob" placeholder="Enter Date of Birth" oninput="updateBBCode()">
-                <input type="text" id="person_${personCount}_phone" placeholder="Enter Phone Number" oninput="updateBBCode()">
-                <input type="text" id="person_${personCount}_residence" placeholder="Enter Residence" oninput="updateBBCode()">
-                <input type="text" id="person_${personCount}_properties" placeholder="Enter Other Properties" oninput="updateBBCode()">
-                <input type="text" id="person_${personCount}_gang_affiliation" placeholder="Enter Gang Affiliation" oninput="updateBBCode()">
-                <input type="url" id="person_${personCount}_mdc_link" placeholder="Enter MDC Profile Picture Link" oninput="updateBBCode()">
-            `;
-            personsSection.appendChild(newPerson);
-        }
+            let bbcode = `[font=Arial][color=black]
 
-        function addExhibit() {
-            const exhibitsSection = document.getElementById('exhibits-section');
-            const exhibitCount = exhibitsSection.children.length + 1;
+[center][img]https://i.imgur.com/LEWTXbL.png[/img]
 
-            const newExhibit = document.createElement('div');
-            newExhibit.className = 'form-group';
-            newExhibit.innerHTML = `
-                <label for="exhibit_${String.fromCharCode(64 + exhibitCount)}">Exhibit ${String.fromCharCode(64 + exhibitCount)}</label>
-                <input type="text" id="exhibit_${String.fromCharCode(64 + exhibitCount)}" placeholder="Enter Exhibit ${String.fromCharCode(64 + exhibitCount)} Description" oninput="updateBBCode()">
-                <textarea id="exhibit_${String.fromCharCode(64 + exhibitCount)}_spoiler" placeholder="Enter Exhibit ${String.fromCharCode(64 + exhibitCount)} Spoiler" oninput="updateBBCode()"></textarea>
-            `;
-            exhibitsSection.appendChild(newExhibit);
-        }
+[size=125][b]SHERIFF'S DEPARTMENT
+COUNTY OF LOS SANTOS[/b]
+[i]"A Tradition of Service Since 1850"[/i][/size]
 
-        function updateBBCode() {
-            let bbcode = '[font=Arial][color=black]\n\n';
-            bbcode += '[center][img]https://i.imgur.com/LEWTXbL.png[/img]\n\n';
-            bbcode += '[size=125][b]SHERIFF\'S DEPARTMENT\nCOUNTY OF LOS SANTOS[/b]\n[i]"A Tradition of Service Since 1850"[/i][/size]\n\n';
-            bbcode += '[size=110][u]CASE PACKAGE[/u][/size][/center][hr][/hr]\n\n';
-            bbcode += '[font=arial][color=black][indent][size=105][b]Investigative Background and Assignment[/b][/size]\n\n[indent]\n';
-            bbcode += `[b]Classification / Penal Code(s):[/b] ${document.getElementById('classification').value}\n`;
-            bbcode += `[b]Time & Date:[/b] ${document.getElementById('time_date').value}\n`;
-            bbcode += `[b]Location:[/b] ${document.getElementById('location').value}\n\n`;
-            bbcode += `[b]Handling Investigator:[/b] ${document.getElementById('handling_investigator').value}\n`;
-            bbcode += `[b]Additional Investigator(s):[/b] ${document.getElementById('additional_investigators').value}\n`;
-            bbcode += '[/indent]\n\n';
+[size=110][u]CASE PACKAGE[/u][/size][/center][hr][/hr]
 
-            bbcode += '[size=105][b]Involved Persons[/b][/size]\n[indent]\n';
-            const personsSection = document.getElementById('persons-section');
-            for (let i = 1; i <= personsSection.children.length; i++) {
-                bbcode += `[u]Person #${i} - ${document.getElementById('person_' + i).value}[/u] [aligntable=right,0,0,55,0,0,0][img]${document.getElementById('person_' + i + '_mdc_link').value}[/img][/aligntable]\n`;
-                bbcode += `[b]Classification:[/b] ${document.getElementById('person_' + i + '_classification').value}\n`;
-                bbcode += `[b]Date of Birth:[/b] ${document.getElementById('person_' + i + '_dob').value}\n`;
-                bbcode += `[b]Phone Number:[/b] ${document.getElementById('person_' + i + '_phone').value}\n`;
-                bbcode += `[b]Residence:[/b] ${document.getElementById('person_' + i + '_residence').value}\n`;
-                bbcode += `[b]Other Properties:[/b] ${document.getElementById('person_' + i + '_properties').value}\n`;
-                bbcode += `[b]Gang Affiliation:[/b] ${document.getElementById('person_' + i + '_gang_affiliation').value}\n\n`;
-            }
-            bbcode += '[/indent]\n\n';
+[font=arial][color=black][indent][size=105][b]Investigative Background and Assignment[/b][/size]
 
-            bbcode += '[size=105][b]Narrative[/b][/size]\n[indent]\n';
-            bbcode += `[b]BRIEF:[/b] ${document.getElementById('brief').value}\n\n`;
-            bbcode += `${document.getElementById('narrative').value}\n`;
-            bbcode += '[/indent]\n\n';
+[indent]
+[b]Classification / Penal Code(s):[/b] ${classification}
+[b]Time & Date:[/b] ${timeDate}
+[b]Location:[/b] ${location}
 
-            bbcode += '[size=105][b]Evidence[/b][/size]\n';
-            const exhibitsSection = document.getElementById('exhibits-section');
-            for (let i = 1; i <= exhibitsSection.children.length; i++) {
-                bbcode += `[list][*][b]Exhibit ${String.fromCharCode(64 + i)}; ${document.getElementById('exhibit_' + String.fromCharCode(64 + i)).value}[/b]\n`;
-                bbcode += `[spoiler]${document.getElementById('exhibit_' + String.fromCharCode(64 + i) + '_spoiler').value}[/spoiler][/list]\n`;
-            }
+[b]Handling Investigator:[/b] ${handlingInvestigator}
+[b]Additional Investigator(s):[/b] ${additionalInvestigators}
+[/indent]
 
-            document.getElementById('bbcode-output').textContent = bbcode;
+[size=105][b]Involved Persons[/b][/size]
+[indent][u]Person #1 - ${person1Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person1Link}[/img][/aligntable]
+[b]Classification:[/b] ${person1Classification}
+[b]Date of Birth:[/b] ${person1DOB}
+
+[size=105][b]Narrative[/b][/size]
+[indent][b]BRIEF:[/b] ${narrativeBrief}
+
+${narrative}[/indent]
+
+[size=105][b]Evidence[/b][/size]
+
+[list][*][b]Exhibit A; Description of evidence[/b]
+[spoiler][/spoiler][/list]
+[list][*][b]Exhibit B; Description of evidence[/b]
+[spoiler][/spoiler][/list]
+[list][*][b]Exhibit C; Description of evidence[/b]
+[spoiler][/spoiler][/list]`;
+
+            document.getElementById("output").value = bbcode;
         }
 
         function copyBBCode() {
-            const output = document.getElementById('bbcode-output');
-            navigator.clipboard.writeText(output.textContent);
-            alert('BBCode copied to clipboard!');
+            let output = document.getElementById("output");
+            output.select();
+            document.execCommand("copy");
+            alert("BBCode copied to clipboard!");
         }
 
         function clearForm() {
-            document.querySelectorAll('input, textarea').forEach(input => input.value = '');
-            document.getElementById('bbcode-output').textContent = '';
+            document.querySelectorAll("input[type='text'], textarea").forEach(input => input.value = "");
         }
     </script>
 </body>
