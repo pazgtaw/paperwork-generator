@@ -3,331 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBCode Generator</title>
+    <title>Paz?'s Paperwork Generators</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
+
         .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .form-group input[type="checkbox"] {
-            width: auto;
-        }
-        .output {
-            margin-top: 20px;
-            background: #f9f9f9;
-            padding: 10px;
-            border: 1px solid #ccc;
-            white-space: pre-wrap;
-        }
-        button {
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        h1, h2, h3 {
             text-align: center;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+
+        h1 {
+            font-size: 3em;
             margin-bottom: 20px;
         }
-        table, th, td {
-            border: 1px solid black;
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            text-align: center;
+
+        .btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>DEPARTMENT OF CORRECTIONS AND REHABILITATION</h1>
-    <h2>DIVISION OF ADULT PAROLE OPERATIONS</h2>
-    <h3>Parole Tracking Program</h3>
+    <div class="container">
+        <h1>Paperwork Generator</h1>
+        <a href="#" class="btn" id="btn-1">Parole Central File</a>
+        <a href="#" class="btn" id="btn-2">LSSD TSD Collision Report</a>
+        <a href="#" class="btn" id="btn-3">PLACEHOLDER</a>
+    </div>
 
-    <form id="bbcode-form">
-        <div class="form-group">
-            <label for="mdc-picture">MDC Picture Link</label>
-            <input type="text" id="mdc-picture" required>
-        </div>
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" required>
-        </div>
-        <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" id="address" required>
-        </div>
-        <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input type="text" id="dob" required>
-        </div>
-        <div class="form-group">
-            <label for="gender">Gender</label>
-            <input type="text" id="gender" required>
-        </div>
-        <div class="form-group">
-            <label for="work">Place of Work</label>
-            <input type="text" id="work" required>
-        </div>
-        <div class="form-group">
-            <label for="aliases">Known Aliases</label>
-            <input type="text" id="aliases" required>
-        </div>
-        <div class="form-group">
-            <label for="relatives">Relatives (separate by commas)</label>
-            <input type="text" id="relatives" required>
-        </div>
-        <div class="form-group">
-            <label for="classification">Classification</label>
-            <select id="classification" required>
-                <option value="Serious (S)">Serious (S)</option>
-                <option value="Non-Serious (NS)">Non-Serious (NS)</option>
-                <option value="Unsupervised (US)">Unsupervised (US)</option>
-                <option value="Special Case (SC)">Special Case (SC)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="classification-notes">Additional Classification Notes</label>
-            <input type="text" id="classification-notes" required>
-        </div>
-        <div class="form-group">
-            <label for="moniker">Moniker</label>
-            <input type="text" id="moniker" required>
-        </div>
-        <div class="form-group">
-            <label for="gang">Gang</label>
-            <input type="text" id="gang" required>
-        </div>
-        <div class="form-group">
-            <label for="sangang">Sangang Profile Link</label>
-            <input type="text" id="sangang" required>
-        </div>
-        <div class="form-group">
-            <label for="affiliation-notes">Additional Affiliation Notes</label>
-            <input type="text" id="affiliation-notes" required>
-        </div>
-        <div class="form-group">
-            <label for="mdc">MDC Profile Link</label>
-            <input type="text" id="mdc" required>
-        </div>
-        <div class="form-group">
-            <label for="inmate-profile">Inmate Profile Link</label>
-            <input type="text" id="inmate-profile" required>
-        </div>
-        <div class="form-group">
-            <label for="parole-application">Parole Application Link</label>
-            <input type="text" id="parole-application" required>
-        </div>
-        <div class="form-group">
-            <label for="case-handlers">Case Handler(s)</label>
-            <input type="text" id="case-handlers" required>
-        </div>
-        <div class="form-group">
-            <label for="case-supervisor">Case Supervisor</label>
-            <input type="text" id="case-supervisor" required>
-        </div>
-        <div class="form-group">
-            <label for="additional-notes">Additional Notes</label>
-            <textarea id="additional-notes" required></textarea>
-        </div>
-        <button type="button" onclick="generateBBCode()">Generate BBCode</button>
-    </form>
+    <script>
+        // Control the button links here
+        document.getElementById('btn-1').href = "https://pazgtaw.github.io/paperwork-generator/parolegenerator/";
+        document.getElementById('btn-2').href = "https://pazgtaw.github.io/paperwork-generator/trafficgenerator/";
+        document.getElementById('btn-3').href = "";
+    </script>
 
-    <div class="output" id="output"></div>
-    <button onclick="copyBBCode()">Copy BBCode</button>
-</div>
-
-<script>
-    function generateBBCode() {
-        const mdcPicture = document.getElementById('mdc-picture').value;
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const dob = document.getElementById('dob').value;
-        const gender = document.getElementById('gender').value;
-        const work = document.getElementById('work').value;
-        const aliases = document.getElementById('aliases').value;
-        const relatives = document.getElementById('relatives').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n[*]');
-        const classification = document.getElementById('classification').value;
-        const classificationNotes = document.getElementById('classification-notes').value;
-        const moniker = document.getElementById('moniker').value;
-        const gang = document.getElementById('gang').value;
-        const sangang = document.getElementById('sangang').value;
-        const affiliationNotes = document.getElementById('affiliation-notes').value;
-        const mdc = document.getElementById('mdc').value;
-        const inmateProfile = document.getElementById('inmate-profile').value;
-        const paroleApplication = document.getElementById('parole-application').value;
-        const caseHandlers = document.getElementById('case-handlers').value;
-        const caseSupervisor = document.getElementById('case-supervisor').value;
-        const additionalNotes = document.getElementById('additional-notes').value;
-
-        const bbcode = `[center][size=175]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
-[size=165]DIVISION OF ADULT PAROLE OPERATIONS[/size]
-[size=160]Parole Tracking Program[/size]
-
-
-[img]${mdcPicture}[/img]
-
-
-[/center]
-
-
-[table2=1,black,transparent,Roboto]
-[tr][tdwidth=2,black,transparent,top,center,500,5]
-[center][b][size=120]GENERAL INFORMATION[/size][/b][/center]
-[/tdwidth][/tr][/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5][b]NAME[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][b]PHONE NUMBER[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][b]ADDRESS[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5]${name}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5]${phone}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5]${address}[/tdwidth]
-[/tr]
-[/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,25,5][b]DATE OF BIRTH[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,25,5][b]GENDER[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,25,5][b]PLACE OF WORK[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,25,5][b]KNOWN ALIASES[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,25,5]${dob}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,25,5]${gender}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,25,5]${work}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,25,5]${aliases}[/tdwidth]
-[/tr]
-[/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,100,5][b]RELATIVES[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,100,5][list] ${relatives} [/list][/tdwidth]
-[/tr]
-[/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,60,5][b]CLASSIFICATION[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,40,5][b]ADDITIONAL CLASSIFICATION NOTES[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,60,5][cbc][/cbc]${classification}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,40,5]${classificationNotes}[/tdwidth]
-[/tr]
-[/table2]
-
-[table2=1,black,transparent,Roboto]
-[tr][tdwidth=2,black,transparent,top,center,500,5]
-[center][b][size=120]GANG AFFILIATION[/size][/b][/center]
-[/tdwidth][/tr][/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5][b]MONIKER[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][b]GANG[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][b]SANGANG PROFILE[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5]${moniker}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5]${gang}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][url=${sangang}]ACCESS[/url][/tdwidth]
-[/tr]
-[/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,25,5][b]ADDITIONAL AFFILIATION NOTES[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,25,5]${affiliationNotes}
-[/tdwidth]
-[/tr]
-[/table2]
-
-[table2=1,black,transparent,Roboto]
-[tr][tdwidth=2,black,transparent,top,center,500,5]
-[center][b][size=120]IMPORTANT INFORMATION[/size][/b][/center]
-[/tdwidth][/tr][/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5][b]MDC PROFILE[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][b]INMATE PROFILE[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][b]PAROLE APPLICATION[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5][url=${mdc}]ACCESS[/url][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][url=${inmateProfile}]ACCESS[/url][/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][url=${paroleApplication}]ACCESS[/url][/tdwidth]
-[/tr]
-[/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,50,5][b]CASE HANDLER(S)[/b][/tdwidth]
-[tdwidth=1,black,transparent,top,left,50,5][b]CASE SUPERVISOR[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,50,5]${caseHandlers}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,50,5]${caseSupervisor}[/tdwidth]
-[/tr]
-[/table2]
-
-[table2=1,black,transparent,Roboto]
-[tr][tdwidth=2,black,transparent,top,center,500,5]
-[center][b][size=120]ADDITIONAL INFORMATION[/size][/b][/center]
-[/tdwidth][/tr][/table2]
-[table2=1,black,transparent,Roboto]
-[tr]
-[tdwidth=1,black,transparent,top,left,100,5][b]ADDITIONAL NOTES[/b][/tdwidth]
-[/tr]
-[tr]
-[tdwidth=1,black,transparent,top,left,33,5]${additionalNotes}
-[/tdwidth]
-[/tr]
-[/table2]`;
-
-        document.getElementById('output').textContent = bbcode;
-    }
-
-    function copyBBCode() {
-        const bbcode = document.getElementById('output').textContent;
-        navigator.clipboard.writeText(bbcode).then(() => {
-            alert('BBCode copied to clipboard');
-        });
-    }
-</script>
-
-</div>
 </body>
 </html>
