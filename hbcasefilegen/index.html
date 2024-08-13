@@ -58,64 +58,63 @@
 
     <div class="form-group">
         <label for="classification">Classification / Penal Code(s):</label>
-        <input type="text" id="classification" placeholder="Enter Classification / Penal Code(s)">
+        <input type="text" id="classification" placeholder="Enter Classification / Penal Code(s)" oninput="updateBBCode()">
     </div>
 
     <div class="form-group">
         <label for="time_date">Time & Date:</label>
-        <input type="text" id="time_date" placeholder="Enter Time & Date">
+        <input type="text" id="time_date" placeholder="Enter Time & Date" oninput="updateBBCode()">
     </div>
 
     <div class="form-group">
         <label for="location">Location:</label>
-        <input type="text" id="location" placeholder="Enter Location">
+        <input type="text" id="location" placeholder="Enter Location" oninput="updateBBCode()">
     </div>
 
     <div class="form-group">
         <label for="handling_investigator">Handling Investigator:</label>
-        <input type="text" id="handling_investigator" placeholder="Enter Handling Investigator">
+        <input type="text" id="handling_investigator" placeholder="Enter Handling Investigator" oninput="updateBBCode()">
     </div>
 
     <div class="form-group">
         <label for="additional_investigators">Additional Investigator(s):</label>
-        <textarea id="additional_investigators" placeholder="Enter Additional Investigator(s)"></textarea>
+        <textarea id="additional_investigators" placeholder="Enter Additional Investigator(s)" oninput="updateBBCode()"></textarea>
     </div>
 
     <div id="persons-section">
         <div class="form-group">
             <label for="person_1">Person #1</label>
-            <input type="text" id="person_1" placeholder="Enter Person #1 Name">
-            <input type="text" id="person_1_classification" placeholder="Enter Classification (Victim / Suspect / Witness / Informant)">
-            <input type="text" id="person_1_dob" placeholder="Enter Date of Birth">
-            <input type="text" id="person_1_phone" placeholder="Enter Phone Number">
-            <input type="text" id="person_1_residence" placeholder="Enter Residence">
-            <input type="text" id="person_1_properties" placeholder="Enter Other Properties">
-            <input type="text" id="person_1_gang_affiliation" placeholder="Enter Gang Affiliation">
-            <input type="url" id="person_1_mdc_link" placeholder="Enter MDC Profile Picture Link">
+            <input type="text" id="person_1" placeholder="Enter Person #1 Name" oninput="updateBBCode()">
+            <input type="text" id="person_1_classification" placeholder="Enter Classification (Victim / Suspect / Witness / Informant)" oninput="updateBBCode()">
+            <input type="text" id="person_1_dob" placeholder="Enter Date of Birth" oninput="updateBBCode()">
+            <input type="text" id="person_1_phone" placeholder="Enter Phone Number" oninput="updateBBCode()">
+            <input type="text" id="person_1_residence" placeholder="Enter Residence" oninput="updateBBCode()">
+            <input type="text" id="person_1_properties" placeholder="Enter Other Properties" oninput="updateBBCode()">
+            <input type="text" id="person_1_gang_affiliation" placeholder="Enter Gang Affiliation" oninput="updateBBCode()">
+            <input type="url" id="person_1_mdc_link" placeholder="Enter MDC Profile Picture Link" oninput="updateBBCode()">
         </div>
     </div>
     <button onclick="addPerson()">Add More Persons</button>
 
     <div class="form-group">
         <label for="brief">Brief:</label>
-        <textarea id="brief" placeholder="Enter Brief"></textarea>
+        <textarea id="brief" placeholder="Enter Brief" oninput="updateBBCode()"></textarea>
     </div>
 
     <div class="form-group">
         <label for="narrative">Narrative:</label>
-        <textarea id="narrative" placeholder="Enter Narrative"></textarea>
+        <textarea id="narrative" placeholder="Enter Narrative" oninput="updateBBCode()"></textarea>
     </div>
 
     <div id="exhibits-section">
         <div class="form-group">
             <label for="exhibit_a">Exhibit A</label>
-            <input type="text" id="exhibit_a" placeholder="Enter Exhibit A Description">
-            <textarea id="exhibit_a_spoiler" placeholder="Enter Exhibit A Spoiler"></textarea>
+            <input type="text" id="exhibit_a" placeholder="Enter Exhibit A Description" oninput="updateBBCode()">
+            <textarea id="exhibit_a_spoiler" placeholder="Enter Exhibit A Spoiler" oninput="updateBBCode()"></textarea>
         </div>
     </div>
     <button onclick="addExhibit()">Add More Exhibits</button>
 
-    <button onclick="generateBBCode()">Generate BBCode</button>
     <button class="clear-btn" onclick="clearForm()">Clear Boxes</button>
 
     <div class="output-box" id="output-box">
@@ -128,6 +127,7 @@
             const savedNameRank = getCookie('handling_investigator');
             if (savedNameRank) {
                 document.getElementById('handling_investigator').value = savedNameRank;
+                updateBBCode(); // Update BBCode after loading saved data
             }
         });
 
@@ -154,14 +154,14 @@
             newPerson.className = 'form-group';
             newPerson.innerHTML = `
                 <label for="person_${personCount}">Person #${personCount}</label>
-                <input type="text" id="person_${personCount}" placeholder="Enter Person #${personCount} Name">
-                <input type="text" id="person_${personCount}_classification" placeholder="Enter Classification (Victim / Suspect / Witness / Informant)">
-                <input type="text" id="person_${personCount}_dob" placeholder="Enter Date of Birth">
-                <input type="text" id="person_${personCount}_phone" placeholder="Enter Phone Number">
-                <input type="text" id="person_${personCount}_residence" placeholder="Enter Residence">
-                <input type="text" id="person_${personCount}_properties" placeholder="Enter Other Properties">
-                <input type="text" id="person_${personCount}_gang_affiliation" placeholder="Enter Gang Affiliation">
-                <input type="url" id="person_${personCount}_mdc_link" placeholder="Enter MDC Profile Picture Link">
+                <input type="text" id="person_${personCount}" placeholder="Enter Person #${personCount} Name" oninput="updateBBCode()">
+                <input type="text" id="person_${personCount}_classification" placeholder="Enter Classification (Victim / Suspect / Witness / Informant)" oninput="updateBBCode()">
+                <input type="text" id="person_${personCount}_dob" placeholder="Enter Date of Birth" oninput="updateBBCode()">
+                <input type="text" id="person_${personCount}_phone" placeholder="Enter Phone Number" oninput="updateBBCode()">
+                <input type="text" id="person_${personCount}_residence" placeholder="Enter Residence" oninput="updateBBCode()">
+                <input type="text" id="person_${personCount}_properties" placeholder="Enter Other Properties" oninput="updateBBCode()">
+                <input type="text" id="person_${personCount}_gang_affiliation" placeholder="Enter Gang Affiliation" oninput="updateBBCode()">
+                <input type="url" id="person_${personCount}_mdc_link" placeholder="Enter MDC Profile Picture Link" oninput="updateBBCode()">
             `;
             personsSection.appendChild(newPerson);
         }
@@ -174,13 +174,13 @@
             newExhibit.className = 'form-group';
             newExhibit.innerHTML = `
                 <label for="exhibit_${String.fromCharCode(64 + exhibitCount)}">Exhibit ${String.fromCharCode(64 + exhibitCount)}</label>
-                <input type="text" id="exhibit_${String.fromCharCode(64 + exhibitCount)}" placeholder="Enter Exhibit ${String.fromCharCode(64 + exhibitCount)} Description">
-                <textarea id="exhibit_${String.fromCharCode(64 + exhibitCount)}_spoiler" placeholder="Enter Exhibit ${String.fromCharCode(64 + exhibitCount)} Spoiler"></textarea>
+                <input type="text" id="exhibit_${String.fromCharCode(64 + exhibitCount)}" placeholder="Enter Exhibit ${String.fromCharCode(64 + exhibitCount)} Description" oninput="updateBBCode()">
+                <textarea id="exhibit_${String.fromCharCode(64 + exhibitCount)}_spoiler" placeholder="Enter Exhibit ${String.fromCharCode(64 + exhibitCount)} Spoiler" oninput="updateBBCode()"></textarea>
             `;
             exhibitsSection.appendChild(newExhibit);
         }
 
-        function generateBBCode() {
+        function updateBBCode() {
             let bbcode = '[font=Arial][color=black]\n\n';
             bbcode += '[center][img]https://i.imgur.com/LEWTXbL.png[/img]\n\n';
             bbcode += '[size=125][b]SHERIFF\'S DEPARTMENT\nCOUNTY OF LOS SANTOS[/b]\n[i]"A Tradition of Service Since 1850"[/i][/size]\n\n';
