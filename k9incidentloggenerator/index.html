@@ -116,10 +116,10 @@ FIRSTNAME LASTNAME, RANK
             const callsign = document.getElementById('callsign').value || 'CALLSIGN HERE';
 
             const deploymentType = `
-${document.getElementById('bite').checked ? '[cbc]Bite[/cbc]' : '[cb][/cb] Bite'}
-${document.getElementById('searchWarrant').checked ? '[cbc]Search Warrant[/cbc]' : '[cb][/cb] Search Warrant'}
-${document.getElementById('tracking').checked ? '[cbc]Tracking[/cbc]' : '[cb][/cb] Tracking'}
-${document.getElementById('other').checked ? '[cbc]Other[/cbc]:(Please detail in the narrative)' : '[cb][/cb] Other:(Please detail in the narrative)'}`;
+${document.getElementById('bite').checked ? '[cbc]Bite' : '[cb][/cb] Bite'}
+${document.getElementById('searchWarrant').checked ? '[cbc]Search Warrant' : '[cb][/cb] Search Warrant'}
+${document.getElementById('tracking').checked ? '[cbc]Tracking' : '[cb][/cb] Tracking'}
+${document.getElementById('other').checked ? '[cbc]Other:(Please detail in the narrative)' : '[cb][/cb] Other:(Please detail in the narrative)'}`;
 
             const narrative = document.getElementById('narrative').value || 'FILL IN NARRATIVE HERE.';
             const evidence = document.getElementById('evidence').value || 'LIST THE EVIDENCE HERE';
@@ -178,9 +178,11 @@ ${signedBy}, ${rank}
         function saveName() {
             const signedBy = document.getElementById('signedBy').value;
             const rank = document.getElementById('rank').value;
+            const callsign = document.getElementById('callsign').value;
 
             document.cookie = `signedBy=${signedBy}; max-age=31536000; path=/`;
             document.cookie = `rank=${rank}; max-age=31536000; path=/`;
+            document.cookie = `callsign=${callsign}; max-age=31536000; path=/`;
         }
 
         function loadName() {
@@ -192,6 +194,7 @@ ${signedBy}, ${rank}
 
             document.getElementById('signedBy').value = cookies.signedBy || '';
             document.getElementById('rank').value = cookies.rank || '';
+            document.getElementById('callsign').value = cookies.callsign || '';
 
             updateBBCode();
         }
