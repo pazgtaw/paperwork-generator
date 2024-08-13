@@ -23,7 +23,7 @@
             border: 1px solid black;
             text-align: left;
         }
-        input, select {
+        input, select, textarea {
             width: 100%;
             box-sizing: border-box;
         }
@@ -33,12 +33,30 @@
             margin: 20px 0;
             background-color: white;
         }
+        #bbcode-output {
+            white-space: pre-wrap;
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid black;
+        }
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="center">
         <h1>Traffic Collision Report Form</h1>
-        <h2>DITC-<input type="text" placeholder="NUMBER"></h2>
+        <h2>DITC-<input id="number" type="text" placeholder="NUMBER"></h2>
     </div>
     <hr>
 
@@ -49,9 +67,9 @@
             <th>TIME OF COLLISION</th>
         </tr>
         <tr>
-            <td><input type="text" placeholder="LOCATION"></td>
-            <td><input type="date" placeholder="DD/MMM/YYYY"></td>
-            <td><input type="time" placeholder="XX:XX"></td>
+            <td><input id="location" type="text" placeholder="LOCATION"></td>
+            <td><input id="date" type="date" placeholder="DD/MMM/YYYY"></td>
+            <td><input id="time" type="time" placeholder="XX:XX"></td>
         </tr>
     </table>
 
@@ -71,24 +89,24 @@
             <th>STATUS</th>
         </tr>
         <tr>
-            <td><input type="text" placeholder="D1"></td>
-            <td><input type="text" placeholder="Lastname"></td>
-            <td><input type="text" placeholder="Firstname"></td>
+            <td><input id="code1" type="text" placeholder="D1"></td>
+            <td><input id="lname1" type="text" placeholder="Lastname"></td>
+            <td><input id="fname1" type="text" placeholder="Firstname"></td>
             <td>
-                <select>
+                <select id="sex1">
                     <option value="M">M</option>
                     <option value="F">F</option>
                 </select>
             </td>
-            <td><input type="number" placeholder="Age"></td>
+            <td><input id="age1" type="number" placeholder="Age"></td>
             <td>
-                <select>
+                <select id="belted1">
                     <option value="Y">Y</option>
                     <option value="N">N</option>
                 </select>
             </td>
             <td>
-                <select>
+                <select id="status1">
                     <option value="UNHARMED">UNHARMED</option>
                     <option value="INJURED">INJURED</option>
                     <option value="SEVERELY INJURED">SEVERELY INJURED</option>
@@ -97,24 +115,24 @@
             </td>
         </tr>
         <tr>
-            <td><input type="text" placeholder="D2"></td>
-            <td><input type="text" placeholder="Lastname"></td>
-            <td><input type="text" placeholder="Firstname"></td>
+            <td><input id="code2" type="text" placeholder="D2"></td>
+            <td><input id="lname2" type="text" placeholder="Lastname"></td>
+            <td><input id="fname2" type="text" placeholder="Firstname"></td>
             <td>
-                <select>
+                <select id="sex2">
                     <option value="M">M</option>
                     <option value="F">F</option>
                 </select>
             </td>
-            <td><input type="number" placeholder="Age"></td>
+            <td><input id="age2" type="number" placeholder="Age"></td>
             <td>
-                <select>
+                <select id="belted2">
                     <option value="Y">Y</option>
                     <option value="N">N</option>
                 </select>
             </td>
             <td>
-                <select>
+                <select id="status2">
                     <option value="UNHARMED">UNHARMED</option>
                     <option value="INJURED">INJURED</option>
                     <option value="SEVERELY INJURED">SEVERELY INJURED</option>
@@ -141,40 +159,40 @@
             <th>TOWED</th>
         </tr>
         <tr>
-            <td><input type="text" placeholder="V1"></td>
-            <td><input type="text" placeholder="D1"></td>
-            <td><input type="text" placeholder="P1"></td>
-            <td><input type="text" placeholder="PLATE"></td>
-            <td><input type="text" placeholder="COLOR"></td>
-            <td><input type="text" placeholder="MODEL"></td>
+            <td><input id="vcode1" type="text" placeholder="V1"></td>
+            <td><input id="vdriver1" type="text" placeholder="D1"></td>
+            <td><input id="vpassenger1" type="text" placeholder="P1"></td>
+            <td><input id="vplate1" type="text" placeholder="PLATE"></td>
+            <td><input id="vcolor1" type="text" placeholder="COLOR"></td>
+            <td><input id="vmodel1" type="text" placeholder="MODEL"></td>
             <td>
-                <select>
+                <select id="vdamage1">
                     <option value="FUNCTIONAL">FUNCTIONAL</option>
                     <option value="DISABLED">DISABLED</option>
                 </select>
             </td>
             <td>
-                <select>
+                <select id="vtowed1">
                     <option value="Y">Y</option>
                     <option value="N">N</option>
                 </select>
             </td>
         </tr>
         <tr>
-            <td><input type="text" placeholder="V2"></td>
-            <td><input type="text" placeholder="D2"></td>
-            <td><input type="text" placeholder="P2"></td>
-            <td><input type="text" placeholder="PLATE"></td>
-            <td><input type="text" placeholder="COLOR"></td>
-            <td><input type="text" placeholder="MODEL"></td>
+            <td><input id="vcode2" type="text" placeholder="V2"></td>
+            <td><input id="vdriver2" type="text" placeholder="D2"></td>
+            <td><input id="vpassenger2" type="text" placeholder="P2"></td>
+            <td><input id="vplate2" type="text" placeholder="PLATE"></td>
+            <td><input id="vcolor2" type="text" placeholder="COLOR"></td>
+            <td><input id="vmodel2" type="text" placeholder="MODEL"></td>
             <td>
-                <select>
+                <select id="vdamage2">
                     <option value="FUNCTIONAL">FUNCTIONAL</option>
                     <option value="DISABLED">DISABLED</option>
                 </select>
             </td>
             <td>
-                <select>
+                <select id="vtowed2">
                     <option value="Y">Y</option>
                     <option value="N">N</option>
                 </select>
@@ -184,12 +202,12 @@
 
     <div class="divbox">
         <h3 class="center">NARRATIVE</h3>
-        <textarea placeholder="EXPLANATION OF EVENTS LEADING UP TO AND RESULTING FROM CRASH." rows="5" style="width:100%;"></textarea>
+        <textarea id="narrative" placeholder="EXPLANATION OF EVENTS LEADING UP TO AND RESULTING FROM CRASH." rows="5"></textarea>
     </div>
 
     <div class="divbox">
         <h3 class="center">ATTACHED EVIDENCE</h3>
-        <textarea placeholder="EVIDENCE HERE" rows="3" style="width:100%;"></textarea>
+        <textarea id="evidence" placeholder="EVIDENCE HERE" rows="3"></textarea>
     </div>
 
     <table>
@@ -200,12 +218,176 @@
             <th>UNIT/CAR #</th>
         </tr>
         <tr>
-            <td><input type="text" placeholder="LAST, FIRST"></td>
-            <td><input type="text" placeholder="EMPLOYEE #"></td>
+            <td><input id="preparedby" type="text" placeholder="LAST, FIRST"></td>
+            <td><input id="employee" type="text" placeholder="EMPLOYEE #"></td>
             <td>TRAFFIC SERVICES</td>
-            <td><input type="text" placeholder="CALLSIGN"></td>
+            <td><input id="unit" type="text" placeholder="CALLSIGN"></td>
         </tr>
     </table>
     <hr>
+
+    <div id="bbcode-output" class="divbox"></div>
+    <button class="copy-btn" onclick="copyBBCode()">Copy BBCode</button>
+
+    <script>
+        function generateBBCode() {
+            const number = document.getElementById('number').value;
+            const location = document.getElementById('location').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const code1 = document.getElementById('code1').value;
+            const lname1 = document.getElementById('lname1').value;
+            const fname1 = document.getElementById('fname1').value;
+            const sex1 = document.getElementById('sex1').value;
+            const age1 = document.getElementById('age1').value;
+            const belted1 = document.getElementById('belted1').value;
+            const status1 = document.getElementById('status1').value;
+            const code2 = document.getElementById('code2').value;
+            const lname2 = document.getElementById('lname2').value;
+            const fname2 = document.getElementById('fname2').value;
+            const sex2 = document.getElementById('sex2').value;
+            const age2 = document.getElementById('age2').value;
+            const belted2 = document.getElementById('belted2').value;
+            const status2 = document.getElementById('status2').value;
+            const vcode1 = document.getElementById('vcode1').value;
+            const vdriver1 = document.getElementById('vdriver1').value;
+            const vpassenger1 = document.getElementById('vpassenger1').value;
+            const vplate1 = document.getElementById('vplate1').value;
+            const vcolor1 = document.getElementById('vcolor1').value;
+            const vmodel1 = document.getElementById('vmodel1').value;
+            const vdamage1 = document.getElementById('vdamage1').value;
+            const vtowed1 = document.getElementById('vtowed1').value;
+            const vcode2 = document.getElementById('vcode2').value;
+            const vdriver2 = document.getElementById('vdriver2').value;
+            const vpassenger2 = document.getElementById('vpassenger2').value;
+            const vplate2 = document.getElementById('vplate2').value;
+            const vcolor2 = document.getElementById('vcolor2').value;
+            const vmodel2 = document.getElementById('vmodel2').value;
+            const vdamage2 = document.getElementById('vdamage2').value;
+            const vtowed2 = document.getElementById('vtowed2').value;
+            const narrative = document.getElementById('narrative').value;
+            const evidence = document.getElementById('evidence').value;
+            const preparedby = document.getElementById('preparedby').value;
+            const employee = document.getElementById('employee').value;
+            const unit = document.getElementById('unit').value;
+
+            const bbcode = `[CENTER][B][U]TRAFFIC COLLISION REPORT FORM[/U][/B]
+[U]DITC-${number}[/U][/CENTER]
+[HR][/HR]
+[TABLE="width: 600"]
+[TR]
+[TD][B]LOCATION OF COLLISION[/B][/TD]
+[TD][B]DATE OF COLLISION[/B][/TD]
+[TD][B]TIME OF COLLISION[/B][/TD]
+[/TR]
+[TR]
+[TD]${location}[/TD]
+[TD]${date}[/TD]
+[TD]${time}[/TD]
+[/TR]
+[/TABLE]
+[CENTER][B][U]INVOLVED PEOPLE[/U][/B][/CENTER]
+[CENTER][I]CODES: D - Driver (1, 2, 3) — W - WITNESS (1, 2, 3) — P - Passenger (1, 2, 3) — PED - PEDESTRIAN (1, 2, 3)[/I][/CENTER]
+[TABLE="width: 600"]
+[TR]
+[TD][B]CODE[/B][/TD]
+[TD][B]L. NAME[/B][/TD]
+[TD][B]F. NAME[/B][/TD]
+[TD][B]SEX[/B][/TD]
+[TD][B]AGE[/B][/TD]
+[TD][B]BELTED[/B][/TD]
+[TD][B]STATUS[/B][/TD]
+[/TR]
+[TR]
+[TD]${code1}[/TD]
+[TD]${lname1}[/TD]
+[TD]${fname1}[/TD]
+[TD]${sex1}[/TD]
+[TD]${age1}[/TD]
+[TD]${belted1}[/TD]
+[TD]${status1}[/TD]
+[/TR]
+[TR]
+[TD]${code2}[/TD]
+[TD]${lname2}[/TD]
+[TD]${fname2}[/TD]
+[TD]${sex2}[/TD]
+[TD]${age2}[/TD]
+[TD]${belted2}[/TD]
+[TD]${status2}[/TD]
+[/TR]
+[/TABLE]
+[CENTER][B][U]INVOLVED VEHICLES[/U][/B][/CENTER]
+[CENTER][I]CODES:  V - Vehicle (1, 2, 3)[/I][/CENTER]
+[TABLE="width: 600"]
+[TR]
+[TD][B]CODE[/B][/TD]
+[TD][B]DRIVER[/B][/TD]
+[TD][B]PASSENGERS[/B][/TD]
+[TD][B]TAG[/B][/TD]
+[TD][B]COLOR[/B][/TD]
+[TD][B]MODEL[/B][/TD]
+[TD][B]DAMAGE[/B][/TD]
+[TD][B]TOWED[/B][/TD]
+[/TR]
+[TR]
+[TD]${vcode1}[/TD]
+[TD]${vdriver1}[/TD]
+[TD]${vpassenger1}[/TD]
+[TD]${vplate1}[/TD]
+[TD]${vcolor1}[/TD]
+[TD]${vmodel1}[/TD]
+[TD]${vdamage1}[/TD]
+[TD]${vtowed1}[/TD]
+[/TR]
+[TR]
+[TD]${vcode2}[/TD]
+[TD]${vdriver2}[/TD]
+[TD]${vpassenger2}[/TD]
+[TD]${vplate2}[/TD]
+[TD]${vcolor2}[/TD]
+[TD]${vmodel2}[/TD]
+[TD]${vdamage2}[/TD]
+[TD]${vtowed2}[/TD]
+[/TR]
+[/TABLE]
+[DIVBOX=white][B][U]NARRATIVE[/U][/B]
+${narrative}[/DIVBOX]
+[DIVBOX=white][B][U]ATTACHED EVIDENCE[/U][/B]
+${evidence}[/DIVBOX]
+[TABLE="width: 600"]
+[TR]
+[TD][B]PREPARED BY[/B][/TD]
+[TD][B]EMPLOYEE #[/B][/TD]
+[TD][B]STATION/UNIT[/B][/TD]
+[TD][B]UNIT/CAR #[/B][/TD]
+[/TR]
+[TR]
+[TD]${preparedby}[/TD]
+[TD]${employee}[/TD]
+[TD]TRAFFIC SERVICES[/TD]
+[TD]${unit}[/TD]
+[/TR]
+[/TABLE]
+[HR][/HR]`;
+
+            document.getElementById('bbcode-output').textContent = bbcode;
+        }
+
+        function copyBBCode() {
+            generateBBCode();
+            const bbcodeOutput = document.getElementById('bbcode-output');
+            const range = document.createRange();
+            range.selectNode(bbcodeOutput);
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            alert('BBCode copied to clipboard!');
+        }
+
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', generateBBCode);
+        });
+    </script>
 </body>
 </html>
