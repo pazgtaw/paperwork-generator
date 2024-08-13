@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Collision Report Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: black;
+        }
+        .center {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        td, th {
+            padding: 8px;
+            border: 1px solid black;
+            text-align: left;
+        }
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .divbox {
+            border: 1px solid black;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <h1>Traffic Collision Report Form</h1>
+        <h2>DITC-<input type="text" placeholder="NUMBER"></h2>
+    </div>
+    <hr>
+
+    <table>
+        <tr>
+            <th>LOCATION OF COLLISION</th>
+            <th>DATE OF COLLISION</th>
+            <th>TIME OF COLLISION</th>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="LOCATION"></td>
+            <td><input type="date" placeholder="DD/MMM/YYYY"></td>
+            <td><input type="time" placeholder="XX:XX"></td>
+        </tr>
+    </table>
+
+    <div class="center">
+        <h3>INVOLVED PEOPLE</h3>
+        <p>CODES: D - Driver (1, 2, 3) — W - WITNESS (1, 2, 3) — P - Passenger (1, 2, 3) — PED - PEDESTRIAN (1, 2, 3)</p>
+    </div>
+
+    <table>
+        <tr>
+            <th>CODE</th>
+            <th>L. NAME</th>
+            <th>F. NAME</th>
+            <th>SEX</th>
+            <th>AGE</th>
+            <th>BELTED</th>
+            <th>STATUS</th>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="D1"></td>
+            <td><input type="text" placeholder="Lastname"></td>
+            <td><input type="text" placeholder="Firstname"></td>
+            <td>
+                <select>
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                </select>
+            </td>
+            <td><input type="number" placeholder="Age"></td>
+            <td>
+                <select>
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value="UNHARMED">UNHARMED</option>
+                    <option value="INJURED">INJURED</option>
+                    <option value="SEVERELY INJURED">SEVERELY INJURED</option>
+                    <option value="DECEASED">DECEASED</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="D2"></td>
+            <td><input type="text" placeholder="Lastname"></td>
+            <td><input type="text" placeholder="Firstname"></td>
+            <td>
+                <select>
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                </select>
+            </td>
+            <td><input type="number" placeholder="Age"></td>
+            <td>
+                <select>
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value="UNHARMED">UNHARMED</option>
+                    <option value="INJURED">INJURED</option>
+                    <option value="SEVERELY INJURED">SEVERELY INJURED</option>
+                    <option value="DECEASED">DECEASED</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <div class="center">
+        <h3>INVOLVED VEHICLES</h3>
+        <p> CODES:  V - Vehicle (1, 2, 3)</p>
+    </div>
+
+    <table>
+        <tr>
+            <th>CODE</th>
+            <th>DRIVER</th>
+            <th>PASSENGERS</th>
+            <th>TAG</th>
+            <th>COLOR</th>
+            <th>MODEL</th>
+            <th>DAMAGE</th>
+            <th>TOWED</th>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="V1"></td>
+            <td><input type="text" placeholder="D1"></td>
+            <td><input type="text" placeholder="P1"></td>
+            <td><input type="text" placeholder="PLATE"></td>
+            <td><input type="text" placeholder="COLOR"></td>
+            <td><input type="text" placeholder="MODEL"></td>
+            <td>
+                <select>
+                    <option value="FUNCTIONAL">FUNCTIONAL</option>
+                    <option value="DISABLED">DISABLED</option>
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="V2"></td>
+            <td><input type="text" placeholder="D2"></td>
+            <td><input type="text" placeholder="P2"></td>
+            <td><input type="text" placeholder="PLATE"></td>
+            <td><input type="text" placeholder="COLOR"></td>
+            <td><input type="text" placeholder="MODEL"></td>
+            <td>
+                <select>
+                    <option value="FUNCTIONAL">FUNCTIONAL</option>
+                    <option value="DISABLED">DISABLED</option>
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <div class="divbox">
+        <h3 class="center">NARRATIVE</h3>
+        <textarea placeholder="EXPLANATION OF EVENTS LEADING UP TO AND RESULTING FROM CRASH." rows="5" style="width:100%;"></textarea>
+    </div>
+
+    <div class="divbox">
+        <h3 class="center">ATTACHED EVIDENCE</h3>
+        <textarea placeholder="EVIDENCE HERE" rows="3" style="width:100%;"></textarea>
+    </div>
+
+    <table>
+        <tr>
+            <th>PREPARED BY</th>
+            <th>EMPLOYEE #</th>
+            <th>STATION/UNIT</th>
+            <th>UNIT/CAR #</th>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="LAST, FIRST"></td>
+            <td><input type="text" placeholder="EMPLOYEE #"></td>
+            <td>TRAFFIC SERVICES</td>
+            <td><input type="text" placeholder="CALLSIGN"></td>
+        </tr>
+    </table>
+    <hr>
+</body>
+</html>
