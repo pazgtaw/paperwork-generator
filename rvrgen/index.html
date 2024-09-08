@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules Violation Report Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button.clear {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Fillable Rules Violation Report</h2>
+
+<form id="violation-form">
+    <!-- SADC Number -->
+    <div class="form-group">
+        <label for="sadcNumber">SADC Number:</label>
+        <input type="text" id="sadcNumber" name="sadcNumber">
+    </div>
+
+    <!-- Inmate's Name -->
+    <div class="form-group">
+        <label for="inmateName">Inmate's Name:</label>
+        <input type="text" id="inmateName" name="inmateName">
+    </div>
+
+    <!-- Release Date -->
+    <div class="form-group">
+        <label for="releaseDate">Release Date:</label>
+        <input type="text" id="releaseDate" name="releaseDate">
+    </div>
+
+    <!-- Institution -->
+    <div class="form-group">
+        <label for="inst">Institution:</label>
+        <input type="text" id="inst" name="inst">
+    </div>
+
+    <!-- Housing Number -->
+    <div class="form-group">
+        <label for="housingNo">Housing No:</label>
+        <input type="text" id="housingNo" name="housingNo">
+    </div>
+
+    <!-- Log Number -->
+    <div class="form-group">
+        <label for="logNo">Log No:</label>
+        <input type="text" id="logNo" name="logNo">
+    </div>
+
+    <!-- Violated Rules -->
+    <div class="form-group">
+        <label for="violatedRules">Violated Rule No(s):</label>
+        <input type="text" id="violatedRules" name="violatedRules">
+    </div>
+
+    <!-- Specific Acts -->
+    <div class="form-group">
+        <label for="specificActs">Specific Acts:</label>
+        <input type="text" id="specificActs" name="specificActs">
+    </div>
+
+    <!-- Location -->
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location">
+    </div>
+
+    <!-- Date and Time -->
+    <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date">
+    </div>
+
+    <div class="form-group">
+        <label for="time">Time:</label>
+        <input type="text" id="time" name="time">
+    </div>
+
+    <!-- Narrative -->
+    <div class="form-group">
+        <label for="narrative">Narrative:</label>
+        <textarea id="narrative" name="narrative"></textarea>
+    </div>
+
+    <!-- Reporting Employee -->
+    <div class="form-group">
+        <label for="reportingEmployee">Reporting Employee:</label>
+        <input type="text" id="reportingEmployee" name="reportingEmployee">
+    </div>
+
+    <!-- Assignment -->
+    <div class="form-group">
+        <label for="assignment">Assignment:</label>
+        <input type="text" id="assignment" name="assignment">
+    </div>
+
+    <!-- Rank -->
+    <div class="form-group">
+        <label for="rank">Rank:</label>
+        <input type="text" id="rank" name="rank">
+    </div>
+
+    <!-- Reviewing Supervisor -->
+    <div class="form-group">
+        <label for="reviewingSupervisor">Reviewing Supervisor:</label>
+        <input type="text" id="reviewingSupervisor" name="reviewingSupervisor">
+    </div>
+
+    <!-- Yes/No Dropdown -->
+    <div class="form-group">
+        <label for="stgActivity">STG Activity in Rules Violation:</label>
+        <select id="stgActivity" name="stgActivity">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+
+    <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+    <button type="button" class="clear" onclick="clearForm()">Clear Form</button>
+</form>
+
+<h3>Generated BBCode</h3>
+<textarea id="output" readonly></textarea>
+<button type="button" onclick="copyBBCode()">Copy BBCode</button>
+
+<script>
+    // Save specific fields to cookies for autofill on reload
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('reportingEmployee')) {
+            document.getElementById('reportingEmployee').value = localStorage.getItem('reportingEmployee');
+        }
+        if (localStorage.getItem('assignment')) {
+            document.getElementById('assignment').value = localStorage.getItem('assignment');
+        }
+    });
+
+    function saveToLocalStorage() {
+        localStorage.setItem('reportingEmployee', document.getElementById('reportingEmployee').value);
+        localStorage.setItem('assignment', document.getElementById('assignment').value);
+    }
+
+    function generateBBCode() {
+        const sadcNumber = document.getElementById('sadcNumber').value;
+        const inmateName = document.getElementById('inmateName').value;
+        const releaseDate = document.getElementById('releaseDate').value;
+        const inst = document.getElementById('inst').value;
+        const housingNo = document.getElementById('housingNo').value;
+        const logNo = document.getElementById('logNo').value;
+        const violatedRules = document.getElementById('violatedRules').value;
+        const specificActs = document.getElementById('specificActs').value;
+        const location = document.getElementById('location').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const narrative = document.getElementById('narrative').value;
+        const reportingEmployee = document.getElementById('reportingEmployee').value;
+        const assignment = document.getElementById('assignment').value;
+        const rank = document.getElementById('rank').value;
+        const reviewingSupervisor = document.getElementById('reviewingSupervisor').value;
+        const stgActivity = document.getElementById('stgActivity').value;
+
+        saveToLocalStorage();
+
+        const bbcode = `[altdivbox=white,0,white,5,5,5]STATE OF SAN ANDREAS[float=right]DEPARTMENT OF CORRECTIONS[/float]
+[altdivbox=transparent,0,black,1,0,0][aligntable2=right,75,1,0,0,transparent,transparent]
+[/aligntable2][/altdivbox]
+[b]RULES VIOLATION REPORT - [/b][float=right][size=80]Page 1 of 1[/size][/float]
+[altdivbox=transparent,1,black,1,0,0][/altdivbox]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,17,4][b]SADC NUMBER[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4][b]INMATES NAME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,16,4][b]RELEASE DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4][b]INST[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,4][b]HOUSING NO[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,30,4][b]LOG NO[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,17,4]${sadcNumber}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4]${inmateName}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,16,4]${releaseDate}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4]${inst}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,4]${housingNo}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,30,4]${logNo}[/tdwidth]
+[/tr]
+[/table2]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,4][b]VIOLATED RULE NO(S)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,4][b]SPECIFIC ACTS[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,4][b]LOCATION[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4][b]DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4][b]TIME[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,4]${violatedRules}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,4]${specificActs}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,4]${location}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4]${date}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4]${time}[/tdwidth]
+[/tr]
+[/table2]
+[altdivbox=white,0,white,1,1,1][font=Roboto][size=85]CIRCUMSTANCES[/size][/font]
+[altdivbox=transparent,0,black,1,0,0][aligntable2=left,75,1,0,0,transparent,transparent]
+[/aligntable2][/altdivbox]
+[font=Roboto][size=90]${narrative}[/font][/size]
+
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,40,4][b]REPORTING EMPLOYEE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4][b]DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4][b]ASSIGNMENT[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4][b]RANK[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,40,4]${reportingEmployee}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4]${date}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4]${assignment}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4]${rank}[/tdwidth]
+[/tr]
+[/table2]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,33,4][b]REVIEWING SUPERVISOR[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,4][b]DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,4][b]INMATE SEGREGATED[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,33,4]${reviewingSupervisor}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,4]${date}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,4][cb][/cb][/tdwidth]
+[/tr]
+[/table2]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,20,4][b]ADMINISTRATIVE/SERIOUS[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,13,4][b]DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,4][b]CLASSIFIED BY[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,30,4][b]STG ACTIVITY IN RULES VIOLATION [/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,20,4]Administrative [cb][/cb] Serious [cb][/cb][/tdwidth]
+[tdwidth=1,black,transparent,top,left,13,4]${date}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,4]${reportingEmployee}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,30,4]${stgActivity}[/tdwidth]
+[/tr]
+[/table2]`;
+
+        document.getElementById('output').value = bbcode;
+    }
+
+    function copyBBCode() {
+        const output = document.getElementById('output');
+        output.select();
+        output.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+
+    function clearForm() {
+        document.getElementById('violation-form').reset();
+    }
+</script>
+
+</body>
+</html>
