@@ -68,7 +68,7 @@
             <select id="dropdown-1">
                 <option value="" disabled selected>Misc Generators</option>
                 <option value="parole">Parole Central File</option>
-                <option value="placeholder">PLACEHOLDER</option>
+                <option value="rvr">Rules Violation Report</option>
             </select>
             <button onclick="navigateToDropdown('dropdown-1')">Go</button>
         </div>
@@ -94,6 +94,9 @@
 
             if (selectedValue === 'parole') {
                 window.location.href = "https://pazgtaw.github.io/paperwork-generator/parolegenerator/";
+            } else if (selectedValue === 'rvr') {
+                // Add the URL for Example Report 1
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/rvrgen/";
             } else if (selectedValue === 'sebgen') {
                 // Add the URL for Example Report 1
                 window.location.href = "https://pazgtaw.github.io/paperwork-generator/sebdeploymentgenerator/";
