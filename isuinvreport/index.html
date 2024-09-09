@@ -214,13 +214,19 @@
 
         const bbcode = `[divbox=#e2e2e2]
 
+
 [aligntable=right,13,0,0,0,0][float=right][b]CONFIDENTIAL[/b][/float][/aligntable]
 
 [aligntable=left,50,0,0,0,13][size=85]SAN ANDREAS DEPARTMENT OF CORRECTIONS AND REHABILITATION
 INVESTIGATIVE SERVICES UNIT
 LOS SANTOS COUNTY (LSC)[/size][/aligntable]
 
+
+
+
 [center][imgmw=500]https://i.ibb.co/qMgT1RY/header2.png[/imgmw][/center]
+
+
 
 [hr][/hr]
 
@@ -231,8 +237,10 @@ LOS SANTOS COUNTY (LSC)[/size][/aligntable]
 [b]CHARGES:[/b] ${charges}
 [b]HANDLING INVESTIGATOR:[/b] ${investigatorName}
 [b]DA REFERRAL:[/b] ${daReferral}
-[b]STG RELATED:[/b] ${stgRelated}, IF YES, WRITE THE STG NAME ${stgRelated === 'YES' ? stgName : ""}
+[b]STG RELATED:[/b] ${stgRelated}, ${stgRelated === 'YES' ? stgName : ""}
 [/indent]
+
+
 
 [indent][size=110][b]1. COMPLAINANT INFORMATION[/b][/size][/indent]
 
@@ -248,12 +256,23 @@ LOS SANTOS COUNTY (LSC)[/size][/aligntable]
 [b]SADC Number:[/b] ${sadcNumber}
 [/aligntable]
 
+
+
+
+
 [indent][size=110][b]2. DISCOVERY INFORMATION[/b][/size]
 ${discoveryInfo}
 [/indent]
 
+
+
+
+
 [indent][size=110][b]3. NARRATIVE[/b][/size]
 ${narrative}[/indent]
+
+
+
 
 [indent][size=110][b]4. EVIDENCE[/b][/size]
 
@@ -261,8 +280,18 @@ ${narrative}[/indent]
 
 [/indent]
 
+
+
+
+
+
+
+
+
 [hr]
 [center][size=75]San Andreas Department of Corrections and Rehabilitation © 2024[/size][/center]
+
+
 
 [/divbox]`;
 
