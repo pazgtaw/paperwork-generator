@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBCode Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        textarea {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>BBCode Fillable Form</h1>
+
+<form id="bbcodeForm">
+    <label for="incidentDateTime">INCIDENT DATE & TIME:</label>
+    <input type="text" id="incidentDateTime" placeholder="Enter the incident date and time">
+
+    <label for="incidentLocation">INCIDENT LOCATION:</label>
+    <input type="text" id="incidentLocation" placeholder="Enter the incident location">
+
+    <h3>Involved Persons</h3>
+    <label for="name1">Name 1:</label>
+    <input type="text" id="name1" placeholder="Enter name">
+
+    <label for="race1">Race 1:</label>
+    <select id="race1">
+        <option value="Caucasian">Caucasian</option>
+        <option value="African American">African American</option>
+        <option value="Hispanic">Hispanic</option>
+        <option value="Asian">Asian</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="sangang1">SANGANG 1:</label>
+    <input type="text" id="sangang1" placeholder="Enter SANGANG URL">
+
+    <label for="mdc1">MDC 1:</label>
+    <input type="text" id="mdc1" placeholder="Enter MDC URL">
+
+    <label for="inmate1">Inmate 1:</label>
+    <select id="inmate1">
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
+    </select>
+
+    <label for="involvement1">Involvement 1:</label>
+    <select id="involvement1">
+        <option value="SUSPECT">SUSPECT</option>
+        <option value="VICTIM">VICTIM</option>
+        <option value="WITNESS">WITNESS</option>
+        <option value="OTHER">OTHER</option>
+    </select>
+
+    <label for="name1">Name 2:</label>
+    <input type="text" id="name2" placeholder="Enter name">
+
+    <label for="race2">Race 2:</label>
+    <select id="race2">
+        <option value="Caucasian">Caucasian</option>
+        <option value="African American">African American</option>
+        <option value="Hispanic">Hispanic</option>
+        <option value="Asian">Asian</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="sangang2">SANGANG 2:</label>
+    <input type="text" id="sangang2" placeholder="Enter SANGANG URL">
+
+    <label for="mdc2">MDC 2:</label>
+    <input type="text" id="mdc2" placeholder="Enter MDC URL">
+
+    <label for="inmate2">Inmate 2:</label>
+    <select id="inmate2">
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
+    </select>
+
+    <label for="involvement2">Involvement 2:</label>
+    <select id="involvement2">
+        <option value="SUSPECT">SUSPECT</option>
+        <option value="VICTIM">VICTIM</option>
+        <option value="WITNESS">WITNESS</option>
+        <option value="OTHER">OTHER</option>
+    </select>
+
+    <label for="name3">Name 3:</label>
+    <input type="text" id="name3" placeholder="Enter name">
+
+    <label for="race3">Race 3:</label>
+    <select id="race3">
+        <option value="Caucasian">Caucasian</option>
+        <option value="African American">African American</option>
+        <option value="Hispanic">Hispanic</option>
+        <option value="Asian">Asian</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="sangang3">SANGANG 3:</label>
+    <input type="text" id="sangang3" placeholder="Enter SANGANG URL">
+
+    <label for="mdc3">MDC 3:</label>
+    <input type="text" id="mdc3" placeholder="Enter MDC URL">
+
+    <label for="inmate3">Inmate 3:</label>
+    <select id="inmate3">
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
+    </select>
+
+    <label for="involvement3">Involvement 3:</label>
+    <select id="involvement3">
+        <option value="SUSPECT">SUSPECT</option>
+        <option value="VICTIM">VICTIM</option>
+        <option value="WITNESS">WITNESS</option>
+        <option value="OTHER">OTHER</option>
+    </select>
+
+    <h3>Intelligence and Narrative</h3>
+    <label for="intelligenceSubject">INTELLIGENCE SUBJECT:</label>
+    <textarea id="intelligenceSubject" placeholder="Enter intelligence subject"></textarea>
+
+    <label for="narrative">NARRATIVE:</label>
+    <textarea id="narrative" placeholder="Write the narrative here..."></textarea>
+
+    <h3>Evidence</h3>
+    <label for="evidence">EVIDENCE:</label>
+    <textarea id="evidence" placeholder="Submit evidence here..."></textarea>
+
+    <h3>Reporting Information</h3>
+    <label for="reportingStaffName">NAME OF REPORTING STAFF:</label>
+    <input type="text" id="reportingStaffName" placeholder="Enter name of reporting staff">
+
+    <label for="reportingStaffTitle">TITLE (RANK NAME):</label>
+    <input type="text" id="reportingStaffTitle" placeholder="Enter title/rank">
+
+    <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+    <button type="button" onclick="clearForm()">Clear Form</button>
+</form>
+
+<div class="output">
+    <h2>Generated BBCode</h2>
+    <textarea id="bbcodeOutput" readonly></textarea>
+    <button onclick="copyBBCode()">Copy BBCode</button>
+</div>
+
+<script>
+    // Save the reporting staff name in a cookie
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const reportingStaffName = getCookie("reportingStaffName");
+        if (reportingStaffName) {
+            document.getElementById("reportingStaffName").value = reportingStaffName;
+        }
+    });
+
+    function generateBBCode() {
+        const incidentDateTime = document.getElementById('incidentDateTime').value;
+        const incidentLocation = document.getElementById('incidentLocation').value;
+        const name1 = document.getElementById('name1').value;
+        const race1 = document.getElementById('race1').value;
+        const sangang1 = document.getElementById('sangang1').value;
+        const mdc1 = document.getElementById('mdc1').value;
+        const inmate1 = document.getElementById('inmate1').value;
+        const involvement1 = document.getElementById('involvement1').value;
+        const name2 = document.getElementById('name2').value;
+        const race2 = document.getElementById('race2').value;
+        const sangang2 = document.getElementById('sangang2').value;
+        const mdc2 = document.getElementById('mdc2').value;
+        const inmate2 = document.getElementById('inmate2').value;
+        const involvement2 = document.getElementById('involvement2').value;
+        const name3 = document.getElementById('name3').value;
+        const race3 = document.getElementById('race3').value;
+        const sangang3 = document.getElementById('sangang3').value;
+        const mdc3 = document.getElementById('mdc3').value;
+        const inmate3 = document.getElementById('inmate3').value;
+        const involvement3 = document.getElementById('involvement3').value;
+        const intelligenceSubject = document.getElementById('intelligenceSubject').value;
+        const narrative = document.getElementById('narrative').value;
+        const evidence = document.getElementById('evidence').value;
+        const reportingStaffName = document.getElementById('reportingStaffName').value;
+        const reportingStaffTitle = document.getElementById('reportingStaffTitle').value;
+
+        setCookie("reportingStaffName", reportingStaffName, 365); // Save name for future use
+
+        const bbcode = `[divbox=#e2e2e2]
+
+
+
+
+[aligntable=right,13,0,0,0,0][float=right][b]CONFIDENTIAL[/b][/float][/aligntable]
+
+
+
+[aligntable=left,50,0,0,0,13][size=85]SAN ANDREAS DEPARTMENT OF CORRECTIONS AND REHABILITATION
+INVESTIGATIVE SERVICES UNIT
+LOS SANTOS COUNTY (LSC)[/size][/aligntable]
+
+
+
+
+
+
+[center][imgmw=500]https://i.ibb.co/qMgT1RY/header2.png[/imgmw][/center]
+
+
+
+[hr]
+[b]RAW INTELLIGENCE REPORT[/b]
+[aligntable=right,50,0,0,0,0][b]INCIDENT DATE & TIME:[/b] ${incidentDateTime}
+[b]INCIDENT LOCATION:[/b] ${incidentLocation}[/aligntable]
+
+
+
+[list=none][/list][hr][b]INVOLVED PERSONS[/b]
+
+
+
+
+
+[table=Times New][tr]
+[td][b]NAME[/b] ${name1}
+[/td][td][b]RACE[/b] ${race1}
+[/td][td][b]SANGANG[/b] [url=${sangang1}]ACCESS[/url]
+[/td][td][b]MDC[/b]  [url=${mdc1}]ACCESS[/url]
+[/td][td][b]INMATE[/b] ${inmate1}
+[/td][td][b]INVOLVEMENT[/b] ${involvement1}
+[/td][/tr][/table]
+
+[table=Times New][tr]
+[td][b]NAME[/b] ${name2}
+[/td][td][b]RACE[/b] ${race2}
+[/td][td][b]SANGANG[/b] [url=${sangang2}]ACCESS[/url]
+[/td][td][b]MDC[/b]  [url=${mdc2}]ACCESS[/url]
+[/td][td][b]INMATE[/b] ${inmate2}
+[/td][td][b]INVOLVEMENT[/b] ${involvement2}
+[/td][/tr][/table]
+
+[table=Times New][tr]
+[td][b]NAME[/b] ${name3}
+[/td][td][b]RACE[/b] ${race3}
+[/td][td][b]SANGANG[/b] [url=${sangang3}]ACCESS[/url]
+[/td][td][b]MDC[/b]  [url=${mdc3}]ACCESS[/url]
+[/td][td][b]INMATE[/b] ${inmate3}
+[/td][td][b]INVOLVEMENT[/b] ${involvement3}
+[/td][/tr][/table]
+
+
+
+
+
+
+[hr][b]INTELLIGENCE SUBJECT:[/b] ${intelligenceSubject}
+
+[b]NARRATIVE:[/b]
+${narrative}
+
+[list=none][/list][hr][b]EVIDENCE[/b]
+
+${evidence}
+
+
+
+
+
+[hr]
+[b]NAME OF REPORTING STAFF:[/b] ${reportingStaffName} [aligntable=right,50,0,0,0,0][b]TITLE:[/b] ${reportingStaffTitle}[/aligntable]
+[center][size=75]San Andreas Department of Corrections and Rehabilitation © 2024[/size][/center]
+[/divbox]`;
+
+        document.getElementById('bbcodeOutput').value = bbcode;
+    }
+
+    function copyBBCode() {
+        const bbcodeOutput = document.getElementById('bbcodeOutput');
+        bbcodeOutput.select();
+        document.execCommand('copy');
+        alert('BBCode copied to clipboard!');
+    }
+
+    function clearForm() {
+        document.getElementById('bbcodeForm').reset();
+        document.getElementById('bbcodeOutput').value = '';
+    }
+</script>
+
+</body>
+</html>
