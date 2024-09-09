@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fillable BBCode Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button.clear {
+            background-color: red;
+        }
+        #bbcode-output {
+            margin-top: 20px;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        #bbcode-output textarea {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Fillable BBCode Form</h2>
+
+<!-- Form Section -->
+<form id="bbcode-form">
+    <!-- Date and Time -->
+    <div class="form-group">
+        <label for="dateTime">Date/Time (DD/MMM/YYYY AT HH:MM):</label>
+        <input type="text" id="dateTime" placeholder="Enter date and time">
+    </div>
+
+    <!-- Location -->
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" placeholder="Enter location">
+    </div>
+
+    <!-- Log Number -->
+    <div class="form-group">
+        <label for="logNumber">Log Number:</label>
+        <input type="text" id="logNumber" placeholder="Enter log number">
+    </div>
+
+    <!-- Charges -->
+    <div class="form-group">
+        <label for="charges">Charges:</label>
+        <input type="text" id="charges" placeholder="Enter charges">
+    </div>
+
+    <!-- Investigator Name and Rank -->
+    <div class="form-group">
+        <label for="investigatorName">Handling Investigator (Classification/Rank):</label>
+        <input type="text" id="investigatorName" placeholder="Enter investigator name and rank">
+    </div>
+
+    <!-- DA Referral -->
+    <div class="form-group">
+        <label for="daReferral">DA Referral:</label>
+        <select id="daReferral">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+
+    <!-- STG Related -->
+    <div class="form-group">
+        <label for="stgRelated">STG Related:</label>
+        <select id="stgRelated">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+
+    <!-- STG Name (if yes) -->
+    <div class="form-group">
+        <label for="stgName">If Yes, Write the STG Name:</label>
+        <input type="text" id="stgName" placeholder="Enter STG name (if applicable)">
+    </div>
+
+    <!-- Complainant Information -->
+    <h3>Complainant Information</h3>
+    <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" placeholder="Enter last name">
+    </div>
+    <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" placeholder="Enter first name">
+    </div>
+    <div class="form-group">
+        <label for="sadcNumber">SADC Number:</label>
+        <input type="text" id="sadcNumber" placeholder="Enter SADC number">
+    </div>
+
+    <!-- Discovery Information -->
+    <div class="form-group">
+        <label for="discoveryInfo">Discovery Information:</label>
+        <textarea id="discoveryInfo" placeholder="Enter discovery information"></textarea>
+    </div>
+
+    <!-- Narrative -->
+    <div class="form-group">
+        <label for="narrative">Narrative:</label>
+        <textarea id="narrative" placeholder="Enter narrative"></textarea>
+    </div>
+
+    <!-- Evidence -->
+    <div class="form-group">
+        <label for="evidence">Evidence:</label>
+        <input type="text" id="evidence" placeholder="Enter evidence (EVIDENCE #1 E/L NUMBER)">
+    </div>
+
+    <!-- Generate and Copy BBCode Button -->
+    <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+</form>
+
+<!-- BBCode Output Section -->
+<div id="bbcode-output">
+    <button type="button" onclick="copyBBCode()">Copy BBCode</button>
+    <textarea id="output" readonly></textarea>
+</div>
+
+<!-- Clear Form Button -->
+<button class="clear" type="button" onclick="clearForm()">Clear Boxes</button>
+
+<script>
+    // Load saved investigator name from cookies
+    document.addEventListener('DOMContentLoaded', () => {
+        const investigatorName = getCookie("investigatorName");
+        if (investigatorName) {
+            document.getElementById('investigatorName').value = investigatorName;
+        }
+    });
+
+    // Save investigator name in cookies
+    function saveToCookies() {
+        const investigatorName = document.getElementById('investigatorName').value;
+        setCookie("investigatorName", investigatorName, 30); // Save for 30 days
+    }
+
+    // Set cookie
+    function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + d.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    // Get cookie
+    function getCookie(name) {
+        const cname = name + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(cname) === 0) {
+                return c.substring(cname.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    // Generate BBCode
+    function generateBBCode() {
+        const dateTime = document.getElementById('dateTime').value;
+        const location = document.getElementById('location').value;
+        const logNumber = document.getElementById('logNumber').value;
+        const charges = document.getElementById('charges').value;
+        const investigatorName = document.getElementById('investigatorName').value;
+        const daReferral = document.getElementById('daReferral').value;
+        const stgRelated = document.getElementById('stgRelated').value;
+        const stgName = document.getElementById('stgName').value;
+        const lastName = document.getElementById('lastName').value;
+        const firstName = document.getElementById('firstName').value;
+        const sadcNumber = document.getElementById('sadcNumber').value;
+        const discoveryInfo = document.getElementById('discoveryInfo').value;
+        const narrative = document.getElementById('narrative').value;
+        const evidence = document.getElementById('evidence').value;
+
+        saveToCookies();
+
+        const bbcode = `[divbox=#e2e2e2]
+
+[aligntable=right,13,0,0,0,0][float=right][b]CONFIDENTIAL[/b][/float][/aligntable]
+
+[aligntable=left,50,0,0,0,13][size=85]SAN ANDREAS DEPARTMENT OF CORRECTIONS AND REHABILITATION
+INVESTIGATIVE SERVICES UNIT
+LOS SANTOS COUNTY (LSC)[/size][/aligntable]
+
+[center][imgmw=500]https://i.ibb.co/qMgT1RY/header2.png[/imgmw][/center]
+
+[hr][/hr]
+
+[indent][size=125][b]INVESTIGATIVE REPORT[/b][/size]
+[b]DATE/TIME:[/b] ${dateTime}
+[b]LOCATION:[/b] ${location}
+[b]LOG NUMBER:[/b] ${logNumber}
+[b]CHARGES:[/b] ${charges}
+[b]HANDLING INVESTIGATOR:[/b] ${investigatorName}
+[b]DA REFERRAL:[/b] ${daReferral}
+[b]STG RELATED:[/b] ${stgRelated}, IF YES, WRITE THE STG NAME ${stgRelated === 'YES' ? stgName : ""}
+[/indent]
+
+[indent][size=110][b]1. COMPLAINANT INFORMATION[/b][/size][/indent]
+
+[aligntable=right,50,0,0,0,0]
+[b]Last Name:[/b] ${lastName}
+[/aligntable]
+
+[aligntable=left,50,0,0,0,0]
+[color=transparent]blank[/color][b]First Name:[/b] ${firstName}
+[/aligntable]
+
+[aligntable=right,50,0,0,0,0]
+[b]SADC Number:[/b] ${sadcNumber}
+[/aligntable]
+
+[indent][size=110][b]2. DISCOVERY INFORMATION[/b][/size]
+${discoveryInfo}
+[/indent]
+
+[indent][size=110][b]3. NARRATIVE[/b][/size]
+${narrative}[/indent]
+
+[indent][size=110][b]4. EVIDENCE[/b][/size]
+
+[altspoiler=EVIDENCE #1]${evidence}[/altspoiler]
+
+[/indent]
+
+[hr]
+[center][size=75]San Andreas Department of Corrections and Rehabilitation © 2024[/size][/center]
+
+[/divbox]`;
+
+        document.getElementById('output').value = bbcode;
+    }
+
+    // Copy BBCode to clipboard
+    function copyBBCode() {
+        const output = document.getElementById('output');
+        output.select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+
+    // Clear form fields
+    function clearForm() {
+        document.getElementById('bbcode-form').reset();
+    }
+</script>
+
+</body>
+</html>
