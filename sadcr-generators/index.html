@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paz?'s Paperwork Generators</title>
+    <title>Paz?'s SADCR Paperwork Generators</title>
     <style>
         body {
             margin: 0;
@@ -62,28 +62,19 @@
 <body>
 
     <div class="container">
-        <h1>Paz?'s Paperwork Generator</h1>
+        <h1>Paz?'s SADCR Paperwork Generators</h1>
 
         <div class="dropdown">
             <select id="dropdown-1">
-                <option value="" disabled selected>Misc Generators</option>
+                <option value="" disabled selected>Click here</option>
                 <option value="parole">Parole Central File</option>
                 <option value="rvr">Rules Violation Report</option>
+                <option value="isuk9">ISU K9 Deployment Form</option>
+                <option value="isuinvreport">ISU Investigative Report</option>
+                <option value="isuinvsupreport">ISU Investigative Supplimental Report</option>
+                <option value="isuintelreport">ISU Raw Intelligence Report</option>
             </select>
-            <button onclick="navigateToDropdown('dropdown-1')">Go</button>
-        </div>
-
-        <div class="dropdown">
-            <select id="dropdown-2">
-                <option value="" disabled selected>LSSD Generators</option>
-                <option value="sebgen">SEB Deployment Report</option>
-                <option value="csdgen">CSD Incident Log</option>
-                <option value="dvsk9gen">DVS K9 Incident Log</option>
-                <option value="senk9gen">SEN K9 Incident Log</option>
-                <option value="pkbgen">PKB Incident Log</option>
-                <option value="tsdgen">TSD Traffic Collision Report</option>
-            </select>
-            <button onclick="navigateToDropdown('dropdown-2')">Go</button>
+            <button onclick="navigateToDropdown('dropdown-1')">Go</button>    
         </div>
     </div>
 
@@ -94,24 +85,21 @@
 
             if (selectedValue === 'parole') {
                 window.location.href = "https://pazgtaw.github.io/paperwork-generator/parolegenerator/";
-            } else if (selectedValue === 'sebgen') {
+            } else if (selectedValue === 'rvr') {
                 // Add the URL for Example Report 1
-                window.location.href = "https://pazgtaw.github.io/paperwork-generator/sebdeploymentgenerator/";
-            } else if (selectedValue === 'csdgen') {
-                // Add the URL for Example Report 2
-                window.location.href = "https://pazgtaw.github.io/paperwork-generator/k9incidentloggenerator/";
-            } else if (selectedValue === 'dvsk9gen') {
-                // Add the URL for Example Report 3
-                window.location.href = "https://pazgtaw.github.io/paperwork-generator/k9dvsgen/";
-            } else if (selectedValue === 'senk9gen') {
-                // Add the URL for Example Report 3
-                window.location.href = "https://pazgtaw.github.io/paperwork-generator/k9sengen/";
-            } else if (selectedValue === 'pkbgen') {
-                // Add the URL for Example Report 3
-                window.location.href = "https://pazgtaw.github.io/paperwork-generator/k9pkbgen/";
-            } else if (selectedValue === 'tsdgen') {
-                // Add the URL for Example Report 3
-                window.location.href = "https://pazgtaw.github.io/paperwork-generator/trafficgenerator/";
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/rvrgen/";
+            } else if (selectedValue === 'isuk9') {
+                // Add the URL for Example Report 1
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/isuk9/";
+            } else if (selectedValue === 'isuinvreport') {
+                // Add the URL for Example Report 1
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/isuinvreport/";
+            } else if (selectedValue === 'isuinvsupreport') {
+                // Add the URL for Example Report 1
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/isuinvsupreport/";
+            } else if (selectedValue === 'isuintelreport') {
+                // Add the URL for Example Report 1
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/isuintelreport/";
             }
         }
     </script>
