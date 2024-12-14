@@ -167,6 +167,40 @@
         <input type="text" id="person3-link">
     </div>
 
+    <!-- Person #4 -->
+    <div class="form-group">
+        <label for="person4-name">Person #4 - Forename Surname:</label>
+        <input type="text" id="person4-name">
+    </div>
+    <div class="form-group">
+        <label for="person4-classification">Person #4 Classification:</label>
+        <input type="text" id="person4-classification">
+    </div>
+    <div class="form-group">
+        <label for="person4-dob">Person #4 Date of Birth:</label>
+        <input type="text" id="person4-dob">
+    </div>
+    <div class="form-group">
+        <label for="person4-phone">Person #4 Phone Number:</label>
+        <input type="text" id="person4-phone">
+    </div>
+    <div class="form-group">
+        <label for="person4-residence">Person #4 Residence:</label>
+        <input type="text" id="person4-residence">
+    </div>
+    <div class="form-group">
+        <label for="person4-properties">Person #4 Other Properties:</label>
+        <input type="text" id="person4-properties">
+    </div>
+    <div class="form-group">
+        <label for="person4-gang">Person #4 Gang Affiliation:</label>
+        <input type="text" id="person4-gang">
+    </div>
+    <div class="form-group">
+        <label for="person4-link">Person #4 Profile Picture Link:</label>
+        <input type="text" id="person4-link">
+    </div>
+
     <!-- Narrative -->
     <div class="form-group">
         <label for="narrative">Narrative:</label>
@@ -249,6 +283,15 @@
             const person3Gang = document.getElementById('person3-gang').value;
             const person3Link = document.getElementById('person3-link').value;
 
+            const person4Name = document.getElementById('person4-name').value;
+            const person4Classification = document.getElementById('person4-classification').value;
+            const person4Dob = document.getElementById('person4-dob').value;
+            const person4Phone = document.getElementById('person4-phone').value;
+            const person4Residence = document.getElementById('person4-residence').value;
+            const person4Properties = document.getElementById('person4-properties').value;
+            const person4Gang = document.getElementById('person4-gang').value;
+            const person4Link = document.getElementById('person4-link').value;
+
             const narrative = document.getElementById('narrative').value;
 
             const exhibitA = document.getElementById('exhibit-a').value;
@@ -258,7 +301,7 @@
             saveToCookie("investigator", handlingInvestigator);
             saveToCookie("additional-investigators", additionalInvestigators);
 
-            let output = `[font=Arial][color=black]\n\n[center][img]https://i.imgur.com/LEWTXbL.png[/img]\n\n[size=125][b]SHERIFF'S DEPARTMENT\nCOUNTY OF LOS SANTOS[/b]\n[i]"A Tradition of Service Since 1850"[/i][/size]\n\n[size=110][u]CASE PACKAGE[/u][/size][/center][hr][/hr]\n\n[font=arial][color=black][indent][size=105][b]Investigative Background and Assignment[/b][/size]\n\n[indent]\n[b]Classification / Penal Code(s):[/b] ${classification}\n[b]Time & Date:[/b] ${timeDate}\n[b]Location:[/b] ${location}\n\n[b]Handling Investigator:[/b] ${handlingInvestigator}\n[b]Additional Investigator(s):[/b] ${additionalInvestigators}\n[/indent]\n\n[size=105][b]Involved Persons[/b][/size]\n[indent][u]Person #1 - ${person1Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person1Link}[/img][/aligntable]\n[b]Classification:[/b] ${person1Classification}\n[b]Date of Birth:[/b] ${person1Dob}\n[b]Phone Number:[/b] ${person1Phone}\n[b]Residence:[/b] ${person1Residence}\n[b]Other Properties:[/b] ${person1Properties}\n[b]Gang Affiliation:[/b] ${person1Gang}\n\n[u]Person #2 - ${person2Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person2Link}[/img][/aligntable]\n[b]Classification:[/b] ${person2Classification}\n[b]Date of Birth:[/b] ${person2Dob}\n[b]Phone Number:[/b] ${person2Phone}\n[b]Residence:[/b] ${person2Residence}\n[b]Other Properties:[/b] ${person2Properties}\n[b]Gang Affiliation:[/b] ${person2Gang}\n\n[u]Person #3 - ${person3Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person3Link}[/img][/aligntable]\n[b]Classification:[/b] ${person3Classification}\n[b]Date of Birth:[/b] ${person3Dob}\n[b]Phone Number:[/b] ${person3Phone}\n[b]Residence:[/b] ${person3Residence}\n[b]Other Properties:[/b] ${person3Properties}\n[b]Gang Affiliation:[/b] ${person3Gang}[/indent]\n[size=105][b]Narrative[/b][/size]\n[indent][b]${narrative}[/indent]\n\n[size=105][b]Evidence[/b][/size]\n\n[list][*][b]Exhibit A; Description of evidence[/b]\n[spoiler]${exhibitA}[/spoiler][/list]\n[list][*][b]Exhibit B; Description of evidence[/b]\n[spoiler]${exhibitB}[/spoiler][/list]\n[list][*][b]Exhibit C; Description of evidence[/b]\n[spoiler]${exhibitC}[/spoiler][/list]\n\n[/font]`;
+            let output = `[font=Arial][color=black]\n\n[center][img]https://i.imgur.com/LEWTXbL.png[/img]\n\n[size=125][b]SHERIFF'S DEPARTMENT\nCOUNTY OF LOS SANTOS[/b]\n[i]"A Tradition of Service Since 1850"[/i][/size]\n\n[size=110][u]CASE PACKAGE[/u][/size][/center][hr][/hr]\n\n[font=arial][color=black][indent][size=105][b]Investigative Background and Assignment[/b][/size]\n\n[indent]\n[b]Classification / Penal Code(s):[/b] ${classification}\n[b]Time & Date:[/b] ${timeDate}\n[b]Location:[/b] ${location}\n\n[b]Handling Investigator:[/b] ${handlingInvestigator}\n[b]Additional Investigator(s):[/b] ${additionalInvestigators}\n[/indent]\n\n[size=105][b]Involved Persons[/b][/size]\n[indent][u]Person #1 - ${person1Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person1Link}[/img][/aligntable]\n[b]Classification:[/b] ${person1Classification}\n[b]Date of Birth:[/b] ${person1Dob}\n[b]Phone Number:[/b] ${person1Phone}\n[b]Residence:[/b] ${person1Residence}\n[b]Other Properties:[/b] ${person1Properties}\n[b]Gang Affiliation:[/b] ${person1Gang}\n\n[u]Person #2 - ${person2Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person2Link}[/img][/aligntable]\n[b]Classification:[/b] ${person2Classification}\n[b]Date of Birth:[/b] ${person2Dob}\n[b]Phone Number:[/b] ${person2Phone}\n[b]Residence:[/b] ${person2Residence}\n[b]Other Properties:[/b] ${person2Properties}\n[b]Gang Affiliation:[/b] ${person2Gang}\n\n[u]Person #3 - ${person3Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person3Link}[/img][/aligntable]\n[b]Classification:[/b] ${person3Classification}\n[b]Date of Birth:[/b] ${person3Dob}\n[b]Phone Number:[/b] ${person3Phone}\n[b]Residence:[/b] ${person3Residence}\n[b]Other Properties:[/b] ${person3Properties}\n[b]Gang Affiliation:[/b] ${person3Gang}\n\n[u]Person #4 - ${person4Name}[/u] [aligntable=right,0,0,55,0,0,0][img]${person4Link}[/img][/aligntable]\n[b]Classification:[/b] ${person4Classification}\n[b]Date of Birth:[/b] ${person4Dob}\n[b]Phone Number:[/b] ${person4Phone}\n[b]Residence:[/b] ${person4Residence}\n[b]Other Properties:[/b] ${person4Properties}\n[b]Gang Affiliation:[/b] ${person4Gang}[/indent]\n[size=105][b]Narrative[/b][/size]\n[indent][b]${narrative}[/indent]\n\n[size=105][b]Evidence[/b][/size]\n\n[list][*][b]Exhibit A; Description of evidence[/b]\n[spoiler]${exhibitA}[/spoiler][/list]\n[list][*][b]Exhibit B; Description of evidence[/b]\n[spoiler]${exhibitB}[/spoiler][/list]\n[list][*][b]Exhibit C; Description of evidence[/b]\n[spoiler]${exhibitC}[/spoiler][/list]\n\n[/font]`;
 
             document.getElementById('output').value = output;
         }
