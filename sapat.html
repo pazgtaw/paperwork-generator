@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBCode Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        textarea {
+            resize: none;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>BBCode Generator</h1>
+<form id="bbcodeForm">
+    <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date">
+    </div>
+    <div class="form-group">
+        <label for="shiftStartTime">Shift Start Time:</label>
+        <input type="time" id="shiftStartTime" name="shiftStartTime">
+    </div>
+    <div class="form-group">
+        <label for="shiftEndTime">Shift End Time:</label>
+        <input type="time" id="shiftEndTime" name="shiftEndTime">
+    </div>
+    <div class="form-group">
+        <label for="teamMembers">Team Members:</label>
+        <textarea id="teamMembers" name="teamMembers" placeholder="Enter team members..."></textarea>
+    </div>
+    <div class="form-group">
+        <label for="subjectName">Subject's Name:</label>
+        <input type="text" id="subjectName" name="subjectName">
+    </div>
+    <div class="form-group">
+        <label for="aliases">Aliases:</label>
+        <input type="text" id="aliases" name="aliases">
+    </div>
+    <div class="form-group">
+        <label for="warrantNumber">Warrant Number:</label>
+        <input type="text" id="warrantNumber" name="warrantNumber">
+    </div>
+    <div class="form-group">
+        <label for="deploymentLocations">Deployment Locations:</label>
+        <textarea id="deploymentLocations" name="deploymentLocations" placeholder="Enter deployment locations..."></textarea>
+    </div>
+    <div class="form-group">
+        <label for="primaryTargetLocation">Primary Target Location:</label>
+        <input type="text" id="primaryTargetLocation" name="primaryTargetLocation">
+    </div>
+    <div class="form-group">
+        <label for="timeOfDeployment">Time of Deployment:</label>
+        <input type="time" id="timeOfDeployment" name="timeOfDeployment">
+    </div>
+    <div class="form-group">
+        <label for="timeOfApprehension">Time of Apprehension:</label>
+        <input type="time" id="timeOfApprehension" name="timeOfApprehension">
+    </div>
+    <div class="form-group">
+        <label for="timeCleared">Time Cleared:</label>
+        <input type="time" id="timeCleared" name="timeCleared">
+    </div>
+    <div class="form-group">
+        <label for="subjectApprehended">Subject Apprehended:</label>
+        <select id="subjectApprehended" name="subjectApprehended">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="conditionAtArrest">Condition at Time of Arrest:</label>
+        <select id="conditionAtArrest" name="conditionAtArrest">
+            <option value="INJURED">INJURED</option>
+            <option value="UNINJURED">UNINJURED</option>
+            <option value="OTHER">OTHER</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="useOfForce">Use of Force Report Required:</label>
+        <select id="useOfForce" name="useOfForce">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="medicalAssistance">Medical Assistance Required:</label>
+        <select id="medicalAssistance" name="medicalAssistance">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="teamLeader">Team Leader:</label>
+        <input type="text" id="teamLeader" name="teamLeader">
+    </div>
+    <div class="form-group">
+        <label for="reviewingSupervisor">Reviewing Supervisor:</label>
+        <input type="text" id="reviewingSupervisor" name="reviewingSupervisor">
+    </div>
+    <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+    <button type="button" onclick="clearForm()">Clear</button>
+</form>
+
+<div class="output">
+    <h2>Generated BBCode</h2>
+    <textarea id="generatedBBCode" readonly></textarea>
+    <button onclick="copyBBCode()">Copy BBCode</button>
+</div>
+
+<script>
+    function generateBBCode() {
+        const form = document.getElementById('bbcodeForm');
+        const data = new FormData(form);
+
+        const bbcode = `[altdivbox=white,0,white,5,5,5]STATE OF SAN ANDREAS[float=right]DEPARTMENT OF CORRECTIONS[/float]
+[altdivbox=transparent,0,black,1,0,0][aligntable2=right,75,1,0,0,transparent,transparent][/aligntable2][/altdivbox]
+[b]WARRANT SERVICE / DEPLOYMENT LOG[/b][float=right][size=80]Page 1 of 1[/size][/float]
+[altdivbox=transparent,1,black,1,0,0][/altdivbox]
+
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,15,4][b]DATE[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,15,4][b]SHIFT START TIME[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,15,4][b]SHIFT END TIME[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,25,4][b]TEAM MEMBERS[/b][/tdwidth]
+[/tr]
+[tr]
+  [tdwidth=1,black,transparent,top,left,15,4]${data.get('date') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,15,4]${data.get('shiftStartTime') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,15,4]${data.get('shiftEndTime') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,25,4]${data.get('teamMembers') || ''}[/tdwidth]
+[/tr]
+[/table2]
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,17,4][b]SUBJECT'S NAME[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,20,4][b]ALIASES[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,16,4][b]WARRANT NUMBER[/b][/tdwidth]
+[/tr]
+[tr]
+  [tdwidth=1,black,transparent,top,left,17,4]${data.get('subjectName') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,20,4]${data.get('aliases') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,16,4]${data.get('warrantNumber') || ''}[/tdwidth]
+[/tr]
+[/table2]
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,17,4][b]DEPLOYMENT LOCATION(S)[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,20,4][b]PRIMARY TARGET LOCATION[/b][/tdwidth]
+[/tr]
+[tr]
+  [tdwidth=1,black,transparent,top,left,17,4]${data.get('deploymentLocations') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,20,4]${data.get('primaryTargetLocation') || ''}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,17,4][b]TIME OF DEPLOYMENT[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,20,4][b]TIME OF APPREHENSION[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,16,4][b]TIME CLEARED[/b][/tdwidth][/tr]
+[tr]
+  [tdwidth=1,black,transparent,top,left,17,4]${data.get('timeOfDeployment') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,20,4]${data.get('timeOfApprehension') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,16,4]${data.get('timeCleared') || ''}[/tdwidth]
+[/tr]
+[/table2]
+
+[altdivbox=white,0,white,1,1,1][font=Roboto][size=85]ACTIONS SUMMARY[/size][/font]
+[altdivbox=transparent,0,black,1,0,0][aligntable2=left,75,1,0,0,transparent,transparent]
+[/aligntable2][/altdivbox]
+[font=Roboto][size=90][/font][/size]
+
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,10,4][b]SUBJECT APPREHENDED[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][b]CONDITION AT TIME OF ARREST[/b][/tdwidth]
+[tr]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('subjectApprehended') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('conditionAtArrest') || ''}[/tdwidth]
+[/tr]
+[/table2]
+
+[altdivbox=white,0,white,1,1,1][font=Roboto][size=85]EVIDENCE/SEIZED PROPERTY[/size][/font]
+[altdivbox=transparent,0,black,1,0,0][aligntable2=left,75,1,0,0,transparent,transparent]
+[/aligntable2][/altdivbox]
+[font=Roboto][size=90][/font][/size]
+
+
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,10,4][b]USE OF FORCE REPORT REQUIRED[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][b]MEDICAL ASSISTANCE REQUIRED[/b][/tdwidth]
+[tr]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('useOfForce') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('medicalAssistance') || ''}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,20,4][b]TEAM LEADER[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][b]DATE[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][b]ASSIGNMENT[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][b]RANK[/b][/tdwidth]
+[tr]
+  [tdwidth=1,black,transparent,top,left,20,4]${data.get('teamLeader') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('date') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][/tdwidth]
+[/tr]
+[/table2]
+[table2=0,black,transparent,Roboto]
+[tr]
+  [tdwidth=1,black,transparent,top,left,20,4][b]REVIEWING SUPERVISOR[/b][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4][b]DATE[/b][/tdwidth]
+[tr]
+  [tdwidth=1,black,transparent,top,left,20,4]${data.get('reviewingSupervisor') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('date') || ''}[/tdwidth]
+[/tr]
+[/table2]
+[/altdivbox]`;
+
+        document.getElementById('generatedBBCode').value = bbcode;
+    }
+
+    function clearForm() {
+        document.getElementById('bbcodeForm').reset();
+        document.getElementById('generatedBBCode').value = '';
+    }
+
+    function copyBBCode() {
+        const textarea = document.getElementById('generatedBBCode');
+        textarea.select();
+        textarea.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand('copy');
+        alert('BBCode copied to clipboard!');
+    }
+</script>
+
+</body>
+</html>
