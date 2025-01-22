@@ -96,6 +96,10 @@
         <input type="time" id="timeCleared" name="timeCleared">
     </div>
     <div class="form-group">
+        <label for="actionsummary">Actions Summary:</label>
+        <textarea id="actionsummary" name="actionsummary" placeholder="Sumamry of actons here..."></textarea>
+    </div>
+    <div class="form-group">
         <label for="subjectApprehended">Subject Apprehended:</label>
         <select id="subjectApprehended" name="subjectApprehended">
             <option value="YES">YES</option>
@@ -118,6 +122,10 @@
         </select>
     </div>
     <div class="form-group">
+        <label for="evidence">Evidence / Seized Property:</label>
+        <textarea id="evidence" name="evidence" placeholder="Evidence found here..."></textarea>
+    </div>
+    <div class="form-group">
         <label for="medicalAssistance">Medical Assistance Required:</label>
         <select id="medicalAssistance" name="medicalAssistance">
             <option value="YES">YES</option>
@@ -127,6 +135,14 @@
     <div class="form-group">
         <label for="teamLeader">Team Leader:</label>
         <input type="text" id="teamLeader" name="teamLeader">
+    </div>
+    <div class="form-group">
+        <label for="assignment">Assignment:</label>
+        <input type="text" id="assignment" name="assignment">
+    </div>
+    <div class="form-group">
+        <label for="rank">Rank:</label>
+        <input type="text" id="rank" name="rank">
     </div>
     <div class="form-group">
         <label for="reviewingSupervisor">Reviewing Supervisor:</label>
@@ -204,7 +220,7 @@
 [altdivbox=white,0,white,1,1,1][font=Roboto][size=85]ACTIONS SUMMARY[/size][/font]
 [altdivbox=transparent,0,black,1,0,0][aligntable2=left,75,1,0,0,transparent,transparent]
 [/aligntable2][/altdivbox]
-[font=Roboto][size=90][/font][/size]
+[font=Roboto]${data.get('actionsummary') || ''}[size=90][/font][/size]
 
 [table2=0,black,transparent,Roboto]
 [tr]
@@ -219,7 +235,7 @@
 [altdivbox=white,0,white,1,1,1][font=Roboto][size=85]EVIDENCE/SEIZED PROPERTY[/size][/font]
 [altdivbox=transparent,0,black,1,0,0][aligntable2=left,75,1,0,0,transparent,transparent]
 [/aligntable2][/altdivbox]
-[font=Roboto][size=90][/font][/size]
+[font=Roboto]${data.get('evidence') || ''}[size=90][/font][/size]
 
 
 [table2=0,black,transparent,Roboto]
@@ -241,8 +257,8 @@
 [tr]
   [tdwidth=1,black,transparent,top,left,20,4]${data.get('teamLeader') || ''}[/tdwidth]
   [tdwidth=1,black,transparent,top,left,10,4]${data.get('date') || ''}[/tdwidth]
-  [tdwidth=1,black,transparent,top,left,10,4][/tdwidth]
-  [tdwidth=1,black,transparent,top,left,10,4][/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('assignment') || ''}[/tdwidth]
+  [tdwidth=1,black,transparent,top,left,10,4]${data.get('rank') || ''}[/tdwidth]
 [/tr]
 [/table2]
 [table2=0,black,transparent,Roboto]
