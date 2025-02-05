@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPAT Generator</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+        }
+        .output {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Los Santos County Sheriff's Department</h1>
+    <h2>Validated Physical Ability Test</h2>
+    <h3>Recommendation</h3>
+
+    <form id="bbcode-form">
+        <div class="form-group">
+            <label for="name">Investigator (First and last name)</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="assignedapplicants">Assigned Applicants (John Doe, Jane Doe)</label>
+            <input type="text" id="assignedapplicants" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Date (DD/MMM/YY)</label>
+            <input type="text" id="date" required>
+        </div>
+        <div class="form-group">
+            <label for="time">Time (HH:MM)</label>
+            <input type="text" id="time" required>
+        </div>
+        <div class="form-group">
+            <label for="applicant1">Applicant #1 (John Doe)</label>
+            <input type="text" id="applicant1" required>
+        </div>
+        <div class="form-group">
+            <label for="passfail1">Pass or Fail?</label>
+            <select id="passfail1" required>
+                <option value="PASS">PASS</option>
+                <option value="FAIL">FAIL</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes1">Notes (Good roleplay, no issues with their English. They were great to roleplay with and went in-depth with their emotes.)</label>
+            <input type="text" id="notes1" required>
+        </div>
+        <div class="form-group">
+            <label for="applicant2">Applicant #2 (Jane Doe)</label>
+            <input type="text" id="applicant2" required>
+        </div>
+        <div class="form-group">
+            <label for="passfail2">Pass or Fail?</label>
+            <select id="passfail2" required>
+                <option value="PASS">PASS</option>
+                <option value="FAIL">FAIL</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes2">Notes (Poor English, repeated grammatical issues with capitalizing Is. Roleplay was pretty slow as if they were using a translator.)</label>
+            <input type="text" id="notes2" required>
+        </div>
+        <div class="form-group">
+            <label for="evidence2">Evidence (If applicable)</label>
+            <input type="text" id="evidence2" required>
+        </div>
+        <div class="form-group">
+            <label for="chatlog">Chatlogs</label>
+            <input type="text" id="chatlog" required>
+        </div>
+        <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+    </form>
+
+    <div class="output" id="output"></div>
+    <button onclick="copyBBCode()">Copy BBCode</button>
+</div>
+
+<script>
+    function generateBBCode() {
+        const name = document.getElementById('name').value;
+        const assignedapplicants = document.getElementById('assignedapplicants').value;        
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const applicant1 = document.getElementById('applicant1').value;
+        const passfail1 = document.getElementById('passfail1').value;
+        const notes1 = document.getElementById('notes1').value;
+        const applicant2 = document.getElementById('applicant2').value;
+        const passfail2 = document.getElementById('passfail2').value;
+        const notes2 = document.getElementById('notes2').value;
+        const evidence2 = document.getElementById('evidence2').value;
+        const chatlog = document.getElementById('chatlog').value;
+
+        const bbcode = `[block=0,30,transparent,white]
+[center][img]https://i.imgur.com/LEWTXbL.png[/img]
+
+[b]INVESTIGATOR RECOMMENDATION FORM[/b]
+LOS SANTOS COUNTY SHERIFF'S DEPARTMENT — PRE-EMPLOYMENT UNIT[/center]
+
+[hr][/hr]
+
+[b]INVESTIGATOR:[/b] ${name}
+[b]ASSIGNED APPLICANT(S):[/b] ${assignedapplicants}
+[b]DATE AND TIME:[/b] ${date} - ${time}
+[hr][/hr]
+[b]APPLICANT:[/b] ${applicant1}
+[b]RECOMMENDATION:[/b] ${passfail1}
+[b]NOTES:[/b]
+${notes1}
+[hr][/hr]
+[b]APPLICANT:[/b] ${applicant2}
+[b]RECOMMENDATION:[/b] ${passfail2}
+[b]NOTES:[/b]
+${notes2}
+[br][/br]
+(PLEASE PROVIDE EVIDENCE BELOW IF THERE ARE ISSUES)
+[altspoiler=EVIDENCE HERE IF APPLICABLE]${evidence2}[/altspoiler]
+[br][/br]
+[hr][/hr]
+[b]CHATLOG:[/b]
+[altspoiler=CHATLOG]${chatlog}[/altspoiler]
+[/block]`;
+
+        document.getElementById('output').textContent = bbcode;
+    }
+
+    function copyBBCode() {
+        const bbcode = document.getElementById('output').textContent;
+        navigator.clipboard.writeText(bbcode).then(() => {
+            alert('BBCode copied to clipboard');
+        });
+    }
+</script>
+
+</div>
+</body>
+</html>
