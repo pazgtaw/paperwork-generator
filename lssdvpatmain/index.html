@@ -97,8 +97,8 @@
     function generateBBCode() {
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
-        const applicants = document.getElementById('applicants').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n[*]');
-        const investigators = document.getElementById('investigators').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n[*]');
+        const applicants = document.getElementById('applicants').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n');
+        const investigators = document.getElementById('investigators').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n');
 
         const bbcode = `[block=0,30,transparent,white]
 [b]DATE AND TIME:[/b] ${date} - ${time}
