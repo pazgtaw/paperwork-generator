@@ -43,13 +43,11 @@
 <h2>Crime/Incident Report</h2>
 
 <form id="violation-form">
-    <!-- SADC Number -->
     <div class="form-group">
         <label for="date">Incident Date:</label>
         <input type="text" id="date" name="date">
     </div>
 
-    <!-- Inmate's Name -->
     <div class="form-group">
         <label for="time">Incident Time:</label>
         <input type="text" id="time" name="time">
@@ -59,13 +57,11 @@
         <input type="text" id="location" name="location">
     </div>
 
-    <!-- Release Date -->
     <div class="form-group">
         <label for="crime">Specific Crime / Incident:</label>
         <input type="text" id="crime" name="crime">
     </div>
 
-    <!-- Institution -->
     <div class="form-group">
         <label for="dareferral">D.A Referral?:</label>
         <select id="dareferral" name="dareferral">
@@ -74,7 +70,6 @@
         </select>
     </div>
 
-    <!-- Housing Number -->
     <div class="form-group">
         <label for="uof">Use of Force?:</label>
         <select id="uof" name="uof">
@@ -83,7 +78,6 @@
         </select>
     </div>
 
-    <!-- Log Number -->
     <div class="form-group">
         <label for="weapon">Type of Weapon:</label>
         <select id="weapon" name="weapon">
@@ -94,7 +88,6 @@
         </select>
     </div>
 
-    <!-- Violated Rules -->
     <div class="form-group">
         <label for="death">Death:</label>
         <select id="death" name="death">
@@ -105,7 +98,6 @@
         </select>
     </div>
 
-    <!-- Specific Acts -->
     <div class="form-group">
         <label for="aorb">Assault / Battery:</label>
         <select id="aorb" name="aorb">
@@ -115,7 +107,6 @@
         </select>
     </div>
 
-    <!-- Location -->
     <div class="form-group">
         <label for="injury">Injury:</label>
         <select id="injury" name="injury">
@@ -145,19 +136,16 @@
         </select>
     </div>
 
-    <!-- Narrative -->
     <div class="form-group">
         <label for="narrative">Narrative:</label>
         <textarea id="narrative" name="narrative"></textarea>
     </div>
 
-    <!-- Reporting Employee -->
     <div class="form-group">
         <label for="reportingEmployee">Reporting Employee:</label>
         <input type="text" id="reportingEmployee" name="reportingEmployee">
     </div>
 
-    <!-- Rank -->
     <div class="form-group">
         <label for="rank">Rank:</label>
         <input type="text" id="rank" name="rank">
@@ -172,7 +160,6 @@
 <button type="button" onclick="copyBBCode()">Copy BBCode</button>
 
 <script>
-    // Save specific fields to cookies for autofill on reload
     document.addEventListener('DOMContentLoaded', () => {
         if (localStorage.getItem('reportingEmployee')) {
             document.getElementById('reportingEmployee').value = localStorage.getItem('reportingEmployee');
