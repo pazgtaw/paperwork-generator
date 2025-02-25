@@ -54,6 +54,10 @@
         <label for="time">Incident Time:</label>
         <input type="text" id="time" name="time">
     </div>
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location">
+    </div>
 
     <!-- Release Date -->
     <div class="form-group">
@@ -159,7 +163,6 @@
         <input type="text" id="rank" name="rank">
     </div>
 
-
     <button type="button" onclick="generateBBCode()">Generate BBCode</button>
     <button type="button" class="clear" onclick="clearForm()">Clear Form</button>
 </form>
@@ -187,6 +190,7 @@
     function generateBBCode() {
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
+        const location = document.getElementById('location').value;
         const crime = document.getElementById('crime').value;
         const uof = document.getElementById('uof').value;
         const weapon = document.getElementById('weapon').value;
@@ -194,7 +198,7 @@
         const aorb = document.getElementById('aorb').value;
         const injury = document.getElementById('injury').value;
         const escapes = document.getElementById('escapes').value;
-        const force = document.getElementById('location').value;
+        const force = document.getElementById('force').value;
         const narrative = document.getElementById('narrative').value;
         const reportingEmployee = document.getElementById('reportingEmployee').value;
         const rank = document.getElementById('rank').value;
