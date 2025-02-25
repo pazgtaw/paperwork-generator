@@ -164,14 +164,10 @@
         if (localStorage.getItem('reportingEmployee')) {
             document.getElementById('reportingEmployee').value = localStorage.getItem('reportingEmployee');
         }
-        if (localStorage.getItem('assignment')) {
-            document.getElementById('assignment').value = localStorage.getItem('assignment');
-        }
     });
 
     function saveToLocalStorage() {
         localStorage.setItem('reportingEmployee', document.getElementById('reportingEmployee').value);
-        localStorage.setItem('assignment', document.getElementById('assignment').value);
     }
 
     function generateBBCode() {
