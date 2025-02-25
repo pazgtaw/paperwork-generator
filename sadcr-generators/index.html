@@ -74,6 +74,7 @@
                 <option value="isuinvsupreport">ISU Investigative Supplimental Report</option>
                 <option value="isuintelreport">ISU Raw Intelligence Report</option>
                 <option value="scientificreq">Scientific Services Request</option>
+                <option value="crimereport">Crime/Incident Report</option>
             </select>
             <button onclick="navigateToDropdown('dropdown-1')">Go</button>    
         </div>
@@ -104,6 +105,9 @@
             } else if (selectedValue === 'scientificreq') {
                 // Add the URL for Example Report 1
                 window.location.href = "https://pazgtaw.github.io/paperwork-generator/scientificreq/";
+            } else if (selectedValue === 'crimereport') {
+                // Add the URL for Example Report 1
+                window.location.href = "https://pazgtaw.github.io/paperwork-generator/crimereport/";
             }
         }
     </script>

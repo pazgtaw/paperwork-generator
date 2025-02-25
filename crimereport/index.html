@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime/Incident Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button.clear {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Crime/Incident Report</h2>
+
+<form id="violation-form">
+    <!-- SADC Number -->
+    <div class="form-group">
+        <label for="date">Incident Date:</label>
+        <input type="text" id="date" name="date">
+    </div>
+
+    <!-- Inmate's Name -->
+    <div class="form-group">
+        <label for="time">Incident Time:</label>
+        <input type="text" id="time" name="time">
+    </div>
+
+    <!-- Release Date -->
+    <div class="form-group">
+        <label for="crime">Specific Crime / Incident:</label>
+        <input type="text" id="crime" name="crime">
+    </div>
+
+    <!-- Institution -->
+    <div class="form-group">
+        <label for="dareferral">D.A Referral?:</label>
+        <select id="dareferral" name="dareferral">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+
+    <!-- Housing Number -->
+    <div class="form-group">
+        <label for="uof">Use of Force?:</label>
+        <select id="uof" name="uof">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+        </select>
+    </div>
+
+    <!-- Log Number -->
+    <div class="form-group">
+        <label for="weapon">Type of Weapon:</label>
+        <select id="weapon" name="weapon">
+            <option value="MINI14">MINI14</option>
+            <option value="9MM">9MM</option>
+            <option value="SHOTGUN">SHOTGUN</option>
+            <option value="N/A">N/A</option>
+        </select>
+    </div>
+
+    <!-- Violated Rules -->
+    <div class="form-group">
+        <label for="death">Death:</label>
+        <select id="death" name="death">
+            <option value="STAFF">STAFF</option>
+            <option value="INMATE">INMATE</option>
+            <option value="VISITOR">VISITOR</option>
+            <option value="N/A">N/A</option>
+        </select>
+    </div>
+
+    <!-- Specific Acts -->
+    <div class="form-group">
+        <label for="aorb">Assault / Battery:</label>
+        <select id="aorb" name="aorb">
+            <option value="ON STAFF">ON STAFF</option>
+            <option value="ON INMATE">ON INMATE</option>
+            <option value="N/A">N/A</option>
+        </select>
+    </div>
+
+    <!-- Location -->
+    <div class="form-group">
+        <label for="injury">Injury:</label>
+        <select id="injury" name="injury">
+            <option value="STAFF">STAFF</option>
+            <option value="INMATE">INMATE</option>
+            <option value="VISITOR">VISITOR</option>
+            <option value="N/A">N/A</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="escapes">Escapes:</label>
+        <select id="escapes" name="escapes">
+            <option value="W/ FORCE">W/ FORCE</option>
+            <option value="W/O FORCE">W/O FORCE</option>
+            <option value="N/A">N/A</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="force">Type of Force:</label>
+        <select id="force" name="force">
+            <option value="EXP. BATON">EXP. BATON</option>
+            <option value="PHYS. FORCE">PHYS. FORCE</option>
+            <option value="TASER">TASER </option>
+            <option value="N/A">N/A</option>
+        </select>
+    </div>
+
+    <!-- Narrative -->
+    <div class="form-group">
+        <label for="narrative">Narrative:</label>
+        <textarea id="narrative" name="narrative"></textarea>
+    </div>
+
+    <!-- Reporting Employee -->
+    <div class="form-group">
+        <label for="reportingEmployee">Reporting Employee:</label>
+        <input type="text" id="reportingEmployee" name="reportingEmployee">
+    </div>
+
+    <!-- Rank -->
+    <div class="form-group">
+        <label for="rank">Rank:</label>
+        <input type="text" id="rank" name="rank">
+    </div>
+
+
+    <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+    <button type="button" class="clear" onclick="clearForm()">Clear Form</button>
+</form>
+
+<h3>Generated BBCode</h3>
+<textarea id="output" readonly></textarea>
+<button type="button" onclick="copyBBCode()">Copy BBCode</button>
+
+<script>
+    // Save specific fields to cookies for autofill on reload
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('reportingEmployee')) {
+            document.getElementById('reportingEmployee').value = localStorage.getItem('reportingEmployee');
+        }
+        if (localStorage.getItem('assignment')) {
+            document.getElementById('assignment').value = localStorage.getItem('assignment');
+        }
+    });
+
+    function saveToLocalStorage() {
+        localStorage.setItem('reportingEmployee', document.getElementById('reportingEmployee').value);
+        localStorage.setItem('assignment', document.getElementById('assignment').value);
+    }
+
+    function generateBBCode() {
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const crime = document.getElementById('crime').value;
+        const uof = document.getElementById('uof').value;
+        const weapon = document.getElementById('weapon').value;
+        const death = document.getElementById('death').value;
+        const aorb = document.getElementById('aorb').value;
+        const injury = document.getElementById('injury').value;
+        const escapes = document.getElementById('escapes').value;
+        const force = document.getElementById('location').value;
+        const narrative = document.getElementById('narrative').value;
+        const reportingEmployee = document.getElementById('reportingEmployee').value;
+        const rank = document.getElementById('rank').value;
+
+        saveToLocalStorage();
+
+        const bbcode = `[altdivbox=white,0,#164916,0,20,20][aligntable=right,50,0,0,0,0][size=105]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/aligntable]STATE OF SAN ANDREAS[/size]
+[hr]
+[b]CRIME / INCIDENT REPORT[/b]
+[aligntable=right,50,0,0,0,0][b]INCIDENT DATE:[/b] ${date}
+[b]INCIDENT TIME:[/b] ${time}[/aligntable] 
+[b]SADCR 837[/b][br]
+[b]LOCATION:[/b] ${location}
+[aligntable=right,50,0,0,0,0][b]DEATH:[/b] ${death}
+[b]ASSAULT / BATTERY:[/b] ${aorb}
+[b]INJURY:[/b] ${injury}
+[b]ESCAPES:[/b] ${escapes}
+[b]TYPE OF FORCE:[/b] ${force}
+[b]SPECIFIC CRIME / INCIDENT:[/b] ${crime}
+[b]D.A. REFERRAL ELIGIBLE:[/b] ${dareferral}
+[b]USE OF FORCE:[/b] ${uof}
+[b]TYPE OF WEAPON:[/b] ${weapon}
+[hr]
+[b]NARRATIVE[/b]
+[list=none] ${narrative} [/list]
+[hr]
+[b]NAME OF REPORTING STAFF:[/b] ${reportingEmployee}
+[aligntable=right,50,0,0,0,0][b]TITLE:[/b] ${rank}[/aligntable]`;
+
+        document.getElementById('output').value = bbcode;
+    }
+
+    function copyBBCode() {
+        const output = document.getElementById('output');
+        output.select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+
+    function clearForm() {
+        document.getElementById('violation-form').reset();
+    }
+</script>
+
+</body>
+</html>
