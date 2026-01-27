@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAPO Observational Patrol Report Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+            border-radius: 10px;
+            border: 1px solid #0f3460;
+        }
+        
+        .header img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            margin: 5px 0;
+            font-size: 1.4em;
+            color: #e94560;
+        }
+        
+        .header h2 {
+            margin: 5px 0;
+            font-size: 1.1em;
+            color: #fff;
+            font-weight: normal;
+        }
+        
+        .header h3 {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #aaa;
+            font-weight: normal;
+        }
+        
+        .section {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #0f3460;
+        }
+        
+        .section-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #e94560;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #0f3460;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+            color: #aaa;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 0.95em;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .rating-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #0f3460;
+        }
+        
+        .rating-row:last-child {
+            border-bottom: none;
+        }
+        
+        .rating-label {
+            flex: 1;
+            font-size: 0.9em;
+        }
+        
+        .rating-select {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn-generate {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        .btn-generate:hover {
+            background: #ff6b6b;
+        }
+        
+        .btn-copy {
+            background: #0f3460;
+            color: #fff;
+        }
+        
+        .btn-copy:hover {
+            background: #1a4a7a;
+        }
+        
+        .btn-clear {
+            background: #333;
+            color: #fff;
+        }
+        
+        .btn-clear:hover {
+            background: #555;
+        }
+        
+        .output-section {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #0f3460;
+        }
+        
+        .output-section h3 {
+            color: #e94560;
+            margin-top: 0;
+        }
+        
+        #output {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            background: #1a1a2e;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            resize: vertical;
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e94560;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .copy-notification.show {
+            opacity: 1;
+        }
+        
+        .grading-info {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+        
+        .grading-info strong {
+            color: #e94560;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DEPARTMENT OF CORRECTIONS AND REHABILITATION</h1>
+            <h2>DIVISION OF ADULT PAROLE OPERATIONS</h2>
+            <h3>Observational Patrol Report Generator</h3>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">REPORT INFORMATION</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>REPORT DATE</label>
+                    <input type="text" id="reportDate" placeholder="DD/MMM/YYYY">
+                </div>
+                <div class="form-group">
+                    <label>REPORT TIME</label>
+                    <input type="text" id="reportTime" placeholder="HH:MM">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>APPRENTICE NAME</label>
+                    <input type="text" id="apprenticeName" placeholder="Firstname Lastname">
+                </div>
+                <div class="form-group">
+                    <label>TRAINER NAME</label>
+                    <input type="text" id="trainerName" placeholder="Firstname Lastname">
+                </div>
+                <div class="form-group">
+                    <label>TRAINER BADGE NO.</label>
+                    <input type="text" id="trainerBadge" placeholder="Badge Number">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">GRADING SYSTEM</div>
+            <div class="grading-info">
+                <strong>E</strong> — Excellent: The Apprentice excelled and showcased outstanding performance.<br>
+                <strong>S</strong> — Standard: The Apprentice is working at a standard grade.<br>
+                <strong>N/I</strong> — Needs Improvement: The Apprentice needs more work and should be quizzed when next taken out.<br>
+                <strong>N/C</strong> — Not Covered: It wasn't covered or didn't come up during the patrol.
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">ATTITUDE</div>
+            <div class="rating-row">
+                <span class="rating-label">1. Acceptance of Feedback</span>
+                <select class="rating-select" id="rating1">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">2. Attitude toward Parole Work</span>
+                <select class="rating-select" id="rating2">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">APPEARANCE</div>
+            <div class="rating-row">
+                <span class="rating-label">3. General Appearance</span>
+                <select class="rating-select" id="rating3">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">RELATIONSHIPS</div>
+            <div class="rating-row">
+                <span class="rating-label">4. With Parolees</span>
+                <select class="rating-select" id="rating4">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">5. With other Agencies' Members</span>
+                <select class="rating-select" id="rating5">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">6. With Colleagues</span>
+                <select class="rating-select" id="rating6">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">GENERAL PAROLE WORK</div>
+            <div class="rating-row">
+                <span class="rating-label">7. Discretion & Law</span>
+                <select class="rating-select" id="rating7">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">8. Driving Standards</span>
+                <select class="rating-select" id="rating8">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">9. Parolee Checkups: General Checkup (This includes Traffic Stops and Parolee Searches)</span>
+                <select class="rating-select" id="rating9">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">10. Parolee Checkups: Searches (Residence and Parolee Searches)</span>
+                <select class="rating-select" id="rating10">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">11. Parolee Checkups: Substance Testing (Drug and Alcohol Testing)</span>
+                <select class="rating-select" id="rating11">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">12. Parolee Checkups: General Questioning</span>
+                <select class="rating-select" id="rating12">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">MISCELLANEOUS ACTIVITIES</div>
+            <div class="rating-row">
+                <span class="rating-label">13. Parolees-At-Large: General & What to do</span>
+                <select class="rating-select" id="rating13">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">14. Search Warrants: General (Including perimeter, searching and other tasks)</span>
+                <select class="rating-select" id="rating14">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">15. Arrest Warrants</span>
+                <select class="rating-select" id="rating15">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">16. Surveillance & Surveillance Policy</span>
+                <select class="rating-select" id="rating16">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">(( OOC ))</div>
+            <div class="rating-row">
+                <span class="rating-label">17. Roleplay Quality</span>
+                <select class="rating-select" id="rating17">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">18. Character Portrayal</span>
+                <select class="rating-select" id="rating18">
+                    <option value="">-</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                    <option value="N/I">N/I</option>
+                    <option value="N/C">N/C</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">NARRATIVE OF PATROL</div>
+            <div class="form-group">
+                <textarea id="narrative" placeholder="Write the narrative of the patrol here..."></textarea>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">TOPICS COVERED</div>
+            <div class="form-group">
+                <textarea id="topicsCovered" placeholder="List the topics covered during the patrol..."></textarea>
+            </div>
+        </div>
+        
+        <div class="button-row">
+            <button class="btn btn-clear" onclick="clearForm()">Clear Form</button>
+            <button class="btn btn-generate" onclick="generateBBCode()">Generate BBCode</button>
+            <button class="btn btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+        
+        <div class="output-section">
+            <h3>Generated BBCode</h3>
+            <textarea id="output" readonly placeholder="Click 'Generate BBCode' to see the output here..."></textarea>
+        </div>
+    </div>
+    
+    <div class="copy-notification" id="copyNotification">Copied to clipboard!</div>
+    
+    <script>
+        function generateBBCode() {
+            const reportDate = document.getElementById('reportDate').value;
+            const reportTime = document.getElementById('reportTime').value;
+            const apprenticeName = document.getElementById('apprenticeName').value;
+            const trainerName = document.getElementById('trainerName').value;
+            const trainerBadge = document.getElementById('trainerBadge').value;
+            const narrative = document.getElementById('narrative').value;
+            const topicsCovered = document.getElementById('topicsCovered').value;
+            
+            const ratings = {};
+            for (let i = 1; i <= 18; i++) {
+                ratings[i] = document.getElementById('rating' + i).value;
+            }
+            
+            const bbcode = `[divbox=white][center][imgmw=200]https://i.imgur.com/Tr8Gu0f.png[/imgmw]
+[size=125]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
+[size=115]DIVISION OF ADULT PAROLE OPERATIONS[/size]
+[size=100]Observational Patrol Report - [color=#BF0000]NOT TO BE FILLED OUT BY THE APPRENTICE[/color][/size]
+[hr][/hr][/center]
+
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,50,5][b]REPORT DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]REPORT TIME[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,50,5]${reportDate}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,50,5]${reportTime}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,33,5][b]APPRENTICE NAME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]TRAINER NAME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5][b]TRAINER BADGE NO. [/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,33,5]${apprenticeName}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5]${trainerName}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5]${trainerBadge}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]GRADING SYSTEM[/size][/b][/center]
+[/tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,100,5][b]INSTRUCTIONS:[/b]
+E — E is equivalent to Excellent, it means the Apprentice excelled and showcased outstanding performance.
+S — S is equivalent to Standard, it means the Apprentice is working at a standard grade. 
+N/I — N/I is equivalent to Needs Improvement, it means that the Apprentice is not there yet with the knowledge taken on and should be quizzed on it when next taken out.
+N/C — N/C is equivalent to Not Covered, it means that it wasn't covered or didn't come up during the patrol.
+[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,80,5][b]ATTITUDE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5][b]RATING[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]1. Acceptance of Feedback[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[1]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]2. Attitude toward Parole Work[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[2]}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,80,5][b]APPEARANCE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5][b]RATING[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]3. General Appearance[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[3]}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,80,5][b]RELATIONSHIPS[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5][b]RATING[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]4. With Parolees[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[4]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]5. With other Agencies' Members[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[5]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]6. With Colleagues[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[6]}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,80,5][b]GENERAL PAROLE WORK[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5][b]RATING[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]7. Discretion & Law[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[7]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]8. Driving Standards[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[8]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]9. Parolee Checkups: General Checkup (This includes Traffic Stops and Parolee Searches)[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[9]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]10. Parolee Checkups: Searches (Residence and Parolee Searches)[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[10]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]11. Parolee Checkups: Substance Testing (Drug and Alcohol Testing)[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[11]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]12. Parolee Checkups: General Questioning[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[12]}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,80,5][b]MISCELLANEOUS ACTIVITIES[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5][b]RATING[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]13. Parolees-At-Large: General & What to do[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[13]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]14. Search Warrants: General (Including perimeter, searching and other tasks)[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[14]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]15. Arrest Warrants[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[15]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]16. Surveillance & Surveillance Policy[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[16]}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,80,5][b](( OOC ))[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5][b]RATING[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]17. Roleplay Quality[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[17]}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,80,5]18. Character Portrayal[/tdwidth]
+[tdwidth=1,black,transparent,top,center,20,5]${ratings[18]}[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]NARRATIVE OF PATROL[/size][/b][/center]
+[/tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,100,5]${narrative}
+[/tdwidth]
+[/tr]
+[/table2]
+
+[table2=1,black,transparent,Roboto]
+[tr][tdwidth=2,black,transparent,top,center,500,5]
+[center][b][size=120]TOPICS COVERED[/size][/b][/center]
+[/tdwidth][/tr][/table2]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,100,5]${topicsCovered}
+[/tdwidth]
+[/tr]
+[/table2][/divbox]`;
+            
+            document.getElementById('output').value = bbcode;
+        }
+        
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            output.select();
+            output.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const notification = document.getElementById('copyNotification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+        
+        function clearForm() {
+            document.getElementById('reportDate').value = '';
+            document.getElementById('reportTime').value = '';
+            document.getElementById('apprenticeName').value = '';
+            document.getElementById('trainerName').value = '';
+            document.getElementById('trainerBadge').value = '';
+            document.getElementById('narrative').value = '';
+            document.getElementById('topicsCovered').value = '';
+            
+            for (let i = 1; i <= 18; i++) {
+                document.getElementById('rating' + i).value = '';
+            }
+            
+            document.getElementById('output').value = '';
+        }
+    </script>
+</body>
+</html>
