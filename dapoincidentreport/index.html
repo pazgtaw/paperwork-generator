@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAPO Field Incident Report Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+            border-radius: 10px;
+            border: 1px solid #0f3460;
+        }
+        
+        .header h1 {
+            margin: 5px 0;
+            font-size: 1.4em;
+            color: #f0a500;
+        }
+        
+        .header h2 {
+            margin: 5px 0;
+            font-size: 1.1em;
+            color: #fff;
+            font-weight: normal;
+        }
+        
+        .header h3 {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #aaa;
+            font-weight: normal;
+        }
+        
+        .section {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #0f3460;
+        }
+        
+        .section-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #f0a500;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #0f3460;
+        }
+        
+        .section-title-grey {
+            background: #666;
+            color: #000;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .form-group.small {
+            flex: 0.5;
+            min-width: 100px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+            color: #aaa;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 0.95em;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f0a500;
+        }
+        
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #eee;
+            font-size: 0.9em;
+        }
+        
+        .checkbox-group input[type="checkbox"],
+        .checkbox-group input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+        
+        .checkbox-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .checkbox-inline input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .checkbox-inline label {
+            color: #f0a500;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn-generate {
+            background: #f0a500;
+            color: #000;
+        }
+        
+        .btn-generate:hover {
+            background: #ffbe0b;
+        }
+        
+        .btn-copy {
+            background: #0f3460;
+            color: #fff;
+        }
+        
+        .btn-copy:hover {
+            background: #1a4a7a;
+        }
+        
+        .btn-clear {
+            background: #333;
+            color: #fff;
+        }
+        
+        .btn-clear:hover {
+            background: #555;
+        }
+        
+        .btn-add {
+            background: #0f3460;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+        
+        .btn-add:hover {
+            background: #1a4a7a;
+        }
+        
+        .btn-remove {
+            background: #e94560;
+            color: #fff;
+            padding: 8px 15px;
+            font-size: 0.85em;
+            min-width: auto;
+        }
+        
+        .btn-remove:hover {
+            background: #ff6b6b;
+        }
+        
+        .output-section {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #0f3460;
+        }
+        
+        .output-section h3 {
+            color: #f0a500;
+            margin-top: 0;
+        }
+        
+        #output {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            background: #1a1a2e;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            resize: vertical;
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f0a500;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            font-weight: bold;
+        }
+        
+        .copy-notification.show {
+            opacity: 1;
+        }
+        
+        .dynamic-entry {
+            padding: 15px;
+            background: #1a1a2e;
+            border-radius: 5px;
+            border: 1px solid #0f3460;
+            margin-bottom: 15px;
+        }
+        
+        .dynamic-entry .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .dynamic-entry .entry-title {
+            font-weight: bold;
+            color: #f0a500;
+        }
+        
+        .add-entry-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .no-entries {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .region-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .related-info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .related-info-column {
+            background: #1a1a2e;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #0f3460;
+        }
+        
+        .related-info-column .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #0f3460;
+        }
+        
+        .related-info-column .column-title {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #f0a500;
+        }
+        
+        .related-info-column .checkbox-group label {
+            font-size: 0.8em;
+        }
+        
+        .other-input {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #0f3460;
+            border-radius: 3px;
+            background: #16213e;
+            color: #fff;
+            font-size: 0.8em;
+        }
+        
+        @media (max-width: 900px) {
+            .related-info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .related-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h3>STATE OF SAN ANDREAS</h3>
+            <h1>FIELD INCIDENT REPORT</h1>
+            <h2>Department of Corrections and Rehabilitation</h2>
+            <h3>Division of Adult Parole Operations | SADCR 1662 (Rev. 04/24)</h3>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">REPORT INFORMATION</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>REGION</label>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="region" value="NORTHERN"> NORTHERN</label>
+                        <label><input type="radio" name="region" value="SOUTHERN" checked> SOUTHERN</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>INCIDENT LOG NO.</label>
+                    <input type="text" id="incidentLogNo" placeholder="FIR-0000">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">INCIDENT DETAILS</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>UNIT</label>
+                    <input type="text" id="unit" placeholder="Los Santos Central GPS">
+                </div>
+                <div class="form-group">
+                    <label>INCIDENT SITE/LOCATION</label>
+                    <input type="text" id="incidentLocation" placeholder="Street, City">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>INCIDENT DATE</label>
+                    <input type="text" id="incidentDate" placeholder="DD/MMM/YY">
+                </div>
+                <div class="form-group">
+                    <label>INCIDENT TIME</label>
+                    <input type="text" id="incidentTime" placeholder="HHMM HRS">
+                </div>
+                <div class="form-group">
+                    <label>DISCOVERY DATE</label>
+                    <input type="text" id="discoveryDate" placeholder="HHMM HRS">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title-grey">INVOLVED SUSPECT/VICTIM/WITNESS</div>
+            <div id="involvedPersonsContainer">
+                <div class="no-entries" id="noPersonsMsg">No persons added yet. Click the button below to add.</div>
+            </div>
+            <div class="add-entry-row">
+                <button class="btn btn-add" onclick="addInvolvedPerson()">+ Add Person</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title-grey">INVOLVED STAFF/OTHERS</div>
+            <div id="involvedStaffContainer">
+                <div class="no-entries" id="noStaffMsg">No staff added yet. Click the button below to add.</div>
+            </div>
+            <div class="add-entry-row">
+                <button class="btn btn-add" onclick="addInvolvedStaff()">+ Add Staff</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title-grey">DESCRIPTION OF CRIME/INCIDENT (USE ADDITIONAL PAGES AS NEEDED)</div>
+            <div class="form-group">
+                <textarea id="incidentDescription" placeholder="Write Description of Crime/Incident..."></textarea>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">REPORTING EMPLOYEE</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>PRINTED NAME</label>
+                    <input type="text" id="reportingName" placeholder="JOHN DOE">
+                </div>
+                <div class="form-group">
+                    <label>SIGNATURE</label>
+                    <input type="text" id="reportingSignature" placeholder="Signature">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>BADGE/ID NO.</label>
+                    <input type="text" id="reportingBadge" placeholder="Badge ID">
+                </div>
+                <div class="form-group">
+                    <label>DATE</label>
+                    <input type="text" id="reportingDate" placeholder="DD/MMM/YYYY">
+                </div>
+                <div class="form-group">
+                    <label>SADCR SERVICE</label>
+                    <input type="text" id="sadcrService" placeholder="X YEARS">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title-grey">RELATED INFORMATION (CHECK ALL THAT APPLY)</div>
+            
+            <!-- Row 1 -->
+            <div class="related-info-grid">
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">DEATH(S)</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="deathNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="deathStaff"> STAFF</label>
+                        <label><input type="checkbox" id="deathPeaceOfficer"> PEACE OFFICER</label>
+                        <label><input type="checkbox" id="deathPrivateCitizen"> PRIVATE CITIZEN</label>
+                        <label><input type="checkbox" id="deathOffender"> OFFENDER</label>
+                        <label><input type="checkbox" id="deathAnimal"> ANIMAL</label>
+                    </div>
+                </div>
+                
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">CAUSE OF DEATH</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="causeNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="causeHomicide"> HOMICIDE</label>
+                        <label><input type="checkbox" id="causeSuicide"> SUICIDE</label>
+                        <label><input type="checkbox" id="causeAccidental"> ACCIDENTAL</label>
+                        <label><input type="checkbox" id="causeNatural"> NATURAL</label>
+                        <label><input type="checkbox" id="causeUnknown"> UNKNOWN/PENDING</label>
+                    </div>
+                </div>
+                
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">ASSAULT OR BATTERY AGAINST</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="assaultAgainstNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="assaultStaff"> STAFF/PEACE OFFICER</label>
+                        <label><input type="checkbox" id="assaultCitizen"> PRIVATE CITIZEN</label>
+                        <label><input type="checkbox" id="assaultChild"> CHILD</label>
+                        <label><input type="checkbox" id="assaultOffender"> OFFENDER</label>
+                        <label><input type="checkbox" id="assaultOther"> OTHER:</label>
+                        <input type="text" class="other-input" id="assaultOtherText" placeholder="Specify...">
+                    </div>
+                </div>
+                
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">TYPE OF ASSAULT OR BATTERY</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="assaultTypeNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="typeAssault"> ASSAULT</label>
+                        <label><input type="checkbox" id="typeBattery"> BATTERY</label>
+                        <label><input type="checkbox" id="typeShooting"> SHOOTING</label>
+                        <label><input type="checkbox" id="typeStabbing"> STABBING</label>
+                        <label><input type="checkbox" id="typeOther"> OTHER:</label>
+                        <input type="text" class="other-input" id="typeOtherText" placeholder="Specify...">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Row 2 -->
+            <div class="related-info-grid" style="margin-top: 15px;">
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">SERIOUS INJURY TO</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="injuryNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="injuryStaff"> STAFF</label>
+                        <label><input type="checkbox" id="injuryPeaceOfficer"> PEACE OFFICER</label>
+                        <label><input type="checkbox" id="injuryPrivateCitizen"> PRIVATE CITIZEN</label>
+                        <label><input type="checkbox" id="injuryOffender"> OFFENDER</label>
+                        <label><input type="checkbox" id="injuryAnimal"> ANIMAL</label>
+                    </div>
+                </div>
+                
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">WEAPONS INVOLVED</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="weaponsNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="weaponNone"> NONE</label>
+                        <label><input type="checkbox" id="weaponFirearm"> FIREARM</label>
+                        <label><input type="checkbox" id="weaponKnife"> KNIFE</label>
+                        <label><input type="checkbox" id="weaponExplosive"> EXPLOSIVE</label>
+                        <label><input type="checkbox" id="weaponHandsFeet"> HANDS/FEET</label>
+                        <label><input type="checkbox" id="weaponOther"> OTHER:</label>
+                        <input type="text" class="other-input" id="weaponOtherText" placeholder="Specify...">
+                    </div>
+                </div>
+                
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">DEADLY FORCE USED</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="deadlyNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="deadlyYes"> YES</label>
+                        <label><input type="checkbox" id="deadlyNo"> NO</label>
+                        <label><input type="checkbox" id="deadlyFirearms"> FIREARMS</label>
+                        <label><input type="checkbox" id="deadlyCaliber"> CALIBER:</label>
+                        <input type="text" class="other-input" id="deadlyCaliberText" placeholder="Caliber...">
+                        <label><input type="checkbox" id="deadlyRounds"> NUMBER OF ROUNDS FIRED:</label>
+                        <input type="text" class="other-input" id="deadlyRoundsText" placeholder="Rounds...">
+                        <label><input type="checkbox" id="deadlyOtherWeapon"> OTHER WEAPON:</label>
+                        <input type="text" class="other-input" id="deadlyOtherText" placeholder="Specify...">
+                    </div>
+                </div>
+                
+                <div class="related-info-column">
+                    <div class="column-header">
+                        <span class="column-title">NON-DEADLY FORCE USED</span>
+                        <label class="checkbox-inline"><input type="checkbox" id="nonDeadlyNA"> N/A</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="nonDeadlyYes"> YES</label>
+                        <label><input type="checkbox" id="nonDeadlyNo"> NO</label>
+                        <label><input type="checkbox" id="nonDeadlyChemical"> CHEMICAL AGENT</label>
+                        <label><input type="checkbox" id="nonDeadlyPhysical"> PHYSICAL</label>
+                        <label><input type="checkbox" id="nonDeadlyTaser"> ELECTRONIC CONTROL DEVICE "TASER"</label>
+                        <label><input type="checkbox" id="nonDeadlyOther"> OTHER:</label>
+                        <input type="text" class="other-input" id="nonDeadlyOtherText" placeholder="Specify...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-row">
+            <button class="btn btn-clear" onclick="clearForm()">Clear Form</button>
+            <button class="btn btn-generate" onclick="generateBBCode()">Generate BBCode</button>
+            <button class="btn btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+        
+        <div class="output-section">
+            <h3>Generated BBCode</h3>
+            <textarea id="output" readonly placeholder="Click 'Generate BBCode' to see the output here..."></textarea>
+        </div>
+    </div>
+    
+    <div class="copy-notification" id="copyNotification">Copied to clipboard!</div>
+    
+    <script>
+        let personCount = 0;
+        let staffCount = 0;
+        
+        function getCheckbox(id) {
+            const el = document.getElementById(id);
+            return el && el.checked ? '[cbc]' : '[cb]';
+        }
+        
+        function addInvolvedPerson() {
+            const container = document.getElementById('involvedPersonsContainer');
+            const noMsg = document.getElementById('noPersonsMsg');
+            
+            if (noMsg) {
+                noMsg.style.display = 'none';
+            }
+            
+            personCount++;
+            
+            const entry = document.createElement('div');
+            entry.className = 'dynamic-entry';
+            entry.id = 'person-' + personCount;
+            entry.innerHTML = `
+                <div class="entry-header">
+                    <span class="entry-title">Person #${personCount}</span>
+                    <button class="btn btn-remove" onclick="removeEntry('person-${personCount}', 'person')">Remove</button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group small">
+                        <label>CHECK ONE</label>
+                        <div class="checkbox-group">
+                            <label><input type="radio" name="personType${personCount}" value="VICTIM"> VICTIM</label>
+                            <label><input type="radio" name="personType${personCount}" value="SUSPECT"> SUSPECT</label>
+                            <label><input type="radio" name="personType${personCount}" value="WITNESS"> WITNESS</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>SADCR/ID NO.</label>
+                        <input type="text" class="person-sadcr" placeholder="X-0000">
+                    </div>
+                    <div class="form-group">
+                        <label>NAME (LAST, FIRST)</label>
+                        <input type="text" class="person-name" placeholder="DOE JOHN">
+                    </div>
+                    <div class="form-group">
+                        <label>SUPERVISION LEVEL</label>
+                        <input type="text" class="person-supervision" placeholder="...">
+                    </div>
+                    <div class="form-group">
+                        <label>TELEPHONE NO.</label>
+                        <input type="text" class="person-phone" placeholder="000-0000">
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(entry);
+        }
+        
+        function addInvolvedStaff() {
+            const container = document.getElementById('involvedStaffContainer');
+            const noMsg = document.getElementById('noStaffMsg');
+            
+            if (noMsg) {
+                noMsg.style.display = 'none';
+            }
+            
+            staffCount++;
+            
+            const entry = document.createElement('div');
+            entry.className = 'dynamic-entry';
+            entry.id = 'staff-' + staffCount;
+            entry.innerHTML = `
+                <div class="entry-header">
+                    <span class="entry-title">Staff #${staffCount}</span>
+                    <button class="btn btn-remove" onclick="removeEntry('staff-${staffCount}', 'staff')">Remove</button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>NAME (LAST, FIRST)</label>
+                        <input type="text" class="staff-name" placeholder="DOE JOHN">
+                    </div>
+                    <div class="form-group">
+                        <label>TITLE</label>
+                        <input type="text" class="staff-title" placeholder="Title">
+                    </div>
+                    <div class="form-group">
+                        <label>AGENCY/UNIT</label>
+                        <input type="text" class="staff-agency" placeholder="Name of Agency">
+                    </div>
+                    <div class="form-group">
+                        <label>BADGE ID/NO.</label>
+                        <input type="text" class="staff-badge" placeholder="000000">
+                    </div>
+                    <div class="form-group small">
+                        <label>GENDER</label>
+                        <div class="checkbox-group">
+                            <label><input type="radio" name="staffGender${staffCount}" value="MALE"> MALE</label>
+                            <label><input type="radio" name="staffGender${staffCount}" value="FEMALE"> FEMALE</label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(entry);
+        }
+        
+        function removeEntry(id, type) {
+            const entry = document.getElementById(id);
+            if (entry) {
+                entry.remove();
+            }
+            
+            if (type === 'person') {
+                const container = document.getElementById('involvedPersonsContainer');
+                const entries = container.querySelectorAll('.dynamic-entry');
+                const noMsg = document.getElementById('noPersonsMsg');
+                if (entries.length === 0 && noMsg) {
+                    noMsg.style.display = 'block';
+                }
+            } else if (type === 'staff') {
+                const container = document.getElementById('involvedStaffContainer');
+                const entries = container.querySelectorAll('.dynamic-entry');
+                const noMsg = document.getElementById('noStaffMsg');
+                if (entries.length === 0 && noMsg) {
+                    noMsg.style.display = 'block';
+                }
+            }
+        }
+        
+        function generateBBCode() {
+            // Get basic info
+            const region = document.querySelector('input[name="region"]:checked');
+            const regionValue = region ? region.value : 'SOUTHERN';
+            const incidentLogNo = document.getElementById('incidentLogNo').value || 'FIR-0000';
+            const unit = document.getElementById('unit').value || 'Los Santos Central GPS';
+            const incidentLocation = document.getElementById('incidentLocation').value || '(Street, City)';
+            const incidentDate = document.getElementById('incidentDate').value || '(DD/MMM/YY)';
+            const incidentTime = document.getElementById('incidentTime').value || '(HHMM HRS)';
+            const discoveryDate = document.getElementById('discoveryDate').value || '(HHMM HRS)';
+            const incidentDescription = document.getElementById('incidentDescription').value || '(Write Description of Crime/Incident...)';
+            const reportingName = document.getElementById('reportingName').value || 'JOHN DOE';
+            const reportingSignature = document.getElementById('reportingSignature').value || '(Signature)';
+            const reportingBadge = document.getElementById('reportingBadge').value || '(Badge ID)';
+            const reportingDate = document.getElementById('reportingDate').value || 'DD/MMM/YYYY';
+            const sadcrService = document.getElementById('sadcrService').value || 'X YEARS';
+            
+            // Region checkboxes
+            const northernCheck = regionValue === 'NORTHERN' ? '[cbc]' : '[cb]';
+            const southernCheck = regionValue === 'SOUTHERN' ? '[cbc]' : '[cb]';
+            
+            // Generate involved persons BBCode
+            let personsBBCode = '';
+            const personEntries = document.querySelectorAll('#involvedPersonsContainer .dynamic-entry');
+            
+            personEntries.forEach(entry => {
+                const typeRadio = entry.querySelector('input[type="radio"]:checked');
+                const personType = typeRadio ? typeRadio.value : '';
+                const sadcr = entry.querySelector('.person-sadcr').value || 'X-0000';
+                const name = entry.querySelector('.person-name').value || 'DOE JOHN';
+                const supervision = entry.querySelector('.person-supervision').value || '...';
+                const phone = entry.querySelector('.person-phone').value || '000-0000';
+                
+                const victimCheck = personType === 'VICTIM' ? '[cbc]' : '[cb]';
+                const suspectCheck = personType === 'SUSPECT' ? '[cbc]' : '[cb]';
+                const witnessCheck = personType === 'WITNESS' ? '[cbc]' : '[cb]';
+                
+                personsBBCode += `[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,15,5][b]CHECK ONE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]SADCR/ID NO.[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]NAME (LAST, FIRST)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]SUPERVISION LEVEL[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]TELEPHONE NO.[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,15,5]${victimCheck} VICTIM
+${suspectCheck} SUSPECT
+${witnessCheck} WITNESS[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]${sadcr}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${name}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]${supervision}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]${phone}[/tdwidth]
+[/tr]
+[/table2]
+`;
+            });
+            
+            if (!personsBBCode) {
+                personsBBCode = `[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,15,5][b]CHECK ONE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]SADCR/ID NO.[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]NAME (LAST, FIRST)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]SUPERVISION LEVEL[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]TELEPHONE NO.[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,15,5][cb] VICTIM
+[cb] SUSPECT
+[cb] WITNESS[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]X-0000[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]DOE JOHN[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]...[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]000-0000[/tdwidth]
+[/tr]
+[/table2]
+`;
+            }
+            
+            // Generate involved staff BBCode
+            let staffBBCode = '';
+            const staffEntries = document.querySelectorAll('#involvedStaffContainer .dynamic-entry');
+            
+            staffEntries.forEach(entry => {
+                const genderRadio = entry.querySelector('input[type="radio"]:checked');
+                const gender = genderRadio ? genderRadio.value : '';
+                const name = entry.querySelector('.staff-name').value || 'DOE JOHN';
+                const title = entry.querySelector('.staff-title').value || '(TITLE)';
+                const agency = entry.querySelector('.staff-agency').value || '(NAME OF AGENCY)';
+                const badge = entry.querySelector('.staff-badge').value || '000000';
+                
+                const maleCheck = gender === 'MALE' ? '[cbc]' : '[cb]';
+                const femaleCheck = gender === 'FEMALE' ? '[cbc]' : '[cb]';
+                
+                staffBBCode += `[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5][b]NAME (LAST, FIRST)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5][b]TITLE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]AGENCY/UNIT[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5][b]BADGE ID/NO.[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]GENDER[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5]${name}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5]${title}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${agency}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5]${badge}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]${maleCheck}MALE
+${femaleCheck}FEMALE[/tdwidth]
+[/tr]
+[/table2]
+`;
+            });
+            
+            if (!staffBBCode) {
+                staffBBCode = `[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5][b]NAME (LAST, FIRST)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5][b]TITLE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]AGENCY/UNIT[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5][b]BADGE ID/NO.[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]GENDER[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5]DOE JOHN[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5](TITLE)[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5](NAME OF AGENCY)[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5]000000[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][cb]MALE
+[cb]FEMALE[/tdwidth]
+[/tr]
+[/table2]
+`;
+            }
+            
+            // Get related information values
+            const assaultOtherText = document.getElementById('assaultOtherText').value || '';
+            const typeOtherText = document.getElementById('typeOtherText').value || '';
+            const weaponOtherText = document.getElementById('weaponOtherText').value || '';
+            const deadlyCaliberText = document.getElementById('deadlyCaliberText').value || '';
+            const deadlyRoundsText = document.getElementById('deadlyRoundsText').value || '';
+            const deadlyOtherText = document.getElementById('deadlyOtherText').value || '';
+            const nonDeadlyOtherText = document.getElementById('nonDeadlyOtherText').value || '';
+            
+            const bbcode = `[divbox=white][aligntable=right,50,0,0,0,0][size=95]DEPARTMENT OF CORRECTIONS AND REHABILITATION
+DIVISION OF ADULT PAROLE OPERATIONS[/aligntable]STATE OF SAN ANDREAS[/size]
+[size=125][b]FIELD INCIDENT REPORT[/b][/size]
+[size=95][b]SADCR 1662 (Rev. 04/24)[/b][/size]
+[aligntable=right,50,0,0,0,0][table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,50,5][b]REGION[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,50,5][b]INCIDENT LOG NO.[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,50,5]${northernCheck}NORTHERN
+${southernCheck}SOUTHERN[/tdwidth]
+[tdwidth=1,black,transparent,top,left,50,5]${incidentLogNo}[/tdwidth]
+[/tr]
+[/table2][/aligntable]
+[hr]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,20,5][b]UNIT[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]INCIDENT SITE/LOCATION[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,18,5][b]INCIDENT DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,18,5][b]INCIDENT TIME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,19,5][b]DISCOVERY DATE[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,20,5]${unit}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${incidentLocation}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,18,5]${incidentDate}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,18,5]${incidentTime}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,19,5]${discoveryDate}[/tdwidth]
+[/tr]
+[/table2]
+[divbox=grey][color=black][center][b]INVOLVED SUSPECT/VICTIM/WITNESS[/b][/center][/color][/divbox]
+${personsBBCode}[divbox=grey][color=black][center][b]INVOLVED STAFF/OTHERS[/b][/center][/color][/divbox]
+${staffBBCode}[divbox=grey][color=black][center][b]DESCRIPTION OF CRIME/INCIDENT (USE ADDITIONAL PAGES AS NEEDED)[/b][/center][/color][/divbox]
+[i]${incidentDescription}[/i]
+[br][/br]
+[br][/br]
+[br][/br]
+[br][/br]
+[br][/br]
+[hr]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,30,5][b]REPORTING EMPLOYEE PRINTED NAME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5][b]SIGNATURE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5][b]BADGE/ID NO.[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]DATE[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5][b]SADCR SERVICE[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,30,5]${reportingName}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5]${reportingSignature}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,15,5]${reportingBadge}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]${reportingDate}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,5]${sadcrService}[/tdwidth]
+[/tr]
+[/table2]
+[hr]
+[b]DISTRIBUTION Original:[/b] First Line Manager
+[br][/br]
+[br][/br]
+[br][/br]
+[divbox=grey][color=black][center][b]RELATED INFORMATION (CHECK ALL THAT APPLY)[/b][/center][/color][/divbox]
+[table2=1,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5][b]DEATH(S)[/b] ${getCheckbox('deathNA')}N/A[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]CAUSE OF DEATH[/b] ${getCheckbox('causeNA')}N/A[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]ASSAULT OR BATTERY AGAINST[/b] ${getCheckbox('assaultAgainstNA')}N/A[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]TYPE OF ASSAULT OR BATTERY[/b] ${getCheckbox('assaultTypeNA')}N/A[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('deathStaff')} STAFF
+${getCheckbox('deathPeaceOfficer')} PEACE OFFICER
+${getCheckbox('deathPrivateCitizen')} PRIVATE CITIZEN
+${getCheckbox('deathOffender')} OFFENDER
+${getCheckbox('deathAnimal')} ANIMAL[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('causeHomicide')} HOMICIDE
+${getCheckbox('causeSuicide')} SUICIDE
+${getCheckbox('causeAccidental')} ACCIDENTAL
+${getCheckbox('causeNatural')} NATURAL
+${getCheckbox('causeUnknown')} UNKNOWN/PENDING[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('assaultStaff')} STAFF/PEACE OFFICER
+${getCheckbox('assaultCitizen')} PRIVATE CITIZEN
+${getCheckbox('assaultChild')} CHILD
+${getCheckbox('assaultOffender')} OFFENDER
+${getCheckbox('assaultOther')} OTHER: ${assaultOtherText}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('typeAssault')} ASSAULT
+${getCheckbox('typeBattery')} BATTERY
+${getCheckbox('typeShooting')} SHOOTING
+${getCheckbox('typeStabbing')} STABBING
+${getCheckbox('typeOther')} OTHER: ${typeOtherText}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5][b]SERIOUS INJURY TO[/b] ${getCheckbox('injuryNA')}N/A[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]WEAPONS INVOLVED[/b] ${getCheckbox('weaponsNA')}N/A[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]DEADLY FORCE USED[/b] ${getCheckbox('deadlyNA')}N/A[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5][b]NON-DEADLY FORCE USED[/b] ${getCheckbox('nonDeadlyNA')}N/A[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('injuryStaff')} STAFF
+${getCheckbox('injuryPeaceOfficer')} PEACE OFFICER
+${getCheckbox('injuryPrivateCitizen')} PRIVATE CITIZEN
+${getCheckbox('injuryOffender')} OFFENDER
+${getCheckbox('injuryAnimal')} ANIMAL[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('weaponNone')} NONE
+${getCheckbox('weaponFirearm')} FIREARM
+${getCheckbox('weaponKnife')} KNIFE
+${getCheckbox('weaponExplosive')} EXPLOSIVE
+${getCheckbox('weaponHandsFeet')} HANDS/FEET
+${getCheckbox('weaponOther')} OTHER: ${weaponOtherText}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('deadlyYes')} YES
+${getCheckbox('deadlyNo')} NO
+${getCheckbox('deadlyFirearms')} FIREARMS
+${getCheckbox('deadlyCaliber')} CALIBER: ${deadlyCaliberText}
+${getCheckbox('deadlyRounds')} NUMBER OF ROUNDS FIRED: ${deadlyRoundsText}
+${getCheckbox('deadlyOtherWeapon')} OTHER WEAPON: ${deadlyOtherText}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,5]${getCheckbox('nonDeadlyYes')} YES
+${getCheckbox('nonDeadlyNo')} NO
+${getCheckbox('nonDeadlyChemical')} CHEMICAL AGENT
+${getCheckbox('nonDeadlyPhysical')} PHYSICAL
+${getCheckbox('nonDeadlyTaser')} ELECTRONIC CONTROL DEVICE "TASER"
+${getCheckbox('nonDeadlyOther')} OTHER: ${nonDeadlyOtherText}[/tdwidth]
+[/tr]
+[/table2]
+[/divbox]`;
+            
+            document.getElementById('output').value = bbcode;
+        }
+        
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            output.select();
+            output.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const notification = document.getElementById('copyNotification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+        
+        function clearForm() {
+            // Clear all text inputs
+            const textInputs = document.querySelectorAll('input[type="text"], textarea');
+            textInputs.forEach(input => input.value = '');
+            
+            // Clear all checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = false);
+            
+            // Reset region to Southern
+            const southernRadio = document.querySelector('input[name="region"][value="SOUTHERN"]');
+            if (southernRadio) southernRadio.checked = true;
+            
+            // Clear output
+            document.getElementById('output').value = '';
+            
+            // Clear persons
+            const personsContainer = document.getElementById('involvedPersonsContainer');
+            const personEntries = personsContainer.querySelectorAll('.dynamic-entry');
+            personEntries.forEach(entry => entry.remove());
+            const noPersonsMsg = document.getElementById('noPersonsMsg');
+            if (noPersonsMsg) noPersonsMsg.style.display = 'block';
+            
+            // Clear staff
+            const staffContainer = document.getElementById('involvedStaffContainer');
+            const staffEntries = staffContainer.querySelectorAll('.dynamic-entry');
+            staffEntries.forEach(entry => entry.remove());
+            const noStaffMsg = document.getElementById('noStaffMsg');
+            if (noStaffMsg) noStaffMsg.style.display = 'block';
+            
+            personCount = 0;
+            staffCount = 0;
+        }
+    </script>
+</body>
+</html>
