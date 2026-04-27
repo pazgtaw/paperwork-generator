@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADCR Form 602-1 / 1824 Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep:   #0f3310;
+            --green-mid:    #164916;
+            --green-light:  #1e6b1e;
+            --green-pale:   #d4e8d0;
+            --green-wash:   #eef5ec;
+            --gold:         #b8960c;
+            --gold-light:   #f0d060;
+            --cream:        #f7f4ed;
+            --parchment:    #ede8da;
+            --ink:          #1a1a14;
+            --ink-mid:      #3a3a2e;
+            --ink-light:    #6a6a54;
+            --rule:         #c8c0a8;
+            --white:        #ffffff;
+            --red-alert:    #8b1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: var(--green-deep);
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px),
+                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px);
+            min-height: 100vh;
+            padding: 30px 20px 60px;
+            color: var(--ink);
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--green-mid);
+            border: 1px solid var(--green-light);
+            border-radius: 4px 4px 0 0;
+            padding: 28px 32px 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        }
+
+        .header-agency {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 700;
+            font-size: 0.7em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 6px;
+        }
+
+        .header-state {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1em;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 12px;
+            letter-spacing: 0.08em;
+        }
+
+        .header-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.55em;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .header-form-ref {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.78em;
+            color: rgba(255,255,255,0.45);
+            letter-spacing: 0.04em;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--cream);
+            border: 1px solid var(--green-mid);
+            border-top: none;
+            padding: 28px 32px;
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 700;
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--green-mid);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--green-pale);
+        }
+
+        .section-title .tag {
+            background: var(--green-mid);
+            color: var(--white);
+            padding: 2px 8px;
+            font-size: 0.9em;
+            border-radius: 2px;
+        }
+
+        /* FORM TYPE SELECTOR */
+        .type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .type-option { position: relative; cursor: pointer; }
+
+        .type-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .type-card {
+            display: block;
+            padding: 16px 18px;
+            border: 1px solid var(--rule);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            border-radius: 3px;
+        }
+
+        .type-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--green-mid);
+            border-radius: 3px 0 0 3px;
+            transform: scaleY(0);
+            transition: transform 0.2s ease;
+            transform-origin: bottom;
+        }
+
+        .type-card:hover {
+            border-color: var(--green-light);
+            background: var(--green-wash);
+        }
+
+        .type-option input:checked + .type-card {
+            border-color: var(--green-mid);
+            background: var(--green-wash);
+            box-shadow: 0 2px 12px rgba(22,73,22,0.1);
+        }
+
+        .type-option input:checked + .type-card::before {
+            transform: scaleY(1);
+        }
+
+        .type-card-code {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.7em;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .type-card-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.3;
+            padding-right: 20px;
+        }
+
+        .type-card-desc {
+            font-size: 0.78em;
+            color: var(--ink-light);
+            margin-top: 4px;
+            font-weight: 300;
+        }
+
+        .type-check {
+            position: absolute;
+            top: 14px; right: 14px;
+            width: 16px; height: 16px;
+            border: 1px solid var(--rule);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .type-check::after {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--green-mid);
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.15s ease;
+        }
+
+        .type-option input:checked + .type-card .type-check {
+            border-color: var(--green-mid);
+        }
+
+        .type-option input:checked + .type-card .type-check::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* CONDITIONAL SECTIONS */
+        .form-section { display: none; }
+
+        .form-section.active {
+            display: block;
+            animation: sectionIn 0.3s ease both;
+        }
+
+        #sigCard { display: none; }
+
+        /* FORM FIELDS */
+        .form-row {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row.c2 { grid-template-columns: 1fr 1fr; }
+        .form-row.c3 { grid-template-columns: 1fr 1fr 1fr; }
+        .form-row.c1 { grid-template-columns: 1fr; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.72em;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid var(--rule);
+            border-radius: 3px;
+            background: var(--white);
+            color: var(--ink);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.93em;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 3px var(--green-pale);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #bbb;
+            font-style: italic;
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-group textarea.tall { min-height: 160px; }
+
+        /* NOTICE */
+        .notice {
+            background: var(--parchment);
+            border-left: 3px solid var(--gold);
+            padding: 12px 16px;
+            font-size: 0.85em;
+            line-height: 1.6;
+            color: var(--ink-mid);
+            margin: 0 0 16px;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .notice strong { color: var(--green-deep); }
+
+        /* BUTTONS */
+        .button-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            padding: 24px 32px;
+            background: var(--green-deep);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 11px 28px;
+            border: none;
+            border-radius: 3px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 700;
+            font-size: 0.85em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-generate {
+            background: var(--gold);
+            color: var(--ink);
+        }
+
+        .btn-generate:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(184,150,12,0.4);
+        }
+
+        .btn-copy {
+            background: var(--green-light);
+            color: var(--white);
+        }
+
+        .btn-copy:hover {
+            background: #28922a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30,107,30,0.4);
+        }
+
+        .btn-clear {
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .btn-clear:hover {
+            color: #fff;
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        /* OUTPUT */
+        .output-card {
+            background: #111108;
+            border: 1px solid var(--green-mid);
+            border-top: none;
+            padding: 24px 32px;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .output-label {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 700;
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .output-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        #output {
+            width: 100%;
+            min-height: 260px;
+            padding: 14px 16px;
+            border: 1px solid #2a2a1a;
+            border-radius: 3px;
+            background: #0a0a06;
+            color: #7ecf7e;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8em;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 28px; right: 28px;
+            background: var(--green-mid);
+            color: var(--white);
+            padding: 12px 22px;
+            border-radius: 3px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.88em;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            border-left: 3px solid var(--gold);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes sectionIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .form-row.c2,
+            .form-row.c3,
+            .type-selector { grid-template-columns: 1fr; }
+            .card, .output-card { padding: 20px 18px; }
+            .header { padding: 20px 18px 16px; }
+            .button-row { padding: 20px 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-agency">State of San Andreas &nbsp;·&nbsp; Department of Corrections and Rehabilitation</div>
+        <div class="header-state">Division of Adult Parole Operations</div>
+        <div class="header-title">Grievance / Reasonable Accommodation Request</div>
+        <div class="header-form-ref">SADCR FORM 602-1 / 1824 &nbsp;·&nbsp; Rev. 01/25</div>
+    </div>
+
+    <!-- 01: FORM TYPE -->
+    <div class="card">
+        <div class="section-title"><span class="tag">§1</span> Select Form Type</div>
+        <div class="type-selector">
+            <label class="type-option">
+                <input type="radio" name="formType" value="grievance" onchange="switchForm('grievance')">
+                <span class="type-card">
+                    <span class="type-check"></span>
+                    <span class="type-card-code">SADCR — 602-1</span>
+                    <span class="type-card-label">Grievance</span>
+                    <span class="type-card-desc">Staff misconduct, complaints, or disability-based discrimination.</span>
+                </span>
+            </label>
+            <label class="type-option">
+                <input type="radio" name="formType" value="ra" onchange="switchForm('ra')">
+                <span class="type-card">
+                    <span class="type-check"></span>
+                    <span class="type-card-code">SADCR — 1824</span>
+                    <span class="type-card-label">Reasonable Accommodation</span>
+                    <span class="type-card-desc">Access, participation in programs, or accommodation requests.</span>
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <!-- 02: INMATE INFO -->
+    <div class="card">
+        <div class="section-title"><span class="tag">§2</span> Inmate Information</div>
+        <div class="form-row c2">
+            <div class="form-group">
+                <label>Last Name, First Name</label>
+                <input type="text" id="fullName" placeholder="e.g. Doe, John">
+            </div>
+            <div class="form-group">
+                <label>SADCR Number</label>
+                <input type="text" id="sadcrNumber" placeholder="e.g. A-123456">
+            </div>
+        </div>
+        <div class="form-row c2">
+            <div class="form-group">
+                <label>Institution or Parole Region</label>
+                <input type="text" id="institution" placeholder="e.g. San Andreas State Prison">
+            </div>
+            <div class="form-group">
+                <label>Housing and Bed Number</label>
+                <input type="text" id="housingBed" placeholder="e.g. Building 4 / Bed 12B">
+            </div>
+        </div>
+    </div>
+
+    <!-- 03a: GRIEVANCE (conditional) -->
+    <div id="sec-grievance" class="form-section card">
+        <div class="section-title"><span class="tag">§3</span> Grievance — SADCR 602-1</div>
+        <div class="notice">
+            Describe your complaint. Include the <strong>names of all involved</strong>; attempts to informally resolve the issue; and related log numbers from your central file.
+        </div>
+        <div class="form-row c3">
+            <div class="form-group">
+                <label>Date of Event (if known)</label>
+                <input type="text" id="eventDate" placeholder="DD/MMM/YYYY">
+            </div>
+            <div class="form-group">
+                <label>Time of Event (if known)</label>
+                <input type="text" id="eventTime" placeholder="HH:MM">
+            </div>
+            <div class="form-group">
+                <label>Location of Event (if known)</label>
+                <input type="text" id="eventLocation" placeholder="e.g. Yard B">
+            </div>
+        </div>
+        <div class="form-row c1">
+            <div class="form-group">
+                <label>Describe Your Complaint</label>
+                <textarea class="tall" id="grievanceDesc" placeholder="Describe the complaint in full..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 03b: REASONABLE ACCOMMODATION (conditional) -->
+    <div id="sec-ra" class="form-section card">
+        <div class="section-title"><span class="tag">§3</span> Reasonable Accommodation — SADCR 1824</div>
+        <div class="notice">
+            Complete this section if requesting accommodation to access a program, service, or activity — or to report removal / denial of accommodation due to <strong>disability-based discrimination</strong>.
+        </div>
+        <div class="form-row c1">
+            <div class="form-group">
+                <label>1. What can't you do / What is the problem?</label>
+                <textarea id="ra1" placeholder="Describe what you are unable to do or what the problem is..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>2. Why can't you do it?</label>
+                <textarea id="ra2" placeholder="Explain the reason or disability preventing you from doing it..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>3. What do you need?</label>
+                <textarea id="ra3" placeholder="Describe the accommodation or assistance you are requesting..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 04: SIGNATURE (hidden until form type chosen) -->
+    <div id="sigCard" class="card">
+        <div class="section-title"><span class="tag">§4</span> Signature &amp; Date</div>
+        <div class="form-row c2">
+            <div class="form-group">
+                <label>Your Signature (Character Name)</label>
+                <input type="text" id="signature" placeholder="Full name as signature">
+            </div>
+            <div class="form-group">
+                <label>Date Signed</label>
+                <input type="text" id="dateSigned" placeholder="DD/MMM/YYYY">
+            </div>
+        </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="button-row">
+        <button class="btn btn-clear"    onclick="clearForm()">Clear Form</button>
+        <button class="btn btn-generate" onclick="generateBBCode()">Generate BBCode</button>
+        <button class="btn btn-copy"     onclick="copyOutput()">Copy to Clipboard</button>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="output-card">
+        <div class="output-label">Generated BBCode</div>
+        <textarea id="output" readonly placeholder="Select a form type above, fill in the fields, then click 'Generate BBCode'..."></textarea>
+    </div>
+
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+    let currentForm = null;
+
+    function switchForm(type) {
+        currentForm = type;
+
+        document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('sec-' + type).classList.add('active');
+
+        const sig = document.getElementById('sigCard');
+        if (sig.style.display !== 'block') {
+            sig.style.display = 'block';
+            sig.style.animation = 'sectionIn 0.3s ease both';
+        }
+    }
+
+    function v(id) {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+    }
+
+    function generateBBCode() {
+        if (!currentForm) {
+            alert('Please select a form type first.');
+            return;
+        }
+
+        const fullName    = v('fullName')    || 'N/A';
+        const sadcrNum    = v('sadcrNumber') || 'N/A';
+        const institution = v('institution') || 'N/A';
+        const housingBed  = v('housingBed')  || 'N/A';
+        const signature   = v('signature')   || 'N/A';
+        const dateSigned  = v('dateSigned')  || 'N/A';
+
+        let formBlock = '';
+
+        if (currentForm === 'grievance') {
+            const eventDate     = v('eventDate')     || 'N/A';
+            const eventTime     = v('eventTime')     || 'N/A';
+            const eventLocation = v('eventLocation') || 'N/A';
+            const grievanceDesc = v('grievanceDesc') || 'N/A';
+
+            formBlock =
+`If you are submitting a grievance, an allegation of staff misconduct, or an allegation of disability-based discrimination, please complete the section below and sign and date the form.
+[table2=1,black,transparent,Arial]
+[tr]
+[tdcs=1,black,transparent,middle,left,2,2][b]GRIEVANCE (SADCR FORM 602-1)[/b]
+Please describe your complaint. Include the names of all those who were involved; any attempts to informally resolve the issue; and any related log numbers for documents in your central file.
+[b]Date of Event, if known:[/b] [u]${eventDate}[/u][float=right][b]Time of Event, if known:[/b] [u]${eventTime}[/u][/float]
+[br]
+[b]Location of Event, if known:[/b] [u]${eventLocation}[/u]
+[b]Describe your complaint:[/b] [u]${grievanceDesc}[/u][/tdcs][/tr][/table2]`;
+
+        } else {
+            const ra1 = v('ra1') || 'N/A';
+            const ra2 = v('ra2') || 'N/A';
+            const ra3 = v('ra3') || 'N/A';
+
+            formBlock =
+`If you are requesting assistance or an accommodation so you can access or participate in a program, service, or activity, or want to report the removal or denial of an accommodation due to disability-based discrimination, please complete the section below and sign and date the form.
+[table2=1,black,transparent,Arial]
+[tr]
+[tdcs=1,black,transparent,middle,left,2,2][b]REASONABLE ACCOMMODATION REQUEST (SADCR FORM 1824)[/b]
+Please answer the following questions:
+[b]1. What can't you do / What is the problem?[/b]
+${ra1}
+[b]2. Why can't you do it?[/b]
+${ra2}
+[b]3. What do you need[/b]
+${ra3}[/tdcs]
+[/tr][/table2]`;
+        }
+
+        const bbcode =
+`[altdivbox=white,0,#164916,0,20,20][float=right][size=75]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/float]STATE OF SAN ANDREAS[/size]
+[b]GRIEVANCE / REASONABLE ACCOMMODATION REQUEST[/b]
+SADCR FORM 602-1 / 1824 (Rev. 01/25)[size=85][float=right][b]Page 1 of 1[/b][/size][/float]
+[br]
+[table2=1,black,transparent,Arial]
+[tr]
+[tdcs=1,black,transparent,middle,left,1,2][b]LAST NAME, FIRST NAME[/b]
+${fullName}[/tdcs]
+[tdcs=1,black,transparent,middle,left,1,2][b]SADCR NUMBER[/b]
+${sadcrNum}[/tdcs]
+[/tr]
+[tr]
+[tdcs=1,black,transparent,middle,left,1,2][b]INSTITUTION OR PAROLE REGION[/b]
+${institution}[/tdcs]
+[tdcs=1,black,transparent,middle,left,1,2][b]HOUSING AND BED NUMBER[/b]
+${housingBed}[/tdcs]
+[/tr]
+[/table2]
+[br]
+[center][size=90][b]*** YOU CAN NOW FILE A GRIEVANCE OR REQUEST A REASONABLE ACCOMMODATION BY COMPLETING THIS FORM ***[/b][/size][/center]
+${formBlock}
+[b]Your Signature:[/b] ${signature}[float=right][b]Date Signed:[/b] ${dateSigned}[/float]
+[br]
+[table2=1,black,transparent,Arial][tr][td colspan=3][center][b][i]STAFF USE ONLY[/i][/b][/center]
+Date Received: [float=right]Log Number: [/float][/td][/tr][/table2][/altdivbox]`;
+
+        document.getElementById('output').value = bbcode;
+    }
+
+    function copyOutput() {
+        const out = document.getElementById('output');
+        if (!out.value || out.value.indexOf('[altdivbox') === -1) {
+            generateBBCode();
+            if (!out.value) return;
+        }
+        out.select();
+        out.setSelectionRange(0, 99999);
+        try { document.execCommand('copy'); }
+        catch(e) { navigator.clipboard.writeText(out.value).catch(() => {}); }
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function clearForm() {
+        ['fullName','sadcrNumber','institution','housingBed',
+         'eventDate','eventTime','eventLocation','grievanceDesc',
+         'ra1','ra2','ra3','signature','dateSigned','output'
+        ].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        document.querySelectorAll('input[name="formType"]').forEach(r => r.checked = false);
+        document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('sigCard').style.display = 'none';
+        currentForm = null;
+    }
+</script>
+</body>
+</html>
