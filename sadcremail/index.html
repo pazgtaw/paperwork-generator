@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADCR Email BBCode Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep:   #0f3310;
+            --green-mid:    #164916;
+            --green-light:  #1e6b1e;
+            --green-pale:   #d4e8d0;
+            --green-wash:   #eef5ec;
+            --gold:         #b8960c;
+            --gold-light:   #f0d060;
+            --cream:        #f7f4ed;
+            --parchment:    #ede8da;
+            --ink:          #1a1a14;
+            --ink-mid:      #3a3a2e;
+            --ink-light:    #6a6a54;
+            --rule:         #c8c0a8;
+            --white:        #ffffff;
+            --red-alert:    #8b1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: var(--green-deep);
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.025) 39px, rgba(255,255,255,0.025) 40px),
+                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.01) 39px, rgba(255,255,255,0.01) 40px);
+            min-height: 100vh;
+            color: var(--ink);
+            padding: 2rem 1rem 4rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header .seal {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            display: block;
+            margin-bottom: 0.4rem;
+            opacity: 0.85;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.04em;
+        }
+
+        .page-header .subtitle {
+            font-size: 0.82rem;
+            color: var(--green-pale);
+            margin-top: 0.35rem;
+            opacity: 0.75;
+            letter-spacing: 0.05em;
+        }
+
+        .divider-ornament {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.75rem auto 0;
+            width: fit-content;
+        }
+        .divider-ornament span {
+            height: 1px;
+            width: 60px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+        }
+        .divider-ornament span:last-child {
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+        .divider-ornament i {
+            width: 6px; height: 6px;
+            background: var(--gold);
+            transform: rotate(45deg);
+            display: block;
+        }
+
+        .main-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 800px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        .card {
+            background: var(--cream);
+            border-radius: 3px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(184,150,12,0.15);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--green-mid);
+            padding: 0.65rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .card-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            flex: 1;
+        }
+
+        .card-header .badge {
+            font-size: 0.65rem;
+            color: var(--gold-light);
+            opacity: 0.8;
+            font-family: 'Courier Prime', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .card-body {
+            padding: 1.2rem 1.3rem;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+        .field-row.single { grid-template-columns: 1fr; }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .field label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green-mid);
+        }
+
+        .field label span.req {
+            color: var(--red-alert);
+            margin-left: 2px;
+        }
+
+        .field input, .field textarea, .field select {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.88rem;
+            color: var(--ink);
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.5rem 0.65rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            width: 100%;
+        }
+
+        .field input:focus, .field textarea:focus, .field select:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 2px rgba(30,107,30,0.12);
+        }
+
+        .field textarea {
+            resize: vertical;
+            line-height: 1.55;
+            font-size: 0.85rem;
+        }
+
+        .field select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23164916' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.6rem center;
+            padding-right: 2rem;
+        }
+
+        /* ── Contacts with pill tags ── */
+        .pill-input-wrap {
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.35rem 0.5rem;
+            min-height: 2.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            align-items: center;
+            cursor: text;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .pill-input-wrap:focus-within {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 2px rgba(30,107,30,0.12);
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--green-pale);
+            border: 1px solid rgba(30,107,30,0.2);
+            border-radius: 20px;
+            padding: 0.15rem 0.55rem 0.15rem 0.65rem;
+            font-size: 0.78rem;
+            color: var(--green-mid);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .pill button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--green-mid);
+            line-height: 1;
+            font-size: 0.9rem;
+            padding: 0;
+            opacity: 0.6;
+            transition: opacity 0.1s;
+        }
+        .pill button:hover { opacity: 1; }
+        .pill-text-input {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            padding: 0.2rem 0.2rem !important;
+            font-size: 0.82rem !important;
+            flex: 1;
+            min-width: 120px;
+            background: transparent !important;
+        }
+        .contact-dropdown {
+            position: relative;
+        }
+        .contact-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0; right: 0;
+            background: var(--white);
+            border: 1px solid var(--green-light);
+            border-top: none;
+            border-radius: 0 0 3px 3px;
+            z-index: 100;
+            max-height: 180px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .contact-suggestions.show { display: block; }
+        .suggestion-item {
+            padding: 0.45rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.82rem;
+            transition: background 0.1s;
+            display: flex;
+            flex-direction: column;
+        }
+        .suggestion-item:hover { background: var(--green-wash); }
+        .suggestion-item .s-name { font-weight: 600; color: var(--ink); }
+        .suggestion-item .s-email { color: var(--ink-light); font-size: 0.75rem; }
+
+        /* ── Saved People Manager ── */
+        .saved-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 0.85rem;
+        }
+        .saved-item {
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .saved-item:hover { background: var(--green-wash); border-color: var(--green-light); }
+        .saved-item.active { background: var(--green-wash); border-color: var(--gold); }
+        .saved-item-info { flex: 1; min-width: 0; }
+        .saved-item-name { font-weight: 600; font-size: 0.84rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .saved-item-sub { font-size: 0.73rem; color: var(--ink-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .saved-item-actions { display: flex; gap: 0.3rem; }
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.2rem;
+            border-radius: 2px;
+            line-height: 1;
+            font-size: 0.85rem;
+            transition: background 0.1s, color 0.1s;
+            color: var(--ink-light);
+        }
+        .icon-btn:hover { background: rgba(0,0,0,0.07); color: var(--ink); }
+        .icon-btn.danger:hover { background: rgba(139,26,26,0.08); color: var(--red-alert); }
+
+        .empty-state {
+            text-align: center;
+            padding: 1.2rem;
+            color: var(--ink-light);
+            font-size: 0.8rem;
+            font-style: italic;
+            border: 1px dashed var(--rule);
+            border-radius: 2px;
+            margin-bottom: 0.85rem;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1.1rem;
+            border-radius: 2px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--green-mid);
+            color: var(--cream);
+            border: 1px solid var(--green-light);
+        }
+        .btn-primary:hover { background: var(--green-light); }
+        .btn-gold {
+            background: var(--gold);
+            color: var(--white);
+            border: 1px solid var(--gold);
+        }
+        .btn-gold:hover { background: #9a7a0a; }
+        .btn-ghost {
+            background: transparent;
+            color: var(--green-mid);
+            border: 1px solid var(--green-pale);
+        }
+        .btn-ghost:hover { background: var(--green-wash); border-color: var(--green-light); }
+        .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.75rem; }
+
+        .btn-row {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        /* ── Output ── */
+        .output-area {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            background: #1a1a14;
+            color: #c8ffb0;
+            border: 1px solid var(--green-mid);
+            border-radius: 2px;
+            padding: 1rem;
+            min-height: 160px;
+            resize: vertical;
+            width: 100%;
+            line-height: 1.6;
+            outline: none;
+            tab-size: 2;
+        }
+        .output-area::placeholder { color: rgba(200,255,176,0.25); }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0.75rem;
+            background: var(--green-deep);
+            border-top: 1px solid var(--green-mid);
+            font-size: 0.72rem;
+            font-family: 'Courier Prime', monospace;
+        }
+        .status-text { color: var(--green-pale); }
+        .status-text.success { color: #6fe06f; }
+        .status-text.error { color: #e06f6f; }
+
+        hr.section-divider {
+            border: none;
+            border-top: 1px solid var(--rule);
+            margin: 1rem 0;
+        }
+
+        .collapse-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gold);
+            padding: 0;
+            transition: opacity 0.1s;
+        }
+        .collapse-toggle:hover { opacity: 0.8; }
+        .collapse-toggle .arrow { transition: transform 0.2s; display: inline-block; }
+        .collapse-toggle.open .arrow { transform: rotate(90deg); }
+
+        .collapsible { overflow: hidden; transition: max-height 0.25s ease; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--cream);
+            border-radius: 3px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            width: min(460px, 92vw);
+            overflow: hidden;
+        }
+        .modal-header {
+            background: var(--green-mid);
+            padding: 0.65rem 1.1rem;
+            border-bottom: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            color: var(--cream);
+            letter-spacing: 0.06em;
+        }
+        .modal-body { padding: 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .modal-footer { padding: 0.75rem 1.3rem; display: flex; gap: 0.5rem; justify-content: flex-end; background: var(--parchment); border-top: 1px solid var(--rule); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: var(--green-mid); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<header class="page-header">
+    <span class="seal">San Andreas Department of Corrections &amp; Rehabilitation</span>
+    <h1>Email BBCode Generator</h1>
+    <div class="divider-ornament">
+        <span></span><i></i><span></span>
+    </div>
+</header>
+
+<div class="main-grid">
+
+    <!-- ── LEFT COLUMN ── -->
+
+    <!-- Signer Profile -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Signing As</h2>
+            <span class="badge">SENDER PROFILES</span>
+        </div>
+        <div class="card-body">
+            <div class="saved-list" id="signerList">
+                <div class="empty-state" id="signerEmpty">No saved profiles. Add one below.</div>
+            </div>
+            <button class="collapse-toggle" id="addSignerToggle" onclick="toggleCollapse('addSignerForm', this)">
+                <span class="arrow">▶</span> Add / Edit Profile
+            </button>
+            <div class="collapsible" id="addSignerForm" style="max-height:0">
+                <div style="padding-top:0.85rem;">
+                    <input type="hidden" id="editSignerId">
+                    <div class="field-row">
+                        <div class="field">
+                            <label>Full Name <span class="req">*</span></label>
+                            <input type="text" id="signerName" placeholder="Aubrey Huy">
+                        </div>
+                        <div class="field">
+                            <label>Email <span class="req">*</span></label>
+                            <input type="text" id="signerEmail" placeholder="aubrey.huy@sadcr.sa.gov">
+                        </div>
+                    </div>
+                    <div class="field-row single">
+                        <div class="field">
+                            <label>Title / Rank</label>
+                            <input type="text" id="signerTitle" placeholder="Parole Administrator I">
+                        </div>
+                    </div>
+                    <div class="field-row single">
+                        <div class="field">
+                            <label>Division / Unit</label>
+                            <input type="text" id="signerDivision" placeholder="Division of Adult Parole Operations - Southern Region">
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary btn-sm" onclick="saveSigner()">💾 Save Profile</button>
+                        <button class="btn btn-ghost btn-sm" onclick="clearSignerForm()">✕ Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contacts Manager -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Contacts</h2>
+            <span class="badge">ADDRESS BOOK</span>
+        </div>
+        <div class="card-body">
+            <div class="saved-list" id="contactList">
+                <div class="empty-state" id="contactEmpty">No saved contacts. Add one below.</div>
+            </div>
+            <button class="collapse-toggle" id="addContactToggle" onclick="toggleCollapse('addContactForm', this)">
+                <span class="arrow">▶</span> Add / Edit Contact
+            </button>
+            <div class="collapsible" id="addContactForm" style="max-height:0">
+                <div style="padding-top:0.85rem;">
+                    <input type="hidden" id="editContactId">
+                    <div class="field-row">
+                        <div class="field">
+                            <label>Full Name <span class="req">*</span></label>
+                            <input type="text" id="contactName" placeholder="Cooper Hood">
+                        </div>
+                        <div class="field">
+                            <label>Email <span class="req">*</span></label>
+                            <input type="text" id="contactEmail" placeholder="cooper.hood@sadcr.sa.gov">
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary btn-sm" onclick="saveContact()">💾 Save Contact</button>
+                        <button class="btn btn-ghost btn-sm" onclick="clearContactForm()">✕ Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── EMAIL DETAILS ── -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h2>Email Details</h2>
+            <span class="badge">COMPOSE</span>
+        </div>
+        <div class="card-body">
+
+            <!-- FROM -->
+            <div class="field-row single" style="margin-bottom:0.85rem;">
+                <div class="field">
+                    <label>From <span class="req">*</span></label>
+                    <div class="pill-input-wrap" id="fromWrap">
+                        <input class="pill-text-input" id="fromInput" placeholder="Select a profile above or type Name <email>..." autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TO / CC -->
+            <div class="field-row" style="margin-bottom:0.85rem;">
+                <div class="field">
+                    <label>To <span class="req">*</span></label>
+                    <div class="contact-dropdown">
+                        <div class="pill-input-wrap" id="toWrap">
+                            <input class="pill-text-input" id="toInput" placeholder="Type name or email, press Enter…" autocomplete="off">
+                        </div>
+                        <div class="contact-suggestions" id="toSuggestions"></div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Cc</label>
+                    <div class="contact-dropdown">
+                        <div class="pill-input-wrap" id="ccWrap">
+                            <input class="pill-text-input" id="ccInput" placeholder="Optional — type name or email…" autocomplete="off">
+                        </div>
+                        <div class="contact-suggestions" id="ccSuggestions"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DATE / SUBJECT -->
+            <div class="field-row" style="margin-bottom:0.85rem;">
+                <div class="field">
+                    <label>Sent Date <span class="req">*</span></label>
+                    <input type="text" id="sentDate" placeholder="May 3rd, 2026">
+                </div>
+                <div class="field">
+                    <label>Subject <span class="req">*</span></label>
+                    <input type="text" id="subject" placeholder="Haven Homes shared contact list">
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <!-- BODY -->
+            <div class="field" style="margin-bottom:0.85rem;">
+                <label>Email Body <span class="req">*</span></label>
+                <textarea id="emailBody" rows="10" placeholder="Write your email here. Press Enter for new lines — they will be preserved in the BBCode output.&#10;&#10;Hello Cooper,&#10;&#10;Following the successful meeting with Haven Homes..."></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── OUTPUT ── -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h2>BBCode Output</h2>
+            <span class="badge">READY TO POST</span>
+        </div>
+        <div style="padding: 1rem 1.3rem 0.5rem; display:flex; gap:0.6rem; flex-wrap:wrap; background:var(--cream);">
+            <button class="btn btn-gold" onclick="generate()">⚡ Generate BBCode</button>
+            <button class="btn btn-primary" onclick="copyOutput()">📋 Copy to Clipboard</button>
+            <button class="btn btn-ghost" onclick="clearOutput()">✕ Clear</button>
+        </div>
+        <div style="padding: 0.5rem 1.3rem 0; background:var(--cream);">
+            <textarea class="output-area" id="outputArea" placeholder="Generated BBCode will appear here…" readonly></textarea>
+        </div>
+        <div class="status-bar">
+            <span class="status-text" id="statusText">Ready.</span>
+            <span style="color:var(--green-pale); opacity:0.5; font-size:0.68rem;">SADCR DAPO · EMAIL GENERATOR</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ── MODALS ── -->
+<div class="modal-overlay" id="confirmDeleteModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Confirm Delete</h3>
+            <button class="icon-btn" onclick="closeModal('confirmDeleteModal')" style="color:var(--cream)">✕</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size:0.88rem;" id="deleteConfirmText">Are you sure you want to delete this?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost btn-sm" onclick="closeModal('confirmDeleteModal')">Cancel</button>
+            <button class="btn btn-sm" style="background:var(--red-alert);color:#fff;border:none;" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// STORAGE
+// ════════════════════════════════════════════════════════
+const STORE = {
+    get(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } },
+    set(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+};
+
+const SIGNERS_KEY  = 'sadcr_email_signers';
+const CONTACTS_KEY = 'sadcr_email_contacts';
+
+let signers  = STORE.get(SIGNERS_KEY);
+let contacts = STORE.get(CONTACTS_KEY);
+let activeSigner = null;
+
+// Pill state
+const pillState = { from: [], to: [], cc: [] };
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    setDefaultDate();
+    renderSigners();
+    renderContacts();
+    setupPillInput('toInput', 'toWrap', 'toSuggestions', 'to');
+    setupPillInput('ccInput', 'ccWrap', 'ccSuggestions', 'cc');
+    setupFromField();
+});
+
+function setDefaultDate() {
+    const now = new Date();
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const day = now.getDate();
+    const suffix = ['th','st','nd','rd'][((day%100-10)>2||(day%100)<11)?0:day%10>3?0:day%10];
+    document.getElementById('sentDate').value = `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()}`;
+}
+
+// ════════════════════════════════════════════════════════
+// COLLAPSE
+// ════════════════════════════════════════════════════════
+function toggleCollapse(id, btn) {
+    const el = document.getElementById(id);
+    const isOpen = el.style.maxHeight !== '0px' && el.style.maxHeight !== '';
+    el.style.maxHeight = isOpen ? '0' : el.scrollHeight + 200 + 'px';
+    btn.classList.toggle('open', !isOpen);
+}
+
+// ════════════════════════════════════════════════════════
+// SIGNERS
+// ════════════════════════════════════════════════════════
+function renderSigners() {
+    const list = document.getElementById('signerList');
+    const empty = document.getElementById('signerEmpty');
+    // Remove old items
+    list.querySelectorAll('.saved-item').forEach(e => e.remove());
+    if (!signers.length) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    signers.forEach(s => {
+        const item = document.createElement('div');
+        item.className = 'saved-item' + (activeSigner === s.id ? ' active' : '');
+        item.dataset.id = s.id;
+        item.innerHTML = `
+            <div class="saved-item-info" onclick="selectSigner('${s.id}')">
+                <div class="saved-item-name">${esc(s.name)}</div>
+                <div class="saved-item-sub">${esc(s.title || '')}${s.title && s.division ? ' · ' : ''}${esc(s.division || '')}</div>
+            </div>
+            <div class="saved-item-actions">
+                <button class="icon-btn" title="Edit" onclick="editSigner('${s.id}')">✏️</button>
+                <button class="icon-btn danger" title="Delete" onclick="deleteSigner('${s.id}')">🗑️</button>
+            </div>`;
+        list.appendChild(item);
+    });
+}
+
+function selectSigner(id) {
+    const s = signers.find(x => x.id === id);
+    if (!s) return;
+    activeSigner = id;
+    // Set from pill
+    pillState.from = [{ name: s.name, email: s.email }];
+    document.getElementById('fromInput').value = '';
+    renderFromPills();
+    renderSigners();
+    setStatus(`Signing as ${s.name}.`, 'success');
+}
+
+function saveSigner() {
+    const name  = document.getElementById('signerName').value.trim();
+    const email = document.getElementById('signerEmail').value.trim();
+    if (!name || !email) { setStatus('Name and email are required for a profile.', 'error'); return; }
+    const editId = document.getElementById('editSignerId').value;
+    if (editId) {
+        const idx = signers.findIndex(s => s.id === editId);
+        if (idx > -1) signers[idx] = { ...signers[idx], name, email,
+            title: document.getElementById('signerTitle').value.trim(),
+            division: document.getElementById('signerDivision').value.trim() };
+        if (activeSigner === editId) selectSigner(editId);
+    } else {
+        signers.push({ id: Date.now().toString(), name, email,
+            title: document.getElementById('signerTitle').value.trim(),
+            division: document.getElementById('signerDivision').value.trim() });
+    }
+    STORE.set(SIGNERS_KEY, signers);
+    clearSignerForm();
+    renderSigners();
+    // Re-expand if was collapsed
+    setStatus('Profile saved.', 'success');
+}
+
+function editSigner(id) {
+    const s = signers.find(x => x.id === id);
+    if (!s) return;
+    document.getElementById('editSignerId').value = s.id;
+    document.getElementById('signerName').value = s.name;
+    document.getElementById('signerEmail').value = s.email;
+    document.getElementById('signerTitle').value = s.title || '';
+    document.getElementById('signerDivision').value = s.division || '';
+    // Open form
+    const form = document.getElementById('addSignerForm');
+    const toggle = document.getElementById('addSignerToggle');
+    form.style.maxHeight = '500px';
+    toggle.classList.add('open');
+}
+
+function deleteSigner(id) {
+    const s = signers.find(x => x.id === id);
+    showConfirm(`Delete profile for "${s?.name}"?`, () => {
+        signers = signers.filter(x => x.id !== id);
+        STORE.set(SIGNERS_KEY, signers);
+        if (activeSigner === id) {
+            activeSigner = null;
+            pillState.from = [];
+            renderFromPills();
+        }
+        renderSigners();
+    });
+}
+
+function clearSignerForm() {
+    ['editSignerId','signerName','signerEmail','signerTitle','signerDivision'].forEach(id => document.getElementById(id).value = '');
+}
+
+// ════════════════════════════════════════════════════════
+// CONTACTS
+// ════════════════════════════════════════════════════════
+function renderContacts() {
+    const list = document.getElementById('contactList');
+    const empty = document.getElementById('contactEmpty');
+    list.querySelectorAll('.saved-item').forEach(e => e.remove());
+    if (!contacts.length) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    contacts.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'saved-item';
+        item.innerHTML = `
+            <div class="saved-item-info">
+                <div class="saved-item-name">${esc(c.name)}</div>
+                <div class="saved-item-sub">${esc(c.email)}</div>
+            </div>
+            <div class="saved-item-actions">
+                <button class="icon-btn" title="Edit" onclick="editContact('${c.id}')">✏️</button>
+                <button class="icon-btn danger" title="Delete" onclick="deleteContact('${c.id}')">🗑️</button>
+            </div>`;
+        list.appendChild(item);
+    });
+}
+
+function saveContact() {
+    const name  = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    if (!name || !email) { setStatus('Name and email are required for a contact.', 'error'); return; }
+    const editId = document.getElementById('editContactId').value;
+    if (editId) {
+        const idx = contacts.findIndex(c => c.id === editId);
+        if (idx > -1) contacts[idx] = { ...contacts[idx], name, email };
+    } else {
+        contacts.push({ id: Date.now().toString(), name, email });
+    }
+    STORE.set(CONTACTS_KEY, contacts);
+    clearContactForm();
+    renderContacts();
+    setStatus('Contact saved.', 'success');
+}
+
+function editContact(id) {
+    const c = contacts.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('editContactId').value = c.id;
+    document.getElementById('contactName').value = c.name;
+    document.getElementById('contactEmail').value = c.email;
+    const form = document.getElementById('addContactForm');
+    const toggle = document.getElementById('addContactToggle');
+    form.style.maxHeight = '300px';
+    toggle.classList.add('open');
+}
+
+function deleteContact(id) {
+    const c = contacts.find(x => x.id === id);
+    showConfirm(`Delete contact "${c?.name}"?`, () => {
+        contacts = contacts.filter(x => x.id !== id);
+        STORE.set(CONTACTS_KEY, contacts);
+        renderContacts();
+    });
+}
+
+function clearContactForm() {
+    ['editContactId','contactName','contactEmail'].forEach(id => document.getElementById(id).value = '');
+}
+
+// ════════════════════════════════════════════════════════
+// PILL INPUTS
+// ════════════════════════════════════════════════════════
+function setupFromField() {
+    const input = document.getElementById('fromInput');
+    const wrap  = document.getElementById('fromWrap');
+    wrap.addEventListener('click', () => input.focus());
+    input.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ',') && input.value.trim()) {
+            e.preventDefault();
+            addFromManual(input.value.trim());
+            input.value = '';
+        }
+        if (e.key === 'Backspace' && !input.value && pillState.from.length) {
+            pillState.from.pop();
+            renderFromPills();
+        }
+    });
+}
+
+function addFromManual(val) {
+    const parsed = parseContact(val);
+    if (parsed) {
+        pillState.from = [parsed]; // Only one sender
+        renderFromPills();
+    }
+}
+
+function renderFromPills() {
+    const wrap = document.getElementById('fromWrap');
+    wrap.querySelectorAll('.pill').forEach(p => p.remove());
+    const input = document.getElementById('fromInput');
+    pillState.from.forEach((p, i) => {
+        const pill = makePill(p.name || p.email, () => {
+            pillState.from.splice(i, 1);
+            renderFromPills();
+        });
+        wrap.insertBefore(pill, input);
+    });
+}
+
+function setupPillInput(inputId, wrapId, suggestId, field) {
+    const input   = document.getElementById(inputId);
+    const wrap    = document.getElementById(wrapId);
+    const suggest = document.getElementById(suggestId);
+
+    wrap.addEventListener('click', () => input.focus());
+
+    input.addEventListener('input', () => {
+        const q = input.value.toLowerCase();
+        if (!q) { suggest.classList.remove('show'); return; }
+        const matches = contacts.filter(c =>
+            c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)
+        ).slice(0, 6);
+        suggest.innerHTML = matches.map(c => `
+            <div class="suggestion-item" onmousedown="addPill('${field}','${esc(c.name)}','${esc(c.email)}')">
+                <span class="s-name">${esc(c.name)}</span>
+                <span class="s-email">${esc(c.email)}</span>
+            </div>`).join('');
+        suggest.classList.toggle('show', matches.length > 0);
+    });
+
+    input.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ',') && input.value.trim()) {
+            e.preventDefault();
+            const parsed = parseContact(input.value.trim());
+            if (parsed) { addPillObj(field, parsed); input.value = ''; suggest.classList.remove('show'); }
+        }
+        if (e.key === 'Backspace' && !input.value && pillState[field].length) {
+            pillState[field].pop();
+            renderPills(field, wrapId, inputId);
+        }
+        if (e.key === 'Escape') suggest.classList.remove('show');
+    });
+
+    input.addEventListener('blur', () => setTimeout(() => suggest.classList.remove('show'), 150));
+}
+
+function addPill(field, name, email) {
+    addPillObj(field, { name, email });
+    document.getElementById(field === 'to' ? 'toInput' : 'ccInput').value = '';
+}
+
+function addPillObj(field, obj) {
+    if (!pillState[field].find(p => p.email === obj.email)) {
+        pillState[field].push(obj);
+    }
+    renderPills(field, field + 'Wrap', field + 'Input');
+}
+
+function renderPills(field, wrapId, inputId) {
+    const wrap  = document.getElementById(wrapId);
+    const input = document.getElementById(inputId);
+    wrap.querySelectorAll('.pill').forEach(p => p.remove());
+    pillState[field].forEach((p, i) => {
+        const pill = makePill(p.name || p.email, () => {
+            pillState[field].splice(i, 1);
+            renderPills(field, wrapId, inputId);
+        });
+        wrap.insertBefore(pill, input);
+    });
+}
+
+function makePill(label, onRemove) {
+    const pill = document.createElement('span');
+    pill.className = 'pill';
+    pill.innerHTML = `${esc(label)} <button title="Remove">×</button>`;
+    pill.querySelector('button').addEventListener('click', e => { e.stopPropagation(); onRemove(); });
+    return pill;
+}
+
+function parseContact(val) {
+    // Matches: "Name <email>" or just "email"
+    const m = val.match(/^(.+?)\s*<([^>]+)>$/);
+    if (m) return { name: m[1].trim(), email: m[2].trim() };
+    if (val.includes('@')) return { name: '', email: val };
+    return { name: val, email: val };
+}
+
+// ════════════════════════════════════════════════════════
+// GENERATE BBCODE
+// ════════════════════════════════════════════════════════
+const DISCLAIMER = `This email and any files transmitted with it, are private and may contain confidential or legally privileged information. If you receive this message in error, please notify the sender and delete the email from your system immediately. In such circumstances, you must not make any use of the email or its contents. Disclaimer: On leaving the Network this E-mail and any files transmitted within it have been checked for known viruses. Email transmissions cannot be guaranteed to be secure or error free as information can be intercepted, corrupted, lost, destroyed, damaged, arrive late or incomplete, or contain viruses. Any views expressed in this message are those of the individual sender and do not necessarily reflect the views of the San Andreas Department of Corrections and Rehabilitation. Monitoring: The San Andreas Department of Corrections and Rehabilitation monitors email traffic content for the purposes of prevention and detection of crime, ensuring the security of our computer systems and checking compliance with our policies.`;
+
+function formatRecipients(pills) {
+    return pills.map(p => {
+        if (p.name && p.email && p.name !== p.email) return `${p.name} <${p.email}>`;
+        return p.email || p.name;
+    }).join(', ');
+}
+
+function generate() {
+    // Validate
+    if (!pillState.from.length) { setStatus('Please set a sender (From).', 'error'); return; }
+    if (!pillState.to.length) { setStatus('Please add at least one recipient (To).', 'error'); return; }
+    const date    = document.getElementById('sentDate').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const body    = document.getElementById('emailBody').value;
+    if (!date)    { setStatus('Please enter a sent date.', 'error'); return; }
+    if (!subject) { setStatus('Please enter a subject.', 'error'); return; }
+    if (!body.trim()) { setStatus('Email body is empty.', 'error'); return; }
+
+    const from  = formatRecipients(pillState.from);
+    const to    = formatRecipients(pillState.to);
+    const cc    = formatRecipients(pillState.cc);
+
+    // Find active signer details
+    const signer = signers.find(s => s.id === activeSigner);
+
+    // Body: convert newlines to literal newlines (BBCode handles them)
+    const bodyBB = body; // Preserve as-is — newlines render in BBCode
+
+    // Signature block
+    let sigBlock = '';
+    if (signer) {
+        sigBlock = `Respectfully,\n${signer.name}`;
+        if (signer.title)    sigBlock += `\n${signer.title}`;
+        if (signer.division) sigBlock += `\n${signer.division}`;
+    }
+
+    const ccLine = cc ? `\n[b]Cc:[/b] ${cc}` : `\n[b]Cc:[/b]`;
+
+    const output =
+`[divbox=white]
+[b]From:[/b] ${from}
+[b]To:[/b] ${to}${ccLine}
+[b]Sent:[/b] ${date}
+[b]Subject:[/b] ${subject}
+[hr][/hr]
+${bodyBB}${sigBlock ? '\n\n' + sigBlock : ''}
+[hr][/hr]
+[size=60]${DISCLAIMER}[/size]
+[br][/br]
+[/divbox]`;
+
+    document.getElementById('outputArea').value = output;
+    setStatus(`✓ BBCode generated at ${new Date().toLocaleTimeString()}.`, 'success');
+}
+
+function copyOutput() {
+    const out = document.getElementById('outputArea');
+    if (!out.value.trim()) { setStatus('Nothing to copy.', 'error'); return; }
+    navigator.clipboard.writeText(out.value).then(() => setStatus('Copied to clipboard!', 'success'));
+}
+
+function clearOutput() {
+    document.getElementById('outputArea').value = '';
+    setStatus('Output cleared.', '');
+}
+
+// ════════════════════════════════════════════════════════
+// MODAL / HELPERS
+// ════════════════════════════════════════════════════════
+function showConfirm(msg, onConfirm) {
+    document.getElementById('deleteConfirmText').textContent = msg;
+    document.getElementById('confirmDeleteModal').classList.add('show');
+    const btn = document.getElementById('deleteConfirmBtn');
+    btn.onclick = () => { onConfirm(); closeModal('confirmDeleteModal'); };
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function setStatus(msg, type) {
+    const el = document.getElementById('statusText');
+    el.textContent = msg;
+    el.className = 'status-text' + (type ? ' ' + type : '');
+    if (type === 'success' || type === 'error') {
+        setTimeout(() => { el.textContent = 'Ready.'; el.className = 'status-text'; }, 4000);
+    }
+}
+
+function esc(str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+</script>
+</body>
+</html>
