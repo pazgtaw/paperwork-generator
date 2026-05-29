@@ -3,194 +3,833 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBCode Generator</title>
+    <title>DAPO Parole Tracking Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --green-deep:   #0f3310;
+            --green-mid:    #164916;
+            --green-light:  #1e6b1e;
+            --green-pale:   #d4e8d0;
+            --green-wash:   #eef5ec;
+            --gold:         #b8960c;
+            --gold-light:   #f0d060;
+            --cream:        #f7f4ed;
+            --parchment:    #ede8da;
+            --ink:          #1a1a14;
+            --ink-mid:      #3a3a2e;
+            --ink-light:    #6a6a54;
+            --rule:         #c8c0a8;
+            --white:        #ffffff;
+            --red-alert:    #8b1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 20px;
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: #165218;
+            min-height: 100vh;
+            color: var(--ink);
+            padding: 2rem 1rem 4rem;
         }
-        .container {
-            max-width: 800px;
-            margin: auto;
+
+        /* ── Page Header ── */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
+        .page-header .seal {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.68rem;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: var(--gold-light);
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.3rem;
+            opacity: 0.8;
         }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2.8vw, 1.9rem);
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.03em;
         }
-        .form-group input[type="checkbox"] {
+        .page-header .subtitle {
+            font-size: 0.8rem;
+            color: var(--green-pale);
+            margin-top: 0.3rem;
+            opacity: 0.7;
+            letter-spacing: 0.06em;
+        }
+        .page-header .logo {
+            display: block;
+            margin: 0.8rem auto 0;
+            height: 52px;
             width: auto;
+            opacity: 0.92;
         }
-        .output {
-            margin-top: 20px;
-            background: #f9f9f9;
-            padding: 10px;
-            border: 1px solid #ccc;
-            white-space: pre-wrap;
+
+        /* ── Layout ── */
+        .wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
         }
-        button {
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 10px;
+
+        /* ── Card ── */
+        .card {
+            background: var(--cream);
+            border-radius: 3px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(184,150,12,0.15);
+            overflow: hidden;
         }
-        h1, h2, h3 {
-            text-align: center;
+        .card-header {
+            background: var(--green-mid);
+            padding: 0.6rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            border-bottom: 2px solid var(--gold);
         }
-        table {
+        .card-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            flex: 1;
+        }
+        .card-header .badge {
+            font-size: 0.63rem;
+            color: var(--gold-light);
+            opacity: 0.75;
+            font-family: 'Courier Prime', monospace;
+            letter-spacing: 0.05em;
+        }
+        .card-body {
+            padding: 1.2rem 1.4rem;
+        }
+
+        /* ── Fields ── */
+        .field-row {
+            display: grid;
+            gap: 0.9rem;
+            margin-bottom: 0.9rem;
+        }
+        .col-1 { grid-template-columns: 1fr; }
+        .col-2 { grid-template-columns: 1fr 1fr; }
+        .col-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .col-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+        @media (max-width: 640px) {
+            .col-2, .col-3, .col-4 { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 420px) {
+            .col-2, .col-3, .col-4 { grid-template-columns: 1fr; }
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.28rem;
+        }
+        .field label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green-mid);
+        }
+        .field label .req { color: var(--red-alert); margin-left: 2px; }
+
+        .field input,
+        .field textarea,
+        .field select {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.87rem;
+            color: var(--ink);
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.48rem 0.65rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
         }
-        table, th, td {
-            border: 1px solid black;
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 2px rgba(30,107,30,0.12);
         }
-        th, td {
-            padding: 8px;
-            text-align: left;
+        .field textarea {
+            resize: vertical;
+            line-height: 1.55;
+            min-height: 80px;
         }
-        th {
-            text-align: center;
+        .field select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23164916' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.65rem center;
+            padding-right: 2.2rem;
         }
+
+        /* ── Divider ── */
+        hr.sep {
+            border: none;
+            border-top: 1px solid var(--rule);
+            margin: 1rem 0;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.52rem 1.2rem;
+            border-radius: 2px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: var(--white);
+        }
+        .btn-gold:hover { background: #9a7a0a; }
+        .btn-primary {
+            background: var(--green-mid);
+            color: var(--cream);
+            border: 1px solid var(--green-light);
+        }
+        .btn-primary:hover { background: var(--green-light); }
+        .btn-ghost {
+            background: transparent;
+            color: var(--green-mid);
+            border: 1px solid var(--green-pale);
+        }
+        .btn-ghost:hover { background: var(--green-wash); border-color: var(--green-light); }
+
+        .btn-row {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            padding: 0.85rem 1.4rem 1rem;
+            background: var(--parchment);
+            border-top: 1px solid var(--rule);
+        }
+        .btn-sm { padding: 0.3rem 0.75rem; font-size: 0.75rem; }
+        .relative-row {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+        .relative-row input {
+            flex: 1;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.87rem;
+            color: var(--ink);
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.44rem 0.65rem;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .relative-row input:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 2px rgba(30,107,30,0.12);
+        }
+        .remove-btn {
+            background: none;
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            cursor: pointer;
+            color: var(--ink-light);
+            font-size: 0.85rem;
+            padding: 0.3rem 0.5rem;
+            line-height: 1;
+            transition: background 0.1s, color 0.1s, border-color 0.1s;
+            flex-shrink: 0;
+        }
+        .remove-btn:hover { background: rgba(139,26,26,0.07); color: var(--red-alert); border-color: var(--red-alert); }
+
+        /* ── Output ── */
+        .output-area {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.78rem;
+            background: #1a1a14;
+            color: #c8ffb0;
+            border: 1px solid var(--green-mid);
+            border-radius: 2px;
+            padding: 1rem;
+            min-height: 180px;
+            resize: vertical;
+            width: 100%;
+            line-height: 1.6;
+            outline: none;
+        }
+        .output-area::placeholder { color: rgba(200,255,176,0.22); }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.38rem 0.8rem;
+            background: var(--green-deep);
+            border-top: 1px solid var(--green-mid);
+            font-size: 0.7rem;
+            font-family: 'Courier Prime', monospace;
+        }
+        .status-text { color: var(--green-pale); }
+        .status-text.ok  { color: #6fe06f; }
+        .status-text.err { color: #e06f6f; }
+
+        /* ── Section label inside card ── */
+        .section-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--green-mid);
+            border-bottom: 1px solid var(--green-pale);
+            padding-bottom: 0.3rem;
+            margin-bottom: 0.9rem;
+        }
+
+        /* ── Checkbox rows ── */
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.65rem;
+            background: var(--green-wash);
+            border: 1px solid var(--green-pale);
+            border-radius: 2px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.12s, border-color 0.12s;
+        }
+        .check-row:hover { background: var(--green-pale); border-color: var(--green-light); }
+        .check-row input[type="checkbox"] {
+            width: 15px; height: 15px;
+            accent-color: var(--green-mid);
+            cursor: pointer;
+            flex-shrink: 0;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+        .check-row span {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--green-mid);
+        }
+        .check-row.checked { background: var(--green-pale); border-color: var(--green-light); }
+
+        /* ── Gang collapsible body ── */
+        .gang-body {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.25s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        .gang-body.visible {
+            max-height: 600px;
+            opacity: 1;
+        }
+        .gang-hidden-note {
+            padding: 0.5rem 0 0;
+            font-size: 0.8rem;
+            color: var(--ink-light);
+            font-style: italic;
+            display: none;
+        }
+        .gang-hidden-note.show { display: block; }
+
+        /* ── Posting guidance panel ── */
+        .guidance-panel {
+            background: #f0f7ee;
+            border: 1px solid var(--green-pale);
+            border-left: 3px solid var(--green-light);
+            border-radius: 2px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.9rem;
+            display: none;
+        }
+        .guidance-panel.show { display: block; }
+        .guidance-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green-mid);
+            margin-bottom: 0.4rem;
+        }
+        .guidance-line {
+            font-size: 0.82rem;
+            color: var(--ink-mid);
+            margin-bottom: 0.25rem;
+            line-height: 1.45;
+        }
+        .guidance-line a {
+            color: var(--green-light);
+            font-weight: 600;
+            word-break: break-all;
+        }
+        .guidance-line a:hover { color: var(--green-mid); }
+        .guidance-note {
+            font-size: 0.79rem;
+            color: var(--ink-light);
+            font-style: italic;
+            margin-top: 0.2rem;
+        }
+
+        .guidance-conflict {
+            background: #fdf0f0;
+            border: 1px solid #e0a0a0;
+            border-left: 3px solid var(--red-alert);
+            border-radius: 2px;
+            padding: 0.6rem 0.85rem;
+            margin-top: 0.4rem;
+        }
+        .guidance-conflict .conflict-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--red-alert);
+            margin-bottom: 0.3rem;
+        }
+        .guidance-conflict .conflict-body {
+            font-size: 0.82rem;
+            color: #5a1a1a;
+            line-height: 1.45;
+        }
+        .guidance-conflict a {
+            color: var(--red-alert);
+            font-weight: 600;
+            word-break: break-all;
+        }
+        .topic-name-wrap {
+            padding: 0.75rem 1.4rem 0;
+            background: var(--cream);
+        }
+        .topic-name-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green-mid);
+            margin-bottom: 0.3rem;
+        }
+        .topic-name-display {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.88rem;
+            background: var(--parchment);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.5rem 0.75rem;
+            color: var(--ink-mid);
+            min-height: 2rem;
+            letter-spacing: 0.01em;
+        }
+        .topic-name-display.has-value { color: var(--ink); font-weight: 600; }
+        .topic-name-display.placeholder { color: var(--ink-light); font-style: italic; font-weight: 400; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: var(--green-mid); border-radius: 3px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>DEPARTMENT OF CORRECTIONS AND REHABILITATION</h1>
-    <h2>DIVISION OF ADULT PAROLE OPERATIONS</h2>
-    <h3>Parole Tracking Program</h3>
+<header class="page-header">
+    <span class="seal">San Andreas Department of Corrections &amp; Rehabilitation</span>
+    <h1>Parole Tracking Program</h1>
+    <p class="subtitle">Division of Adult Parole Operations</p>
+    <img src="https://images.paz.wtf/u/C7j1jq.png" alt="SADCR Logo" class="logo">
+</header>
 
-    <form id="bbcode-form">
-        <div class="form-group">
-            <label for="mdc-picture">MDC Picture Link</label>
-            <input type="text" id="mdc-picture" required>
-        </div>
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" required>
-        </div>
-        <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" id="address" required>
-        </div>
-        <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input type="text" id="dob" required>
-        </div>
-        <div class="form-group">
-            <label for="gender">Gender</label>
-            <input type="text" id="gender" required>
-        </div>
-        <div class="form-group">
-            <label for="work">Place of Work</label>
-            <input type="text" id="work" required>
-        </div>
-        <div class="form-group">
-            <label for="aliases">Known Aliases</label>
-            <input type="text" id="aliases" required>
-        </div>
-        <div class="form-group">
-            <label for="relatives">Relatives (separate by commas)</label>
-            <input type="text" id="relatives" required>
-        </div>
-        <div class="form-group">
-            <label for="classification">Classification</label>
-            <select id="classification" required>
-                <option value="Serious (S)">Serious (S)</option>
-                <option value="Non-Serious (NS)">Non-Serious (NS)</option>
-                <option value="Unsupervised (US)">Unsupervised (US)</option>
-                <option value="Special Case (SC)">Special Case (SC)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="classification-notes">Additional Classification Notes</label>
-            <input type="text" id="classification-notes" required>
-        </div>
-        <div class="form-group">
-            <label for="moniker">Moniker</label>
-            <input type="text" id="moniker" required>
-        </div>
-        <div class="form-group">
-            <label for="gang">Gang</label>
-            <input type="text" id="gang" required>
-        </div>
-        <div class="form-group">
-            <label for="sangang">Sangang Profile Link</label>
-            <input type="text" id="sangang" required>
-        </div>
-        <div class="form-group">
-            <label for="affiliation-notes">Additional Affiliation Notes</label>
-            <input type="text" id="affiliation-notes" required>
-        </div>
-        <div class="form-group">
-            <label for="mdc">MDC Profile Link</label>
-            <input type="text" id="mdc" required>
-        </div>
-        <div class="form-group">
-            <label for="inmate-profile">Inmate Profile Link (MDC Profile > Actions > View Inmate Profile)</label>
-            <input type="text" id="inmate-profile" required>
-        </div>
-        <div class="form-group">
-            <label for="parole-application">Parole Application Link (If discord parole, take a picture of the agreement in discord and place the link here)</label>
-            <input type="text" id="parole-application" required>
-        </div>
-        <div class="form-group">
-            <label for="case-handlers">Case Handler(s)</label>
-            <input type="text" id="case-handlers" required>
-        </div>
-        <div class="form-group">
-            <label for="case-supervisor">Case Supervisor</label>
-            <input type="text" id="case-supervisor" required>
-        </div>
-        <div class="form-group">
-            <label for="additional-notes">Additional Notes</label>
-            <textarea id="additional-notes" required></textarea>
-        </div>
-        <button type="button" onclick="generateBBCode()">Generate BBCode</button>
-    </form>
+<div class="wrapper">
 
-    <div class="output" id="output"></div>
-    <button onclick="copyBBCode()">Copy BBCode</button>
+    <!-- GENERAL INFORMATION -->
+    <div class="card">
+        <div class="card-header">
+            <h2>General Information</h2>
+            <span class="badge">SECTION I</span>
+        </div>
+        <div class="card-body">
+
+            <div class="field-row col-1" style="margin-bottom:0.9rem;">
+                <div class="field">
+                    <label>MDC Picture Link <span class="req">*</span></label>
+                    <input type="text" id="mdc-picture" placeholder="https://mdc.gta.world/...">
+                </div>
+            </div>
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>Full Name <span class="req">*</span></label>
+                    <input type="text" id="name" placeholder="John Doe" oninput="updateTopicName()">
+                </div>
+                <div class="field">
+                    <label>Phone Number <span class="req">*</span></label>
+                    <input type="text" id="phone" placeholder="123456">
+                </div>
+                <div class="field">
+                    <label>Address <span class="req">*</span></label>
+                    <input type="text" id="address" placeholder="2114 Vespucci Blvd - Floor 2, Room 3">
+                </div>
+            </div>
+
+            <div class="field-row col-2">
+                <div class="field">
+                    <label>Start Date</label>
+                    <input type="text" id="start-date" placeholder="DD/MMM/YYYY" oninput="updateTopicName()">
+                </div>
+                <div class="field">
+                    <label>Release Date</label>
+                    <input type="text" id="release-date" placeholder="DD/MMM/YYYY" oninput="updateTopicName()">
+                </div>
+            </div>
+
+            <div class="field-row col-4">
+                <div class="field">
+                    <label>Date of Birth <span class="req">*</span></label>
+                    <input type="text" id="dob" placeholder="DD/MMM/YYYY">
+                </div>
+                <div class="field">
+                    <label>Gender <span class="req">*</span></label>
+                    <input type="text" id="gender" placeholder="Male / Female / Other">
+                </div>
+                <div class="field">
+                    <label>Place of Work</label>
+                    <input type="text" id="work" placeholder="Store Clerk / N/A">
+                </div>
+                <div class="field">
+                    <label>Known Aliases</label>
+                    <input type="text" id="aliases" placeholder="Leave blank if none">
+                </div>
+            </div>
+
+            <div class="field-row col-1">
+                <div class="field">
+                    <label>Relatives</label>
+                    <div id="relatives-list" style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.4rem;"></div>
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="addRelative()" style="align-self:flex-start;">+ Add Relative</button>
+                </div>
+            </div>
+
+            <hr class="sep">
+
+            <div class="field-row col-2">
+                <div class="field">
+                    <label>Classification <span class="req">*</span></label>
+                    <select id="classification" onchange="updateGuidance(); updateTopicName();">
+                        <option value="" disabled selected>— Select Classification —</option>
+                        <option value="Serious (S)">Serious (S)</option>
+                        <option value="Non-Serious (NS)">Non-Serious (NS)</option>
+                        <option value="Unsupervised (US)">Unsupervised (US)</option>
+                        <option value="Special Case (SC)">Special Case (SC)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Additional Classification Notes</label>
+                    <input type="text" id="classification-notes" placeholder="Evading, etc.">
+                </div>
+            </div>
+
+            <label class="check-row" id="liferCheckRow">
+                <input type="checkbox" id="lifer-check" onchange="updateGuidance()">
+                <span>Lifer</span>
+            </label>
+
+        </div>
+    </div>
+
+    <!-- GANG AFFILIATION -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Gang Affiliation</h2>
+            <span class="badge">SECTION II</span>
+        </div>
+        <div style="padding: 0.85rem 1.4rem 0.7rem;">
+            <label class="check-row">
+                <input type="checkbox" id="gang-check" onchange="toggleGangFields(); updateGuidance();">
+                <span>Has Gang Affiliation</span>
+            </label>
+            <div class="gang-hidden-note" id="gangHiddenNote">
+                Gang affiliation not flagged — MONIKER, GANG and SANGANG PROFILE will output as N/A.
+            </div>
+        </div>
+        <div class="gang-body" id="gangBody">
+        <div class="card-body" style="padding-top:0;">
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>Moniker</label>
+                    <input type="text" id="moniker" placeholder="—">
+                </div>
+                <div class="field">
+                    <label>Gang</label>
+                    <input type="text" id="gang" placeholder="Gang Name">
+                </div>
+                <div class="field">
+                    <label>SanGang Profile Link</label>
+                    <input type="text" id="sangang" placeholder="https://sangang.com/...">
+                </div>
+            </div>
+
+            <div class="field-row col-1">
+                <div class="field">
+                    <label>Additional Affiliation Notes</label>
+                    <textarea id="affiliation-notes" rows="3" placeholder="Any additional notes regarding gang affiliation…"></textarea>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+    <!-- IMPORTANT INFORMATION -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Important Information</h2>
+            <span class="badge">SECTION III</span>
+        </div>
+        <div class="card-body">
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>MDC Profile Link <span class="req">*</span></label>
+                    <input type="text" id="mdc" placeholder="https://...">
+                </div>
+                <div class="field">
+                    <label>Inmate Profile Link <span class="req">*</span></label>
+                    <input type="text" id="inmate-profile" placeholder="MDC Profile → Actions → View Inmate Profile">
+                </div>
+                <div class="field">
+                    <label>Parole Application Link <span class="req">*</span></label>
+                    <input type="text" id="parole-application" placeholder="Discord screenshot URL or link">
+                </div>
+            </div>
+
+            <div class="field-row col-2">
+                <div class="field">
+                    <label>Case Handler(s) <span class="req">*</span></label>
+                    <input type="text" id="case-handlers" placeholder="Parole Agent I John Doe, Parole Agent I (A) Jane Doe etc.">
+                </div>
+                <div class="field">
+                    <label>Case Supervisor <span class="req">*</span></label>
+                    <input type="text" id="case-supervisor" placeholder="Parole Agent II John Doe">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ADDITIONAL NOTES -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Additional Information</h2>
+            <span class="badge">SECTION IV</span>
+        </div>
+        <div class="card-body">
+            <div class="field-row col-1">
+                <div class="field">
+                    <label>Additional Notes</label>
+                    <textarea id="additional-notes" rows="5" placeholder="Enter any additional notes here…"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button class="btn btn-gold" onclick="generateBBCode()">Generate BBCode</button>
+            <button class="btn btn-ghost" onclick="clearForm()">Clear Form</button>
+        </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="card">
+        <div class="card-header">
+            <h2>BBCode Output</h2>
+            <span class="badge">READY TO POST</span>
+        </div>
+        <div style="padding: 1rem 1.4rem 0.5rem; background: var(--cream); display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="copyBBCode()">Copy to Clipboard</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('output').value=''">Clear</button>
+        </div>
+        <div class="topic-name-wrap">
+            <div class="topic-name-label">Topic Name</div>
+            <div class="topic-name-display placeholder" id="topicNameDisplay">Fill in a name and select a classification above…</div>
+        </div>
+        <div class="guidance-panel" id="guidancePanel" style="margin: 0; border-radius:0; border-left-width:3px; border-top: 1px solid var(--green-pale);">
+            <div class="guidance-title">Where to Post</div>
+            <div class="guidance-line">Post here with the title and the outputted BBCode:</div>
+            <div id="guidanceLinks"></div>
+        </div>
+        <div style="padding: 0.5rem 1.4rem 0; background: var(--cream);">
+            <textarea class="output-area" id="output" placeholder="Generated BBCode will appear here…" readonly></textarea>
+        </div>
+        <div class="status-bar">
+            <span class="status-text" id="statusText">Ready.</span>
+            <span style="color:var(--green-pale); opacity:0.45; font-size:0.67rem;">SADCR DAPO · PAROLE TRACKING</span>
+        </div>
+    </div>
+
 </div>
 
 <script>
-    function generateBBCode() {
-        const mdcPicture = document.getElementById('mdc-picture').value;
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const dob = document.getElementById('dob').value;
-        const gender = document.getElementById('gender').value;
-        const work = document.getElementById('work').value;
-        const aliases = document.getElementById('aliases').value;
-        const relatives = document.getElementById('relatives').value.split(',').map(rel => `[*] ${rel.trim()}`).join('\n[*]');
-        const classification = document.getElementById('classification').value;
-        const classificationNotes = document.getElementById('classification-notes').value;
-        const moniker = document.getElementById('moniker').value;
-        const gang = document.getElementById('gang').value;
-        const sangang = document.getElementById('sangang').value;
-        const affiliationNotes = document.getElementById('affiliation-notes').value;
-        const mdc = document.getElementById('mdc').value;
-        const inmateProfile = document.getElementById('inmate-profile').value;
-        const paroleApplication = document.getElementById('parole-application').value;
-        const caseHandlers = document.getElementById('case-handlers').value;
-        const caseSupervisor = document.getElementById('case-supervisor').value;
-        const additionalNotes = document.getElementById('additional-notes').value;
+    // ── Classification maps ──
+    const TOPIC_CODE = {
+        'Serious (S)':       'S',
+        'Non-Serious (NS)':  'NS',
+        'Unsupervised (US)': 'US',
+        'Special Case (SC)': 'CS'
+    };
 
-        const bbcode = `[center][size=175]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
+    const BASE_FORUM = {
+        'Serious (S)':       { url: 'https://sadcr.gta.world/viewforum.php?f=314', label: 'Serious Parolees' },
+        'Non-Serious (NS)':  { url: 'https://sadcr.gta.world/viewforum.php?f=312', label: 'Non-Serious Parolees' },
+        'Unsupervised (US)': null,
+        'Special Case (SC)': { url: 'https://sadcr.gta.world/viewforum.php?f=313', label: 'Special Cases' }
+    };
+
+    // ── Gang toggle ──
+    function toggleGangFields() {
+        const checked = document.getElementById('gang-check').checked;
+        const body    = document.getElementById('gangBody');
+        const note    = document.getElementById('gangHiddenNote');
+        body.classList.toggle('visible', checked);
+        note.classList.toggle('show', !checked);
+    }
+
+    // ── Topic name ──
+    function updateTopicName() {
+        const name      = (document.getElementById('name').value || '').trim();
+        const cls       = document.getElementById('classification').value;
+        const startDate = (document.getElementById('start-date').value || '').trim();
+        const endDate   = (document.getElementById('release-date').value || '').trim();
+        const el        = document.getElementById('topicNameDisplay');
+        if (!name) {
+            el.textContent = 'Fill in a name and select a classification above…';
+            el.className = 'topic-name-display placeholder';
+            return;
+        }
+        const code = TOPIC_CODE[cls] || cls;
+        let topic = `[${code}] ${name}`;
+        if (startDate || endDate) {
+            topic += ` - [${startDate || '?'} - ${endDate || '?'}]`;
+        }
+        el.textContent = topic;
+        el.className = 'topic-name-display has-value';
+    }
+
+    // ── Posting guidance ──
+    function updateGuidance() {
+        const cls      = document.getElementById('classification').value;
+        const isLifer  = document.getElementById('lifer-check').checked;
+        const hasGang  = document.getElementById('gang-check').checked;
+        const panel    = document.getElementById('guidancePanel');
+        const linksEl  = document.getElementById('guidanceLinks');
+
+        panel.classList.add('show');
+        linksEl.innerHTML = '';
+
+        // Unsupervised always shows lore note, ignores checkboxes
+        if (cls === 'Unsupervised (US)') {
+            linksEl.innerHTML = `<div class="guidance-note">No section exists for Unsupervised parolees as this isn't done In-Character — this classification is simply here for lore purposes.</div>`;
+            return;
+        }
+
+        // Both ticked — red conflict, Lifer link wins
+        if (isLifer && hasGang) {
+            linksEl.innerHTML = `
+                <div class="guidance-conflict">
+                    <div class="conflict-title">Both Lifer and Gang Affiliation Detected</div>
+                    <div class="conflict-body">Post here: <a href="https://sadcr.gta.world/viewforum.php?f=311" target="_blank">https://sadcr.gta.world/viewforum.php?f=311</a></div>
+                </div>`;
+            return;
+        }
+
+        // Lifer only
+        if (isLifer) {
+            linksEl.innerHTML = `<div class="guidance-line"><strong>Lifer Parolees:</strong> <a href="https://sadcr.gta.world/viewforum.php?f=311" target="_blank">https://sadcr.gta.world/viewforum.php?f=311</a></div>`;
+            return;
+        }
+
+        // Gang only
+        if (hasGang) {
+            linksEl.innerHTML = `<div class="guidance-line"><strong>Gang-Affiliated Parolees:</strong> <a href="https://sadcr.gta.world/viewforum.php?f=310" target="_blank">https://sadcr.gta.world/viewforum.php?f=310</a></div>`;
+            return;
+        }
+
+        // Neither — fall back to classification link
+        const base = BASE_FORUM[cls];
+        if (base) {
+            linksEl.innerHTML = `<div class="guidance-line"><strong>${base.label}:</strong> <a href="${base.url}" target="_blank">${base.url}</a></div>`;
+        }
+    }
+
+    // ── Generate ──
+    function generateBBCode() {
+        const mdcPicture         = document.getElementById('mdc-picture').value;
+        const name               = document.getElementById('name').value;
+        const phone              = document.getElementById('phone').value;
+        const address            = document.getElementById('address').value;
+        const dob                = document.getElementById('dob').value;
+        const gender             = document.getElementById('gender').value;
+        const work               = document.getElementById('work').value;
+        const aliases            = document.getElementById('aliases').value;
+        const relativesRaw       = [...document.querySelectorAll('.relative-input')]
+                                       .map(i => i.value.trim()).filter(Boolean);
+        const relatives          = relativesRaw.length
+                                       ? relativesRaw.map(r => `[*] ${r}`).join('\n')
+                                       : '[*] N/A';
+        const classification     = document.getElementById('classification').value;
+        const classificationNotes= document.getElementById('classification-notes').value;
+        const hasGang            = document.getElementById('gang-check').checked;
+        const moniker            = hasGang ? document.getElementById('moniker').value || 'N/A' : 'N/A';
+        const gang               = hasGang ? document.getElementById('gang').value    || 'N/A' : 'N/A';
+        const sangang            = hasGang ? document.getElementById('sangang').value : '';
+        const affiliationNotes   = hasGang ? document.getElementById('affiliation-notes').value : '';
+        const mdc                = document.getElementById('mdc').value;
+        const inmateProfile      = document.getElementById('inmate-profile').value;
+        const paroleApplication  = document.getElementById('parole-application').value;
+        const caseHandlers       = document.getElementById('case-handlers').value;
+        const caseSupervisor     = document.getElementById('case-supervisor').value;
+        const additionalNotes    = document.getElementById('additional-notes').value;
+
+        if (!name || !phone || !address || !dob || !gender) {
+            setStatus('Please fill in all required fields.', 'err');
+            return;
+        }
+        if (!classification) {
+            setStatus('Please select a classification.', 'err');
+            return;
+        }
+
+        const sangangCell = sangang
+            ? `[url=${sangang}]ACCESS[/url]`
+            : `N/A`;
+
+        const bbcode =
+`[center][size=175]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/size]
 [size=165]DIVISION OF ADULT PAROLE OPERATIONS[/size]
 [size=160]Parole Tracking Program[/size]
 
@@ -263,7 +902,7 @@
 [tr]
 [tdwidth=1,black,transparent,top,left,33,5]${moniker}[/tdwidth]
 [tdwidth=1,black,transparent,top,left,33,5]${gang}[/tdwidth]
-[tdwidth=1,black,transparent,top,left,33,5][url=${sangang}]ACCESS[/url][/tdwidth]
+[tdwidth=1,black,transparent,top,left,33,5]${sangangCell}[/tdwidth]
 [/tr]
 [/table2]
 [table2=1,black,transparent,Roboto]
@@ -317,17 +956,80 @@
 [/tr]
 [/table2]`;
 
-        document.getElementById('output').textContent = bbcode;
+        document.getElementById('output').value = bbcode;
+        setStatus(`✓ BBCode generated at ${new Date().toLocaleTimeString()}.`, 'ok');
     }
 
-    function copyBBCode() {
-        const bbcode = document.getElementById('output').textContent;
-        navigator.clipboard.writeText(bbcode).then(() => {
-            alert('BBCode copied to clipboard');
-        });
+    // ── Add relative ──
+    function addRelative(value = '') {
+        const list = document.getElementById('relatives-list');
+        const row = document.createElement('div');
+        row.className = 'relative-row';
+        row.innerHTML = `<input type="text" class="relative-input" placeholder="e.g. James Doe - Brother" value="${value}"><button type="button" class="remove-btn" title="Remove" onclick="this.parentElement.remove()">✕</button>`;
+        list.appendChild(row);
+        row.querySelector('input').focus();
     }
+
+    // ── Copy (with execCommand fallback for local files) ──
+    function copyBBCode() {
+        const ta = document.getElementById('output');
+        if (!ta.value.trim()) { setStatus('Nothing to copy — generate first.', 'err'); return; }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(ta.value).then(() => {
+                setStatus('Copied to clipboard!', 'ok');
+            }).catch(() => fallbackCopy(ta));
+        } else {
+            fallbackCopy(ta);
+        }
+    }
+
+    function fallbackCopy(ta) {
+        const prev = ta.hasAttribute('readonly');
+        ta.removeAttribute('readonly');
+        ta.select();
+        ta.setSelectionRange(0, 99999);
+        try {
+            document.execCommand('copy');
+            setStatus('Copied to clipboard!', 'ok');
+        } catch {
+            setStatus('Copy failed — please select the text manually (Ctrl+A, Ctrl+C).', 'err');
+        }
+        if (prev) ta.setAttribute('readonly', '');
+        window.getSelection()?.removeAllRanges();
+    }
+
+    // ── Clear form ──
+    function clearForm() {
+        const ids = ['mdc-picture','name','phone','address','start-date','release-date','dob','gender','work','aliases',
+                     'classification-notes','moniker','gang','sangang','affiliation-notes',
+                     'mdc','inmate-profile','parole-application','case-handlers','case-supervisor','additional-notes'];
+        ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        document.getElementById('classification').value = '';
+        document.getElementById('relatives-list').innerHTML = '';
+        document.getElementById('gang-check').checked = false;
+        document.getElementById('lifer-check').checked = false;
+        toggleGangFields();
+        updateGuidance();
+        updateTopicName();
+        document.getElementById('guidancePanel').classList.remove('show');
+        setStatus('Form cleared.', '');
+    }
+
+    function setStatus(msg, type) {
+        const el = document.getElementById('statusText');
+        el.textContent = msg;
+        el.className = 'status-text' + (type ? ' ' + type : '');
+        if (type === 'ok' || type === 'err') {
+            setTimeout(() => { el.textContent = 'Ready.'; el.className = 'status-text'; }, 4000);
+        }
+    }
+
+    // ── Init ──
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleGangFields();
+    });
 </script>
 
-</div>
 </body>
 </html>
