@@ -5,202 +5,1077 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rules Violation Report</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        :root {
+            --bg: #eef1f6;
+            --surface: #ffffff;
+            --border: #e0e4ea;
+            --text: #1a1d23;
+            --text-muted: #6b7280;
+            --accent: #3b6fe0;
+            --accent-hover: #2f5cc4;
+            --danger: #e0433b;
+            --danger-hover: #c73830;
+            --radius: 10px;
+            --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 32px 16px;
+        }
+
+        .page {
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .page-header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .page-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background-color: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f4f5f7;
+        }
+
+        .field-with-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .field-with-action input,
+        .field-with-action select {
+            flex: 1 1 100px;
+            min-width: 0;
+        }
+
+        .field-with-action .btn-inline {
+            flex-shrink: 0;
+            padding: 9px 12px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .time-select-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1 1 100px;
+            min-width: 0;
+        }
+
+        .time-select-group select {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .time-select-group span {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 24, 40, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 100;
+        }
+
+        .modal-overlay[hidden] {
+            display: none;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 24px rgba(16, 24, 40, 0.18);
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 4px 8px;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .profiles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profiles-list .muted {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+        }
+
+        .profile-select {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+            background: #f7f8fa;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-align: left;
+            font-weight: 400;
+        }
+
+        .profile-select:hover {
+            background: #eef1f6;
+        }
+
+        .profile-select span {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .profile-remove {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--border);
+            padding: 0 14px;
+        }
+
+        .profile-remove:hover {
+            background: #fdf1f0;
+            border-color: var(--danger-hover);
+        }
+
+        .profile-form h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-muted);
+            margin: 0 0 12px;
+        }
+
+        .profile-form .form-group {
+            margin-bottom: 12px;
+        }
+
+        .modal.modal-wide {
+            max-width: 640px;
+        }
+
+        #chargeSearch {
+            margin-bottom: 16px;
+        }
+
+        .charge-section-heading {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-muted);
+            margin: 18px 0 8px;
+        }
+
+        .charge-section-heading:first-of-type {
+            margin-top: 0;
+        }
+
+        .charge-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .charge-row:last-child {
+            border-bottom: none;
+        }
+
+        .charge-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .charge-info .charge-code {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .charge-info .charge-title {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .charge-info .charge-penalty {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .charge-add-btn, .charge-remove-btn {
+            flex-shrink: 0;
+            padding: 7px 14px;
+            font-size: 12.5px;
+        }
+
+        .charge-add-btn.added {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            cursor: default;
+        }
+
+        .charge-add-btn.added:hover {
+            background-color: transparent;
+        }
+
+        .no-results {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .calc-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 16px;
+        }
+
+        .calc-empty {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .calc-totals {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .calc-total-item .calc-total-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .calc-total-item .calc-total-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .calc-notes {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .calc-notes .charge-section-heading {
+            margin-top: 0;
+        }
+
+        .calc-notes ul {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        .calc-notes li {
+            margin-bottom: 4px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0 0 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .grid.narrow {
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.span-full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 11px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 111, 224, 0.15);
+        }
+
         textarea {
             width: 100%;
-            height: 200px;
+            min-height: 160px;
+            resize: vertical;
+            line-height: 1.5;
         }
-        .form-group {
-            margin-bottom: 10px;
+
+        #output {
+            font-family: "SF Mono", Consolas, Menlo, monospace;
+            font-size: 12.5px;
+            min-height: 220px;
+            background: #f7f8fa;
         }
-        label {
-            display: block;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-        }
-        button {
-            margin: 10px 0;
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+
+        select {
             cursor: pointer;
         }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: var(--accent);
+            color: white;
+            transition: background-color 0.15s ease, transform 0.05s ease;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
         button.clear {
-            background-color: red;
+            background-color: transparent;
+            color: var(--danger);
+            border: 1px solid var(--border);
+        }
+
+        button.clear:hover {
+            background-color: #fdf1f0;
+            border-color: var(--danger-hover);
         }
     </style>
 </head>
 <body>
 
-<h2>Rules Violation Report</h2>
+<div class="page">
 
-<form id="violation-form">
-    <!-- SADC Number -->
-    <div class="form-group">
-        <label for="sadcNumber">SADC Number:</label>
-        <input type="text" id="sadcNumber" name="sadcNumber">
+    <div class="page-header-row">
+        <div class="page-header">
+            <h2>Rules Violation Report</h2>
+            <p>Fill out the fields below to generate formatted BBCode.</p>
+        </div>
+        <button type="button" class="btn-secondary" onclick="openProfilesModal()">Profiles</button>
     </div>
 
-    <!-- Inmate's Name -->
-    <div class="form-group">
-        <label for="inmateName">Inmate's Name:</label>
-        <input type="text" id="inmateName" name="inmateName">
+    <div id="profilesModal" class="modal-overlay" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Profiles</h3>
+                <button type="button" class="modal-close" onclick="closeProfilesModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="profilesList" class="profiles-list"></div>
+                <div class="profile-form">
+                    <h4>Add Profile</h4>
+                    <div class="form-group">
+                        <label for="newProfileEmployee">Reporting Employee</label>
+                        <input type="text" id="newProfileEmployee">
+                    </div>
+                    <div class="form-group">
+                        <label for="newProfileAssignment">Assignment</label>
+                        <input type="text" id="newProfileAssignment">
+                    </div>
+                    <div class="form-group">
+                        <label for="newProfileRank">Rank</label>
+                        <input type="text" id="newProfileRank">
+                    </div>
+                    <button type="button" onclick="addProfile()">Save Profile</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Release Date -->
-    <div class="form-group">
-        <label for="releaseDate">Release Date:</label>
-        <input type="text" id="releaseDate" name="releaseDate">
+    <div id="chargeModal" class="modal-overlay" hidden>
+        <div class="modal modal-wide">
+            <div class="modal-header">
+                <h3>Add Charge</h3>
+                <button type="button" class="modal-close" onclick="closeChargeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="chargeSearch" placeholder="Search by code, name, or keyword..." oninput="renderChargeList()">
+                <div id="chargeList"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Institution -->
-    <div class="form-group">
-        <label for="inst">Institution:</label>
-        <input type="text" id="inst" name="inst">
+    <form id="violation-form">
+
+        <div class="card">
+            <h3>Inmate Information</h3>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="sadcNumber">SADC Number</label>
+                    <input type="text" id="sadcNumber" name="sadcNumber">
+                </div>
+                <div class="form-group">
+                    <label for="inmateName">Inmate's Name</label>
+                    <input type="text" id="inmateName" name="inmateName">
+                </div>
+                <div class="form-group">
+                    <label for="releaseDate">Release Date</label>
+                    <input type="date" id="releaseDate" name="releaseDate">
+                </div>
+                <div class="form-group">
+                    <label for="inst">Institution</label>
+                    <input type="text" id="inst" name="inst" value="SASP-LSC">
+                </div>
+                <div class="form-group">
+                    <label for="housingNo">Housing No</label>
+                    <input type="text" id="housingNo" name="housingNo">
+                </div>
+                <div class="form-group">
+                    <label for="logNo">Log No</label>
+                    <input type="text" id="logNo" name="logNo">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Violation Details</h3>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="violatedRules">Violated Rule No(s)</label>
+                    <div class="field-with-action">
+                        <input type="text" id="violatedRules" name="violatedRules">
+                        <button type="button" class="btn-secondary btn-inline" onclick="openChargeModal()">Add Charge</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="specificActs">Specific Acts</label>
+                    <input type="text" id="specificActs" name="specificActs">
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location">
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <div class="field-with-action">
+                        <input type="date" id="date" name="date">
+                        <button type="button" class="btn-secondary btn-inline" onclick="setDateToday()">Today (Server Time)</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="timeHour">Time (UTC, 24hr)</label>
+                    <div class="field-with-action">
+                        <div class="time-select-group">
+                            <select id="timeHour" name="timeHour"></select>
+                            <span>:</span>
+                            <select id="timeMinute" name="timeMinute"></select>
+                        </div>
+                        <button type="button" class="btn-secondary btn-inline" onclick="setTimeNow()">Now (Server Time)</button>
+                    </div>
+                </div>
+                <div class="form-group span-full">
+                    <label for="narrative">Narrative</label>
+                    <textarea id="narrative" name="narrative"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Reporting &amp; Review</h3>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="reportingEmployee">Reporting Employee</label>
+                    <input type="text" id="reportingEmployee" name="reportingEmployee">
+                </div>
+                <div class="form-group">
+                    <label for="assignment">Assignment</label>
+                    <input type="text" id="assignment" name="assignment">
+                </div>
+                <div class="form-group">
+                    <label for="rank">Rank</label>
+                    <input type="text" id="rank" name="rank">
+                </div>
+                <div class="form-group">
+                    <label for="reviewingSupervisor">Reviewing Supervisor</label>
+                    <input type="text" id="reviewingSupervisor" name="reviewingSupervisor">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Classification</h3>
+            <div class="grid narrow">
+                <div class="form-group">
+                    <label for="stgActivity">STG Activity in Rules Violation</label>
+                    <select id="stgActivity" name="stgActivity">
+                        <option value="YES">YES</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="inmateSegregated">Inmate Segregated</label>
+                    <select id="inmateSegregated" name="inmateSegregated">
+                        <option value="YES">YES</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="adminSerious">Administrative/Serious</label>
+                    <select id="adminSerious" name="adminSerious">
+                        <option value="ADMINISTRATIVE">ADMINISTRATIVE</option>
+                        <option value="SERIOUS">SERIOUS</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" onclick="generateBBCode()">Generate BBCode</button>
+            <button type="button" class="clear" onclick="clearForm()">Clear Form</button>
+        </div>
+    </form>
+
+    <div class="card">
+        <h3>Charge Calculator</h3>
+        <div id="calcList" class="calc-list"></div>
+        <div id="calcTotals" class="calc-totals"></div>
+        <div id="calcNotes"></div>
     </div>
 
-    <!-- Housing Number -->
-    <div class="form-group">
-        <label for="housingNo">Housing No:</label>
-        <input type="text" id="housingNo" name="housingNo">
+    <div class="card">
+        <h3>Generated BBCode</h3>
+        <textarea id="output" readonly></textarea>
+        <div class="actions">
+            <button type="button" onclick="copyBBCode()">Copy BBCode</button>
+        </div>
     </div>
 
-    <!-- Log Number -->
-    <div class="form-group">
-        <label for="logNo">Log No:</label>
-        <input type="text" id="logNo" name="logNo">
-    </div>
-
-    <!-- Violated Rules -->
-    <div class="form-group">
-        <label for="violatedRules">Violated Rule No(s):</label>
-        <input type="text" id="violatedRules" name="violatedRules">
-    </div>
-
-    <!-- Specific Acts -->
-    <div class="form-group">
-        <label for="specificActs">Specific Acts:</label>
-        <input type="text" id="specificActs" name="specificActs">
-    </div>
-
-    <!-- Location -->
-    <div class="form-group">
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location">
-    </div>
-
-    <!-- Date and Time -->
-    <div class="form-group">
-        <label for="date">Date:</label>
-        <input type="text" id="date" name="date">
-    </div>
-
-    <div class="form-group">
-        <label for="time">Time:</label>
-        <input type="text" id="time" name="time">
-    </div>
-
-    <!-- Narrative -->
-    <div class="form-group">
-        <label for="narrative">Narrative:</label>
-        <textarea id="narrative" name="narrative"></textarea>
-    </div>
-
-    <!-- Reporting Employee -->
-    <div class="form-group">
-        <label for="reportingEmployee">Reporting Employee:</label>
-        <input type="text" id="reportingEmployee" name="reportingEmployee">
-    </div>
-
-    <!-- Assignment -->
-    <div class="form-group">
-        <label for="assignment">Assignment:</label>
-        <input type="text" id="assignment" name="assignment">
-    </div>
-
-    <!-- Rank -->
-    <div class="form-group">
-        <label for="rank">Rank:</label>
-        <input type="text" id="rank" name="rank">
-    </div>
-
-    <!-- Reviewing Supervisor -->
-    <div class="form-group">
-        <label for="reviewingSupervisor">Reviewing Supervisor:</label>
-        <input type="text" id="reviewingSupervisor" name="reviewingSupervisor">
-    </div>
-
-    <!-- STG Activity in Rules Violation -->
-    <div class="form-group">
-        <label for="stgActivity">STG Activity in Rules Violation:</label>
-        <select id="stgActivity" name="stgActivity">
-            <option value="YES">YES</option>
-            <option value="NO">NO</option>
-        </select>
-    </div>
-
-    <!-- Inmate Segregated (YES/NO Dropdown) -->
-    <div class="form-group">
-        <label for="inmateSegregated">Inmate Segregated:</label>
-        <select id="inmateSegregated" name="inmateSegregated">
-            <option value="YES">YES</option>
-            <option value="NO">NO</option>
-        </select>
-    </div>
-
-    <!-- Administrative/Serious Dropdown -->
-    <div class="form-group">
-        <label for="adminSerious">Administrative/Serious:</label>
-        <select id="adminSerious" name="adminSerious">
-            <option value="ADMINISTRATIVE">ADMINISTRATIVE</option>
-            <option value="SERIOUS">SERIOUS</option>
-        </select>
-    </div>
-
-    <button type="button" onclick="generateBBCode()">Generate BBCode</button>
-    <button type="button" class="clear" onclick="clearForm()">Clear Form</button>
-</form>
-
-<h3>Generated BBCode</h3>
-<textarea id="output" readonly></textarea>
-<button type="button" onclick="copyBBCode()">Copy BBCode</button>
+</div>
 
 <script>
-    // Save specific fields to cookies for autofill on reload
+    const PROFILES_KEY = 'rvrProfiles';
+    const ACTIVE_PROFILE_KEY = 'rvrActiveProfileIndex';
+    const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+    const CHARGES = [
+        { code: 'ADM-A', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'EXCESS PROPERTY/CONTRABAND', title: 'Possession of property, materials, items, or substances in excess of authorized limits, or possession of contraband other than controlled substances or dangerous contraband.', rhuHours: 0, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 1, visitationWeeks: 0, noContactWeeks: 0, note: null },
+        { code: 'ADM-B', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'MISUSE OF FOOD', title: 'Misuse of food.', rhuHours: 0, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 1, visitationWeeks: 0, noContactWeeks: 0, note: null },
+        { code: 'ADM-C', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'OUT OF BOUNDS', title: 'Out-of-bounds presenting no threat to facility security.', rhuHours: 1, rhuDiscretionary: true, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: null },
+        { code: 'ADM-D', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'PHONE MISUSE', title: 'Misuse of telephone privileges presenting no threat to facility security.', rhuHours: 0, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'ADM-E', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'MAIL/VISIT VIOLATION', title: 'Mail or visiting violations presenting no threat to facility security.', rhuHours: 0, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'ADM-F', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'WORK/PROGRAM FAILURE', title: "Failure to meet work or program expectations within the incarcerated person's abilities.", rhuHours: 0, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'ADM-G', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'LATE/ABSENT FROM WORK', title: 'Late for or absent without authorization from a work or program assignment.', rhuHours: 1, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'ADM-H', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'VULGAR/OBSCENE LANGUAGE', title: 'Use of vulgar or obscene language.', rhuHours: 12, rhuDiscretionary: true, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'ADM-J', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'UNDER THE INFLUENCE', title: 'Under the influence (use) of alcoholic beverages, drugs, or intoxicants in a facility; refusal of a drug/alcohol test.', rhuHours: 24, rhuDiscretionary: true, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'ADM-K', section: 'Administrative Rules Violation', reportType: 'Administrative Rules Violation Report', shortName: 'GROOMING STANDARDS', title: 'Failure to comply with departmental grooming standards.', rhuHours: 0, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+
+        { code: 'SNP-A', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'MISCONDUCT TO RELEASING AUTHORITY', title: "Misconduct reportable to the incarcerated person's releasing authority.", rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'SNP-B', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'THEFT/DESTRUCTION OF PROPERTY', title: "Theft, embezzlement, destruction, or damage to another's personal property, state funds, or state property.", rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: 'Officer discretion: PC 305 Petty Theft (M) / PC 314 Vandalism of Prison Property (M)(F)' },
+        { code: 'SNP-C', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'ESCAPE PREP/PARAPHERNALIA', title: 'Hideout, preparation to escape, or possession of escape paraphernalia.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 4, noContactWeeks: 4, note: 'Officer discretion: PC 134 Possession of Handcuff Keys in a Correctional Facility (M)' },
+        { code: 'SNP-D', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'TATTOOING', title: 'Tattooing or possession of tattoo paraphernalia.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 4, note: null },
+        { code: 'SNP-E', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'ALCOHOL/CONTROLLED SUBSTANCE', title: 'Manufacture of alcohol or possession of any controlled substance, unauthorized drug, intoxicant, or illegal substance.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 4, note: 'Officer discretion: PC 602 Possession of a Controlled Substance (<15g) (M) / PC 603 Possession w/ Intent to Distribute (15-34g) (M)' },
+        { code: 'SNP-G', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'POSSESSION OF U.S. CURRENCY', title: 'Possession of U.S Currency (over $5).', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 4, note: null },
+        { code: 'SNP-H', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'DISOBEDIENCE (POTENTIAL VIOLENCE)', title: 'Acts of disobedience or disrespect which by reason of intensity or context create a potential for violence or mass disruptive conduct.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 4, note: null },
+        { code: 'SNP-I', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'INCITING VIOLENCE', title: 'Willfully inciting others to commit an act of force or violence.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 4, note: null },
+        { code: 'SNP-J', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'REFUSAL TO WORK/PROGRAM', title: 'Refusal to perform work or participate in a program as ordered or assigned.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 4, note: 'If an outside work detail, inmate permanently disqualified from attending outside work details.' },
+        { code: 'SNP-K', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'RECURRING WORK FAILURE', title: "Recurring failure to meet work or program expectations within the incarcerated person's abilities when lesser disciplinary methods failed to correct the misconduct.", rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 4, note: 'Inmate disqualified from attending outside work details.' },
+        { code: 'SNP-L', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'STRIKE/WORK STOPPAGE', title: 'Participation in a strike or work stoppage.', rhuHours: 24, rhuDiscretionary: false, rhuNote: 'Or until end of hunger strike.', canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 4, note: 'Disqualified from outside work details if offence was committed at one.' },
+        { code: 'SNP-M', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'REPEATED ADMIN VIOLATIONS', title: 'A repeated pattern of administrative rule violations for the same offense.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 4, note: null },
+        { code: 'SNP-N', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'MAIL/VISIT VIOLATION (THREAT)', title: 'Mail or visiting violations presenting a threat to institution security.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-O', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'HARASSMENT', title: 'Harassment of another person, group, or entity either directly or indirectly through the use of the mail or by any other means.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-P', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'THROWING SUBSTANCE AT STAFF', title: 'Throwing any liquid or solid substance on a non-incarcerated person.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: 'Officer discretion: PC 208 Battery (M)' },
+        { code: 'SNP-Q', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'UNAUTHORIZED RECORDS POSSESSION', title: "Unauthorized possession of departmental records or documents which could affect any incarcerated person's release status.", rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-R', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'REFUSAL OF DRUG/ALCOHOL TEST', title: 'Refusal to submit to a test for controlled substances or alcohol.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-S', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'REFUSAL OF BIOMETRICS', title: 'Refusal to provide blood specimens, a saliva sample, and palm and thumb print impressions and photographs.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-T', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'GAMBLING', title: 'Participation in gambling.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 3, note: null },
+        { code: 'SNP-U', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'LATE RETURN FROM RELEASE', title: 'Late return or failure to return from a temporary community release or leave.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 3, note: null },
+        { code: 'SNP-V', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'WEAPON/EXPLOSIVE/POISON MATERIALS', title: 'Unauthorized possession of materials or substances modified or altered with potential to be made into a weapon, explosive, poison, caustic substance, or destructive device.', rhuHours: 120, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-W', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'SELF-MUTILATION/MANIPULATION', title: 'Self mutilation or attempted suicide for the purpose of manipulation.', rhuHours: null, rhuDiscretionary: false, rhuNote: 'Until seen by a prison psychiatrist.', canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: null },
+        { code: 'SNP-X', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'WIRELESS COMMUNICATION DEVICE', title: 'Possession or constructive possession of any wireless communication device or component thereof.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 2, noContactWeeks: 8, note: 'Officer discretion: PC 132 Possession of Communications in a Correctional Facility (M)' },
+        { code: 'SNP-Y', section: 'Serious Rules Violation (Non-Prosecutable)', reportType: 'Serious Rules Violation Report', shortName: 'CONSPIRACY/ATTEMPT', title: 'Involvement in a conspiracy or attempt to do any of the above.', rhuHours: null, rhuDiscretionary: false, rhuNote: 'Half the punishment of whatever category the offence was in conspiracy of.', canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: null },
+
+        { code: 'SP-A', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'BRIBERY OF STAFF', title: 'Bribery of a Staff Member.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 6, note: 'Charged with PC 105 Bribery of a Public Official (F)' },
+        { code: 'SP-B', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'RIOTING', title: 'Rioting: partaking in or inciting riotous activity including combat by more than three inmates.', rhuHours: 96, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 6, note: 'Charged with PC 106 Incitement to Riot (F)' },
+        { code: 'SP-C', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'CONCEALMENT OF EVIDENCE', title: 'Concealment/Disposing of Evidence.', rhuHours: 96, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 6, note: 'Charged with PC 108 Tampering with Evidence (F)' },
+        { code: 'SP-D', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'OBSTRUCTION OF OPERATIONS', title: 'Obstruction of Institution Operations.', rhuHours: 96, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 6, note: "Charged with PC 112 Obstruction of a Public Duty (F), or PC 113 Obstructing a Peace Officer's Animal (M)(F)" },
+        { code: 'SP-E', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'ESCAPE', title: 'Escape: any attempt to escape the institution, transport, or a work detail.', rhuHours: 168, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 4, noContactWeeks: 10, note: 'Permanently disqualified from outside work detail. Charged with PC 114 Escape from Lawful Custody (F)' },
+        { code: 'SP-F', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'BATTERY', title: 'Battery: using force against any person, incarcerated or otherwise.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 120 Assault & Battery on a Government Worker (F), PC 208 Battery (M), PC 209 Aggravated Battery (F), Assault with a Deadly Weapon (F), or Assault with Caustic Chemicals (F) depending on circumstances' },
+        { code: 'SP-G', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'MURDER', title: 'Murder: any act resulting in the death of another inmate.', rhuHours: 120, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 201 Capital Murder (F), PC 202 First Degree Murder (F), or PC 203 Second Degree Murder (F)' },
+        { code: 'SP-H', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'HOSTAGE TAKING', title: 'Hostage Taking: any act resulting in the taking of a hostage within the prison.', rhuHours: 120, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 210 Kidnapping (F)' },
+        { code: 'SP-I', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'RAPE', title: 'Rape: forcing another person into sexual intercourse, sodomy, or oral copulation.', rhuHours: 120, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 217 Rape (F)' },
+        { code: 'SP-J', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'ARSON', title: 'Arson: setting any fire within an institution or at a work detail/program.', rhuHours: 120, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 301 Arson (F)' },
+        { code: 'SP-K', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'MAJOR NARCOTICS POSSESSION', title: 'Major Narcotics Possession: narcotics weighed at more than thirty-five (35) grams.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 605 Drug Smuggling (F, 35-74g) or PC 606 Drug Trafficking (F, 75g+)' },
+        { code: 'SP-L', section: 'Serious Rules Violation (Prosecuted)', reportType: 'Serious Rules Violation Report', shortName: 'INMATE MANUFACTURED WEAPON', title: 'Possession of Inmate Manufactured Weapon: shank, unauthorised tool, blade, hammer, duster, blunt force object, et cetera.', rhuHours: 72, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 3, noContactWeeks: 3, note: 'Charged with PC 713 Possession of Deadly Weapons in a Correctional Facility (F)' },
+
+        { code: 'STG-A', section: 'Security Threat Group', reportType: 'Administrative Rules Violation Report', shortName: 'STG ROLL CALL PARTICIPATION', title: 'Active participation in STG roll call.', rhuHours: null, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: 'No specific penalty beyond the report is listed for this offence.' },
+        { code: 'STG-B', section: 'Security Threat Group', reportType: 'Administrative Rules Violation Report', shortName: 'STG GROUP EXERCISE PARTICIPATION', title: 'Active participation in STG group exercise.', rhuHours: null, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: 'No specific penalty beyond the report is listed for this offence.' },
+        { code: 'STG-C', section: 'Security Threat Group', reportType: 'Administrative Rules Violation Report', shortName: 'STG HAND SIGNS/GESTURES', title: 'Using hand signs, graffiti, handshakes, slogans, distinctive clothing, and gestures related to an STG.', rhuHours: null, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: 'No specific penalty beyond the report is listed for this offence.' },
+        { code: 'STG-D', section: 'Security Threat Group', reportType: 'Administrative Rules Violation Report', shortName: 'STG ARTWORK POSSESSION', title: 'In possession of STG artwork (drawings, artwork, or photographs showcasing STG material).', rhuHours: null, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: 'No specific penalty beyond the report is listed for this offence.' },
+        { code: 'STG-E', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'STG TATTOO (NEW)', title: 'Possessing STG related tattoos or body artwork obtained since arrival in a SADCR institution.', rhuHours: 48, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 4, noContactWeeks: 8, note: 'Double time of the Tattooing offence (SNP-D).' },
+        { code: 'STG-F', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'STG PHONE/RECORDING', title: 'Recording/Phonecalls believed to reference or support an STG organisation and its activities.', rhuHours: null, rhuDiscretionary: false, rhuNote: 'Double time of the applicable mail/visitation misuse offence (officer determines base charge).', canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: null },
+        { code: 'STG-G', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'STG COMMUNICATION', title: 'Communication with an inmate regarding STG behavior to aid or influence STG activity.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 4, note: null },
+        { code: 'STG-H', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'DIRECTING STG ROLL CALL', title: 'Directing participation in STG roll call.', rhuHours: null, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: 'No specific penalty beyond the report is listed for this offence.' },
+        { code: 'STG-I', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'DIRECTING STG EXERCISE', title: 'Directing cadence in STG group exercise.', rhuHours: null, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 0, noContactWeeks: 0, note: 'No specific penalty beyond the report is listed for this offence.' },
+        { code: 'STG-J', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'STG CLOTHING/PARAPHERNALIA', title: 'Wearing, possession, selling, distributing, loaning or displaying clothing, jewellery, emblems, badges, signs, or other items related to STG membership.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 4, note: null },
+        { code: 'STG-K', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'STG WRITTEN MATERIAL', title: 'Possession of STG written material including membership/enemy lists, tax lists, I.O.Us, and training material.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 4, note: null },
+        { code: 'STG-L', section: 'Security Threat Group', reportType: 'Serious Rules Violation Report', shortName: 'STG CODED MAIL/NOTES', title: 'In personal possession of mail/notes utilizing code language or coded orders relating to STG material.', rhuHours: 24, rhuDiscretionary: false, rhuNote: null, canteenWeeks: 0, visitationWeeks: 1, noContactWeeks: 4, note: null },
+    ];
+
+    let selectedChargeCodes = [];
+
     document.addEventListener('DOMContentLoaded', () => {
-        if (localStorage.getItem('reportingEmployee')) {
-            document.getElementById('reportingEmployee').value = localStorage.getItem('reportingEmployee');
-        }
-        if (localStorage.getItem('assignment')) {
-            document.getElementById('assignment').value = localStorage.getItem('assignment');
+        populateTimeSelects();
+        renderCalculator();
+
+        const profiles = getProfiles();
+        const activeIndex = localStorage.getItem(ACTIVE_PROFILE_KEY);
+        if (activeIndex !== null && profiles[activeIndex]) {
+            applyProfile(Number(activeIndex));
         }
     });
 
-    function saveToLocalStorage() {
-        localStorage.setItem('reportingEmployee', document.getElementById('reportingEmployee').value);
-        localStorage.setItem('assignment', document.getElementById('assignment').value);
+    function pad2(n) {
+        return String(n).padStart(2, '0');
+    }
+
+    function populateTimeSelects() {
+        const hourSelect = document.getElementById('timeHour');
+        const minuteSelect = document.getElementById('timeMinute');
+        for (let h = 0; h < 24; h++) {
+            const opt = document.createElement('option');
+            opt.value = pad2(h);
+            opt.textContent = pad2(h);
+            hourSelect.appendChild(opt);
+        }
+        for (let m = 0; m < 60; m++) {
+            const opt = document.createElement('option');
+            opt.value = pad2(m);
+            opt.textContent = pad2(m);
+            minuteSelect.appendChild(opt);
+        }
+    }
+
+    function setDateToday() {
+        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+    }
+
+    function setTimeNow() {
+        const now = new Date();
+        document.getElementById('timeHour').value = pad2(now.getUTCHours());
+        document.getElementById('timeMinute').value = pad2(now.getUTCMinutes());
+    }
+
+    function formatDateDMY(isoDate) {
+        if (!isoDate) return '';
+        const [year, month, day] = isoDate.split('-');
+        return `${day}/${MONTHS[parseInt(month, 10) - 1]}/${year}`;
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+    }
+
+    function formatHours(totalHours) {
+        if (!totalHours) return '0h';
+        const days = Math.floor(totalHours / 24);
+        const hours = totalHours % 24;
+        let out = '';
+        if (days > 0) out += `${days}d `;
+        if (hours > 0 || days === 0) out += `${hours}h`;
+        return out.trim();
+    }
+
+    function openChargeModal() {
+        document.getElementById('chargeSearch').value = '';
+        renderChargeList();
+        document.getElementById('chargeModal').hidden = false;
+    }
+
+    function closeChargeModal() {
+        document.getElementById('chargeModal').hidden = true;
+    }
+
+    function chargePenaltySummary(charge) {
+        const parts = [];
+        if (charge.rhuHours !== null) {
+            parts.push(`RHU ${formatHours(charge.rhuHours)}${charge.rhuDiscretionary ? ' (discretion)' : ''}`);
+        } else if (charge.rhuNote) {
+            parts.push(`RHU: ${charge.rhuNote}`);
+        }
+        if (charge.canteenWeeks) parts.push(`Canteen loss ${charge.canteenWeeks}wk`);
+        if (charge.visitationWeeks) parts.push(`Visitation loss ${charge.visitationWeeks}wk`);
+        if (charge.noContactWeeks) parts.push(`No-contact ${charge.noContactWeeks}wk`);
+        if (parts.length === 0 && charge.note) parts.push(charge.note);
+        return parts.join(' &middot; ');
+    }
+
+    function renderChargeList() {
+        const search = document.getElementById('chargeSearch').value.trim().toLowerCase();
+        const container = document.getElementById('chargeList');
+
+        const filtered = CHARGES.filter(c => {
+            if (!search) return true;
+            return c.code.toLowerCase().includes(search) ||
+                c.shortName.toLowerCase().includes(search) ||
+                c.title.toLowerCase().includes(search) ||
+                c.section.toLowerCase().includes(search);
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<p class="no-results">No charges match your search.</p>';
+            return;
+        }
+
+        let html = '';
+        let lastSection = null;
+        filtered.forEach(charge => {
+            if (charge.section !== lastSection) {
+                html += `<div class="charge-section-heading">${escapeHtml(charge.section)}</div>`;
+                lastSection = charge.section;
+            }
+            const isAdded = selectedChargeCodes.includes(charge.code);
+            html += `
+                <div class="charge-row">
+                    <div class="charge-info">
+                        <div class="charge-code">${escapeHtml(charge.code)} &mdash; ${escapeHtml(charge.shortName)}</div>
+                        <div class="charge-title">${escapeHtml(charge.title)}</div>
+                        <div class="charge-penalty">${chargePenaltySummary(charge)}</div>
+                    </div>
+                    ${isAdded
+                        ? `<button type="button" class="charge-add-btn added" disabled>Added</button>`
+                        : `<button type="button" class="charge-add-btn" onclick="addCharge('${charge.code}')">Add</button>`
+                    }
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function rebuildViolatedRulesField() {
+        const text = selectedChargeCodes
+            .map(code => CHARGES.find(c => c.code === code))
+            .filter(Boolean)
+            .map(c => `${c.code} ${c.shortName}`)
+            .join(', ');
+        document.getElementById('violatedRules').value = text;
+    }
+
+    function addCharge(code) {
+        if (!selectedChargeCodes.includes(code)) {
+            selectedChargeCodes.push(code);
+        }
+        rebuildViolatedRulesField();
+        renderCalculator();
+        renderChargeList();
+    }
+
+    function removeCharge(code) {
+        selectedChargeCodes = selectedChargeCodes.filter(c => c !== code);
+        rebuildViolatedRulesField();
+        renderCalculator();
+        if (!document.getElementById('chargeModal').hidden) {
+            renderChargeList();
+        }
+    }
+
+    function renderCalculator() {
+        const listEl = document.getElementById('calcList');
+        const totalsEl = document.getElementById('calcTotals');
+        const notesEl = document.getElementById('calcNotes');
+
+        const charges = selectedChargeCodes
+            .map(code => CHARGES.find(c => c.code === code))
+            .filter(Boolean);
+
+        if (charges.length === 0) {
+            listEl.innerHTML = '<p class="calc-empty">No charges added yet. Use "Add Charge" above to build the Violated Rule No(s) list and calculate time.</p>';
+            totalsEl.innerHTML = '';
+            notesEl.innerHTML = '';
+            return;
+        }
+
+        listEl.innerHTML = charges.map(charge => `
+            <div class="charge-row">
+                <div class="charge-info">
+                    <div class="charge-code">${escapeHtml(charge.code)} &mdash; ${escapeHtml(charge.shortName)}</div>
+                    <div class="charge-penalty">${chargePenaltySummary(charge)}</div>
+                </div>
+                <button type="button" class="charge-remove-btn clear" onclick="removeCharge('${charge.code}')">Remove</button>
+            </div>
+        `).join('');
+
+        let totalRhuHours = 0;
+        let totalCanteenWeeks = 0;
+        let totalVisitationWeeks = 0;
+        let totalNoContactWeeks = 0;
+        const notes = [];
+
+        charges.forEach(charge => {
+            if (charge.rhuHours !== null) {
+                totalRhuHours += charge.rhuHours;
+            } else if (charge.rhuNote) {
+                notes.push(`${charge.code}: ${charge.rhuNote}`);
+            }
+            if (charge.rhuDiscretionary) {
+                notes.push(`${charge.code}: RHU time of ${formatHours(charge.rhuHours)} is at officer discretion.`);
+            }
+            totalCanteenWeeks += charge.canteenWeeks;
+            totalVisitationWeeks += charge.visitationWeeks;
+            totalNoContactWeeks += charge.noContactWeeks;
+            if (charge.note) {
+                notes.push(`${charge.code}: ${charge.note}`);
+            }
+        });
+
+        totalsEl.innerHTML = `
+            <div class="calc-total-item">
+                <div class="calc-total-label">Total RHU Time</div>
+                <div class="calc-total-value">${formatHours(totalRhuHours)}</div>
+            </div>
+            <div class="calc-total-item">
+                <div class="calc-total-label">Canteen Loss</div>
+                <div class="calc-total-value">${totalCanteenWeeks}wk</div>
+            </div>
+            <div class="calc-total-item">
+                <div class="calc-total-label">Visitation Loss</div>
+                <div class="calc-total-value">${totalVisitationWeeks}wk</div>
+            </div>
+            <div class="calc-total-item">
+                <div class="calc-total-label">No-Contact Visitation</div>
+                <div class="calc-total-value">${totalNoContactWeeks}wk</div>
+            </div>
+        `;
+
+        notesEl.innerHTML = notes.length > 0
+            ? `<div class="calc-notes">
+                <div class="charge-section-heading">Notes</div>
+                <ul>${notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>
+            </div>`
+            : '';
+    }
+
+    function getProfiles() {
+        const raw = localStorage.getItem(PROFILES_KEY);
+        return raw ? JSON.parse(raw) : [];
+    }
+
+    function saveProfiles(profiles) {
+        localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+    }
+
+    function renderProfilesList() {
+        const profiles = getProfiles();
+        const container = document.getElementById('profilesList');
+        if (profiles.length === 0) {
+            container.innerHTML = '<p class="muted">No saved profiles yet.</p>';
+            return;
+        }
+        container.innerHTML = profiles.map((p, i) => `
+            <div class="profile-row">
+                <button type="button" class="profile-select" onclick="applyProfile(${i})">
+                    <strong>${escapeHtml(p.reportingEmployee)}</strong>
+                    <span>${escapeHtml(p.rank)} &middot; ${escapeHtml(p.assignment)}</span>
+                </button>
+                <button type="button" class="profile-remove" onclick="removeProfile(${i})" aria-label="Remove profile">&times;</button>
+            </div>
+        `).join('');
+    }
+
+    function addProfile() {
+        const reportingEmployee = document.getElementById('newProfileEmployee').value.trim();
+        const assignment = document.getElementById('newProfileAssignment').value.trim();
+        const rank = document.getElementById('newProfileRank').value.trim();
+
+        if (!reportingEmployee) {
+            alert('Reporting Employee is required to save a profile.');
+            return;
+        }
+
+        const profiles = getProfiles();
+        profiles.push({ reportingEmployee, assignment, rank });
+        saveProfiles(profiles);
+
+        document.getElementById('newProfileEmployee').value = '';
+        document.getElementById('newProfileAssignment').value = '';
+        document.getElementById('newProfileRank').value = '';
+
+        renderProfilesList();
+    }
+
+    function removeProfile(index) {
+        const profiles = getProfiles();
+        profiles.splice(index, 1);
+        saveProfiles(profiles);
+        if (localStorage.getItem(ACTIVE_PROFILE_KEY) === String(index)) {
+            localStorage.removeItem(ACTIVE_PROFILE_KEY);
+        }
+        renderProfilesList();
+    }
+
+    function applyProfile(index) {
+        const profiles = getProfiles();
+        const profile = profiles[index];
+        if (!profile) return;
+
+        document.getElementById('reportingEmployee').value = profile.reportingEmployee;
+        document.getElementById('assignment').value = profile.assignment;
+        document.getElementById('rank').value = profile.rank;
+
+        localStorage.setItem(ACTIVE_PROFILE_KEY, index);
+
+        closeProfilesModal();
+    }
+
+    function openProfilesModal() {
+        renderProfilesList();
+        document.getElementById('profilesModal').hidden = false;
+    }
+
+    function closeProfilesModal() {
+        document.getElementById('profilesModal').hidden = true;
     }
 
     function generateBBCode() {
         const sadcNumber = document.getElementById('sadcNumber').value;
         const inmateName = document.getElementById('inmateName').value;
-        const releaseDate = document.getElementById('releaseDate').value;
+        const releaseDate = formatDateDMY(document.getElementById('releaseDate').value);
         const inst = document.getElementById('inst').value;
         const housingNo = document.getElementById('housingNo').value;
         const logNo = document.getElementById('logNo').value;
         const violatedRules = document.getElementById('violatedRules').value;
         const specificActs = document.getElementById('specificActs').value;
         const location = document.getElementById('location').value;
-        const date = document.getElementById('date').value;
-        const time = document.getElementById('time').value;
+        const date = formatDateDMY(document.getElementById('date').value);
+        const time = `${document.getElementById('timeHour').value}:${document.getElementById('timeMinute').value}`;
         const narrative = document.getElementById('narrative').value;
         const reportingEmployee = document.getElementById('reportingEmployee').value;
         const assignment = document.getElementById('assignment').value;
@@ -209,8 +1084,6 @@
         const stgActivity = document.getElementById('stgActivity').value;
         const inmateSegregated = document.getElementById('inmateSegregated').value;
         const adminSerious = document.getElementById('adminSerious').value;
-
-        saveToLocalStorage();
 
         const bbcode = `[altdivbox=white,0,white,5,5,5]STATE OF SAN ANDREAS[float=right]DEPARTMENT OF CORRECTIONS[/float]
 [altdivbox=transparent,0,black,1,0,0][aligntable2=right,75,1,0,0,transparent,transparent]
@@ -309,6 +1182,8 @@
 
     function clearForm() {
         document.getElementById('violation-form').reset();
+        selectedChargeCodes = [];
+        renderCalculator();
     }
 </script>
 
