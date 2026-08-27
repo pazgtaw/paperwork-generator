@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADCR Evidence/Property Report Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep:  #0f3310;
+            --green-mid:   #164916;
+            --green-light: #1e6b1e;
+            --green-pale:  #d4e8d0;
+            --green-wash:  #eef5ec;
+            --gold:        #b8960c;
+            --gold-light:  #f0d060;
+            --cream:       #f7f4ed;
+            --parchment:   #ede8da;
+            --ink:         #1a1a14;
+            --ink-mid:     #3a3a2e;
+            --ink-light:   #6a6a54;
+            --rule:        #c8c0a8;
+            --white:       #ffffff;
+            --red-alert:   #8b1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: #165218;
+            min-height: 100vh;
+            color: var(--ink);
+            padding: 2rem 1rem 4rem;
+        }
+
+        /* ── Header ── */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .page-header .seal {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.68rem;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            display: block;
+            margin-bottom: 0.3rem;
+            opacity: 0.8;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2.8vw, 1.9rem);
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.03em;
+        }
+        .page-header .subtitle {
+            font-size: 0.8rem;
+            color: var(--green-pale);
+            margin-top: 0.3rem;
+            opacity: 0.7;
+            letter-spacing: 0.06em;
+        }
+        .page-header .logo {
+            display: block;
+            margin: 0.8rem auto 0;
+            height: 52px;
+            width: auto;
+            opacity: 0.92;
+        }
+
+        /* ── Layout ── */
+        .wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--cream);
+            border-radius: 3px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(184,150,12,0.15);
+            overflow: hidden;
+        }
+        .card-header {
+            background: var(--green-mid);
+            padding: 0.6rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            border-bottom: 2px solid var(--gold);
+        }
+        .card-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            flex: 1;
+        }
+        .card-header .badge {
+            font-size: 0.63rem;
+            color: var(--gold-light);
+            opacity: 0.75;
+            font-family: 'Courier Prime', monospace;
+            letter-spacing: 0.05em;
+        }
+        .card-body { padding: 1.2rem 1.4rem; }
+
+        /* ── Fields ── */
+        .field-row {
+            display: grid;
+            gap: 0.9rem;
+            margin-bottom: 0.9rem;
+        }
+        .col-1 { grid-template-columns: 1fr; }
+        .col-2 { grid-template-columns: 1fr 1fr; }
+        .col-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .col-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+        @media (max-width: 600px) {
+            .col-3, .col-4 { grid-template-columns: 1fr 1fr; }
+            .col-2 { grid-template-columns: 1fr; }
+        }
+
+        .field { display: flex; flex-direction: column; gap: 0.28rem; }
+        .field label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green-mid);
+        }
+        .field label .req { color: var(--red-alert); margin-left: 2px; }
+
+        .field input, .field textarea, .field select {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.87rem;
+            color: var(--ink);
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.48rem 0.65rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            width: 100%;
+        }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 2px rgba(30,107,30,0.12);
+        }
+        .field textarea { resize: vertical; line-height: 1.55; min-height: 70px; }
+
+        /* ── Radio groups ── */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            padding: 0.55rem 0.65rem;
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--ink);
+        }
+        .radio-option input[type="radio"] {
+            width: 14px; height: 14px;
+            accent-color: var(--green-mid);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin: 0; padding: 0;
+            border: none; box-shadow: none;
+        }
+
+        /* ── Dynamic table rows ── */
+        .dynamic-table { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.75rem; }
+
+        .evidence-row, .custody-row {
+            display: grid;
+            gap: 0.5rem;
+            align-items: center;
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            padding: 0.55rem 0.7rem;
+            position: relative;
+        }
+        .evidence-row { grid-template-columns: 32px 1fr 1fr auto; }
+        .custody-row  { grid-template-columns: 1fr 1fr 90px 110px auto; }
+
+        .row-num {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--ink-light);
+            text-align: center;
+            background: var(--green-wash);
+            border-radius: 2px;
+            padding: 0.2rem;
+            line-height: 1.8;
+        }
+        .row-input {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.84rem;
+            color: var(--ink);
+            background: var(--green-wash);
+            border: 1px solid transparent;
+            border-radius: 2px;
+            padding: 0.38rem 0.55rem;
+            outline: none;
+            transition: border-color 0.15s, background 0.15s;
+            width: 100%;
+        }
+        .row-input:focus { border-color: var(--green-light); background: var(--white); }
+        .row-input::placeholder { color: var(--ink-light); font-style: italic; font-size: 0.8rem; }
+
+        .col-label {
+            font-size: 0.63rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: var(--ink-light);
+            margin-bottom: 0.15rem;
+        }
+        .row-field { display: flex; flex-direction: column; }
+
+        .remove-row-btn {
+            background: none;
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            cursor: pointer;
+            color: var(--ink-light);
+            font-size: 0.78rem;
+            padding: 0.3rem 0.45rem;
+            line-height: 1;
+            transition: background 0.1s, color 0.1s, border-color 0.1s;
+            white-space: nowrap;
+            align-self: center;
+        }
+        .remove-row-btn:hover { background: rgba(139,26,26,0.07); color: var(--red-alert); border-color: var(--red-alert); }
+
+        .col-headers {
+            display: grid;
+            gap: 0.5rem;
+            padding: 0 0.7rem;
+            margin-bottom: 0.25rem;
+        }
+        .col-headers.evidence-cols { grid-template-columns: 32px 1fr 1fr auto; }
+        .col-headers.custody-cols  { grid-template-columns: 1fr 1fr 90px 110px auto; }
+        .col-headers span {
+            font-size: 0.63rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: var(--ink-light);
+        }
+        .col-headers .spacer { min-width: 52px; }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.52rem 1.2rem;
+            border-radius: 2px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+        .btn-gold { background: var(--gold); color: var(--white); }
+        .btn-gold:hover { background: #9a7a0a; }
+        .btn-primary { background: var(--green-mid); color: var(--cream); border: 1px solid var(--green-light); }
+        .btn-primary:hover { background: var(--green-light); }
+        .btn-ghost { background: transparent; color: var(--green-mid); border: 1px solid var(--green-pale); }
+        .btn-ghost:hover { background: var(--green-wash); border-color: var(--green-light); }
+        .btn-sm { padding: 0.3rem 0.75rem; font-size: 0.75rem; }
+        .btn-add { background: var(--green-wash); color: var(--green-mid); border: 1px dashed var(--green-light); }
+        .btn-add:hover { background: var(--green-pale); }
+
+        .btn-row {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            padding: 0.85rem 1.4rem 1rem;
+            background: var(--parchment);
+            border-top: 1px solid var(--rule);
+        }
+
+        /* ── Separator ── */
+        hr.sep { border: none; border-top: 1px solid var(--rule); margin: 1rem 0; }
+
+        /* ── Output ── */
+        .output-area {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.78rem;
+            background: #1a1a14;
+            color: #c8ffb0;
+            border: 1px solid var(--green-mid);
+            border-radius: 2px;
+            padding: 1rem;
+            min-height: 180px;
+            resize: vertical;
+            width: 100%;
+            line-height: 1.6;
+            outline: none;
+        }
+        .output-area::placeholder { color: rgba(200,255,176,0.22); }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.38rem 0.8rem;
+            background: var(--green-deep);
+            border-top: 1px solid var(--green-mid);
+            font-size: 0.7rem;
+            font-family: 'Courier Prime', monospace;
+        }
+        .status-text { color: var(--green-pale); }
+        .status-text.ok  { color: #6fe06f; }
+        .status-text.err { color: #e06f6f; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: var(--green-mid); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<header class="page-header">
+    <span class="seal">San Andreas Department of Corrections &amp; Rehabilitation</span>
+    <h1>Evidence / Property Report &amp; Inventory</h1>
+    <p class="subtitle">SADCR 1136 (Rev. 02/4707/24)</p>
+    <img src="https://images.paz.wtf/u/C7j1jq.png" alt="SADCR Logo" class="logo">
+</header>
+
+<div class="wrapper">
+
+    <!-- ── SECTION I: SUSPECT ── -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Suspect Information</h2>
+            <span class="badge">SECTION I</span>
+        </div>
+        <div class="card-body">
+
+            <div class="field-row col-1">
+                <div class="field">
+                    <label>Suspect Name (Last, First) <span class="req">*</span></label>
+                    <input type="text" id="suspect-name" placeholder="Doe, John">
+                </div>
+            </div>
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>ID Type <span class="req">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="id-type" value="sadcr" checked> SADCR #
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="id-type" value="id"> ID #
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>ID Number <span class="req">*</span></label>
+                    <input type="text" id="id-number" placeholder="e.g. 5912">
+                </div>
+                <div class="field">
+                    <label>Location of Search <span class="req">*</span></label>
+                    <input type="text" id="location" placeholder="e.g. HUB3, CTC, Cell 14">
+                </div>
+            </div>
+
+            <div class="field-row col-1">
+                <div class="field">
+                    <label>Suspect Type <span class="req">*</span></label>
+                    <div class="radio-group" style="flex-direction:row; gap:1.5rem;">
+                        <label class="radio-option">
+                            <input type="radio" name="suspect-type" value="parolee" checked> Parolee / Supervised Person
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="suspect-type" value="nonparolee"> Nonparolee / Nonsupervised Person
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── SECTION II: EVIDENCE ITEMS ── -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Evidence Items</h2>
+            <span class="badge">SECTION II</span>
+        </div>
+        <div class="card-body">
+
+            <div class="col-headers evidence-cols">
+                <span style="text-align:center;">Item #</span>
+                <span>Object Description</span>
+                <span>Item Removed From</span>
+                <span class="spacer"></span>
+            </div>
+
+            <div class="dynamic-table" id="evidence-list"></div>
+
+            <button class="btn btn-add btn-sm" onclick="addEvidenceRow()">+ Add Evidence Item</button>
+
+            <hr class="sep">
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>Staff Signature (Name) <span class="req">*</span></label>
+                    <input type="text" id="staff-sig" placeholder="Officer John Doe">
+                </div>
+                <div class="field">
+                    <label>Badge Number <span class="req">*</span></label>
+                    <input type="text" id="badge-num" placeholder="e.g. 4821">
+                </div>
+                <div class="field">
+                    <label>Date <span class="req">*</span></label>
+                    <input type="text" id="staff-date" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── SECTION III: CHAIN OF CUSTODY ── -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Chain of Custody</h2>
+            <span class="badge">SECTION III</span>
+        </div>
+        <div class="card-body">
+
+            <div class="col-headers custody-cols">
+                <span>Evidence/Property Received From</span>
+                <span>Evidence/Property Delivered To</span>
+                <span>Time</span>
+                <span>Date</span>
+                <span class="spacer"></span>
+            </div>
+
+            <div class="dynamic-table" id="custody-list"></div>
+
+            <button class="btn btn-add btn-sm" onclick="addCustodyRow()">+ Add Chain of Custody Entry</button>
+
+        </div>
+    </div>
+
+    <!-- ── SECTION IV: DISPOSITION & SIGNATURES ── -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Disposition &amp; Signatures</h2>
+            <span class="badge">SECTION IV</span>
+        </div>
+        <div class="card-body">
+
+            <div class="field-row col-1">
+                <div class="field">
+                    <label>Final Disposition of Property</label>
+                    <textarea id="final-disp" placeholder="e.g. Contraband destroyed per policy; personal property returned to inmate upon release…"></textarea>
+                </div>
+            </div>
+
+            <hr class="sep">
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>Property Released By (Signature/Name)</label>
+                    <input type="text" id="rel-by-sig" placeholder="Officer J. Doe">
+                </div>
+                <div class="field">
+                    <label>Printed Name</label>
+                    <input type="text" id="rel-by-name" placeholder="John Doe">
+                </div>
+                <div class="field">
+                    <label>Date</label>
+                    <input type="text" id="rel-date" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+
+            <div class="field-row col-3">
+                <div class="field">
+                    <label>Property Received By (Signature/Name)</label>
+                    <input type="text" id="rec-by-sig" placeholder="Officer J. Smith">
+                </div>
+                <div class="field">
+                    <label>Printed Name</label>
+                    <input type="text" id="rec-by-name" placeholder="Jane Smith">
+                </div>
+                <div class="field">
+                    <label>Date</label>
+                    <input type="text" id="rec-date" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+
+        </div>
+        <div class="btn-row">
+            <button class="btn btn-gold" onclick="generateBBCode()">Generate BBCode</button>
+            <button class="btn btn-ghost" onclick="clearForm()">Clear Form</button>
+        </div>
+    </div>
+
+    <!-- ── OUTPUT ── -->
+    <div class="card">
+        <div class="card-header">
+            <h2>BBCode Output</h2>
+            <span class="badge">READY TO POST</span>
+        </div>
+        <div style="padding: 1rem 1.4rem 0.5rem; background: var(--cream); display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="copyBBCode()">Copy to Clipboard</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('output').value=''">Clear</button>
+        </div>
+        <div style="padding: 0.5rem 1.4rem 0; background: var(--cream);">
+            <textarea class="output-area" id="output" placeholder="Generated BBCode will appear here…" readonly></textarea>
+        </div>
+        <div class="status-bar">
+            <span class="status-text" id="statusText">Ready.</span>
+            <span style="color:var(--green-pale); opacity:0.45; font-size:0.67rem;">SADCR · EVIDENCE/PROPERTY REPORT 1136</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// DYNAMIC ROWS — EVIDENCE
+// ════════════════════════════════════════════
+let evidenceCount = 0;
+
+function addEvidenceRow(desc = '', removed = '') {
+    evidenceCount++;
+    const n = evidenceCount;
+    const list = document.getElementById('evidence-list');
+    const row = document.createElement('div');
+    row.className = 'evidence-row';
+    row.dataset.rowId = n;
+    row.innerHTML = `
+        <div class="row-num">${list.children.length + 1}</div>
+        <div class="row-field">
+            <input class="row-input item-desc" type="text" placeholder="Describe the item…" value="${esc(desc)}">
+        </div>
+        <div class="row-field">
+            <input class="row-input item-removed" type="text" placeholder="e.g. Person, Cell, Locker" value="${esc(removed)}">
+        </div>
+        <button class="remove-row-btn" onclick="removeEvidenceRow(this)">Remove</button>`;
+    list.appendChild(row);
+    reNumberEvidence();
+}
+
+function removeEvidenceRow(btn) {
+    btn.closest('.evidence-row').remove();
+    reNumberEvidence();
+}
+
+function reNumberEvidence() {
+    document.querySelectorAll('#evidence-list .evidence-row .row-num').forEach((el, i) => {
+        el.textContent = i + 1;
+    });
+}
+
+// ════════════════════════════════════════════
+// DYNAMIC ROWS — CUSTODY
+// ════════════════════════════════════════════
+let custodyCount = 0;
+
+function addCustodyRow(from = '', to = '', time = '', date = '') {
+    custodyCount++;
+    const list = document.getElementById('custody-list');
+    const row = document.createElement('div');
+    row.className = 'custody-row';
+    row.innerHTML = `
+        <div class="row-field">
+            <input class="row-input cust-from" type="text" placeholder="Received from…" value="${esc(from)}">
+        </div>
+        <div class="row-field">
+            <input class="row-input cust-to" type="text" placeholder="Delivered to…" value="${esc(to)}">
+        </div>
+        <div class="row-field">
+            <input class="row-input cust-time" type="text" placeholder="HH:MM" value="${esc(time)}">
+        </div>
+        <div class="row-field">
+            <input class="row-input cust-date" type="text" placeholder="DD/MM/YYYY" value="${esc(date)}">
+        </div>
+        <button class="remove-row-btn" onclick="this.closest('.custody-row').remove()">Remove</button>`;
+    list.appendChild(row);
+}
+
+// ════════════════════════════════════════════
+// GENERATE BBCODE
+// ════════════════════════════════════════════
+function generateBBCode() {
+    const suspectName  = document.getElementById('suspect-name').value.trim();
+    const idTypeVal    = document.querySelector('input[name="id-type"]:checked')?.value || 'sadcr';
+    const idNumber     = document.getElementById('id-number').value.trim();
+    const suspectType  = document.querySelector('input[name="suspect-type"]:checked')?.value || 'parolee';
+    const location     = document.getElementById('location').value.trim();
+    const staffSig     = document.getElementById('staff-sig').value.trim();
+    const badgeNum     = document.getElementById('badge-num').value.trim();
+    const staffDate    = document.getElementById('staff-date').value.trim();
+    const finalDisp    = document.getElementById('final-disp').value.trim();
+    const relBySig     = document.getElementById('rel-by-sig').value.trim();
+    const relByName    = document.getElementById('rel-by-name').value.trim();
+    const relDate      = document.getElementById('rel-date').value.trim();
+    const recBySig     = document.getElementById('rec-by-sig').value.trim();
+    const recByName    = document.getElementById('rec-by-name').value.trim();
+    const recDate      = document.getElementById('rec-date').value.trim();
+
+    if (!suspectName) { setStatus('Suspect name is required.', 'err'); return; }
+    if (!idNumber)    { setStatus('ID number is required.', 'err'); return; }
+    if (!location)    { setStatus('Location of search is required.', 'err'); return; }
+
+    // Checkboxes
+    const sadcrCheck      = idTypeVal === 'sadcr'      ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
+    const idCheck         = idTypeVal === 'id'         ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
+    const paroleeCheck    = suspectType === 'parolee'    ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
+    const nonParoleeCheck = suspectType === 'nonparolee' ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
+
+    // Evidence rows
+    const evidenceRowEls = [...document.querySelectorAll('#evidence-list .evidence-row')];
+    if (!evidenceRowEls.length) { setStatus('Add at least one evidence item.', 'err'); return; }
+
+    const evidenceRows = evidenceRowEls.map((row, i) => {
+        const desc    = row.querySelector('.item-desc').value;
+        const removed = row.querySelector('.item-removed').value;
+        return `[tr]\n[tdwidth=1,black,transparent,top,left,10,4]${i + 1}[/tdwidth]\n[tdwidth=1,black,transparent,top,left,60,4]${desc}[/tdwidth]\n[tdwidth=1,black,transparent,top,left,30,4]${removed}[/tdwidth]\n[/tr]`;
+    }).join('\n');
+
+    // Custody rows
+    const custodyRowEls = [...document.querySelectorAll('#custody-list .custody-row')];
+    const custodyRows = custodyRowEls.length
+        ? custodyRowEls.map(row => {
+            const from = row.querySelector('.cust-from').value;
+            const to   = row.querySelector('.cust-to').value;
+            const time = row.querySelector('.cust-time').value;
+            const date = row.querySelector('.cust-date').value;
+            return `[tr]\n[tdwidth=1,black,transparent,top,left,40,4]${from}[/tdwidth]\n[tdwidth=1,black,transparent,top,left,40,4]${to}[/tdwidth]\n[tdwidth=1,black,transparent,top,left,10,4]${time}[/tdwidth]\n[tdwidth=1,black,transparent,top,left,10,4]${date}[/tdwidth]\n[/tr]`;
+          }).join('\n')
+        : `[tr]\n[tdwidth=1,black,transparent,top,left,40,4][/tdwidth]\n[tdwidth=1,black,transparent,top,left,40,4][/tdwidth]\n[tdwidth=1,black,transparent,top,left,10,4][/tdwidth]\n[tdwidth=1,black,transparent,top,left,10,4][/tdwidth]\n[/tr]`;
+
+    const bbcode =
+`[altdivbox=white,0,white,5,5,5]STATE OF SAN ANDREAS[float=right]DEPARTMENT OF CORRECTIONS AND REHABILITATION[/float]
+[altdivbox=transparent,0,black,1,0,0][aligntable2=right,75,1,0,0,transparent,transparent]
+[/aligntable2][/altdivbox]
+[b]EVIDENCE/PROPERTY REPORT AND INVENTORY - [/b][float=right][size=80]SADCR 1136 (Rev. 02/4707/24)[/size][/float]
+[altdivbox=transparent,1,black,1,0,0][/altdivbox]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,45,4][b]SUSPECT NAME (LAST, FIRST)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4]${sadcrCheck} SADCR #   ${idCheck} ID #[/tdwidth]
+[tdwidth=1,black,transparent,top,left,35,4][b]LOCATION OF SEARCH[/b][/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,45,4]${suspectName}
+${paroleeCheck} PAROLEE/SUPERVISED PERSON
+${nonParoleeCheck} NONPAROLEE/NONSUPERVISED PERSON[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4]${idNumber}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,35,4]${location}[/tdwidth]
+[/tr]
+[/table2]
+[size=90]Receipt is hereby acknowledged by the undersigned for the following property seized by and/or stored on behalf of the person identified above on this day in the search of the premises and/or person identified above.[/size]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,center,10,4][b]ITEM #[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,60,4][b]OBJECT DESCRIPTION[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,center,30,4][b]ITEM REMOVED FROM[/b][/tdwidth]
+[/tr]
+${evidenceRows}
+[tr]
+[tdwidth=1,black,transparent,top,left,45,4][b]STAFF SIGNATURE[/b]
+${staffSig}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,25,4][b]BADGE NUMBER[/b]
+${badgeNum}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,30,4][b]DATE[/b]
+${staffDate}[/tdwidth]
+[/tr]
+[/table2]
+
+[center][b]CHAIN OF CUSTODY[/b][/center]
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,40,4][b]EVIDENCE/PROPERTY RECEIVED FROM[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,4][b]EVIDENCE/PROPERTY DELIVERED TO[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4][b]TIME[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,10,4][b]DATE[/b][/tdwidth]
+[/tr]
+${custodyRows}
+[/table2]
+Final disposition of property: ${finalDisp}
+
+[table2=0,black,transparent,Roboto]
+[tr]
+[tdwidth=1,black,transparent,top,left,40,4][b]PROPERTY RELEASED BY (SIGNATURE)[/b]
+
+${relBySig}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,4][b]PRINTED NAME[/b]
+
+${relByName}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4][b]DATE[/b]
+
+${relDate}[/tdwidth]
+[/tr]
+[tr]
+[tdwidth=1,black,transparent,top,left,40,4][b]PROPERTY RECEIVED BY (SIGNATURE)[/b]
+
+${recBySig}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,40,4][b]PRINTED NAME[/b]
+
+${recByName}[/tdwidth]
+[tdwidth=1,black,transparent,top,left,20,4][b]DATE[/b]
+
+${recDate}[/tdwidth]
+[/tr]
+[/table2]
+[size=80]DISTRIBUTION: WHITE - FILE; CANARY - EVIDENCE AREA; PINK - SUSPECT[/size]
+[/altdivbox]`;
+
+    document.getElementById('output').value = bbcode;
+    setStatus(`BBCode generated at ${new Date().toLocaleTimeString()}.`, 'ok');
+}
+
+// ════════════════════════════════════════════
+// COPY & CLEAR
+// ════════════════════════════════════════════
+function copyBBCode() {
+    const ta = document.getElementById('output');
+    if (!ta.value.trim()) { setStatus('Nothing to copy — generate first.', 'err'); return; }
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(ta.value)
+            .then(() => setStatus('Copied to clipboard!', 'ok'))
+            .catch(() => fallbackCopy(ta));
+    } else {
+        fallbackCopy(ta);
+    }
+}
+
+function fallbackCopy(ta) {
+    const wasReadOnly = ta.hasAttribute('readonly');
+    ta.removeAttribute('readonly');
+    ta.select();
+    ta.setSelectionRange(0, 99999);
+    try {
+        document.execCommand('copy');
+        setStatus('Copied to clipboard!', 'ok');
+    } catch {
+        setStatus('Copy failed — please select text manually (Ctrl+A, Ctrl+C).', 'err');
+    }
+    if (wasReadOnly) ta.setAttribute('readonly', '');
+    window.getSelection()?.removeAllRanges();
+}
+
+function clearForm() {
+    const fields = ['suspect-name','id-number','location','staff-sig','badge-num','staff-date',
+                    'final-disp','rel-by-sig','rel-by-name','rel-date','rec-by-sig','rec-by-name','rec-date'];
+    fields.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    document.querySelector('input[name="id-type"][value="sadcr"]').checked = true;
+    document.querySelector('input[name="suspect-type"][value="parolee"]').checked = true;
+    document.getElementById('evidence-list').innerHTML = '';
+    document.getElementById('custody-list').innerHTML = '';
+    evidenceCount = 0;
+    custodyCount  = 0;
+    addEvidenceRow();
+    addCustodyRow();
+    document.getElementById('output').value = '';
+    setStatus('Form cleared.', '');
+}
+
+function setStatus(msg, type) {
+    const el = document.getElementById('statusText');
+    el.textContent = msg;
+    el.className = 'status-text' + (type ? ' ' + type : '');
+    if (type === 'ok' || type === 'err') {
+        setTimeout(() => { el.textContent = 'Ready.'; el.className = 'status-text'; }, 4000);
+    }
+}
+
+function esc(str) {
+    return String(str || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', () => {
+    addEvidenceRow();
+    addCustodyRow();
+});
+</script>
+
+</body>
+</html>
