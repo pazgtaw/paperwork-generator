@@ -632,11 +632,11 @@ function generateBBCode() {
     if (!idNumber)    { setStatus('ID number is required.', 'err'); return; }
     if (!location)    { setStatus('Location of search is required.', 'err'); return; }
 
-    // Checkboxes
-    const sadcrCheck      = idTypeVal === 'sadcr'      ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
-    const idCheck         = idTypeVal === 'id'         ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
-    const paroleeCheck    = suspectType === 'parolee'    ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
-    const nonParoleeCheck = suspectType === 'nonparolee' ? '[cbc]✓[/cbc]' : '[cbc][/cbc]';
+    // Checkboxes — unchecked=[cb][/cb], checked=[cbc][/cbc]
+    const sadcrCheck      = idTypeVal === 'sadcr'       ? '[cbc][/cbc]' : '[cb][/cb]';
+    const idCheck         = idTypeVal === 'id'           ? '[cbc][/cbc]' : '[cb][/cb]';
+    const paroleeCheck    = suspectType === 'parolee'    ? '[cbc][/cbc]' : '[cb][/cb]';
+    const nonParoleeCheck = suspectType === 'nonparolee' ? '[cbc][/cbc]' : '[cb][/cb]';
 
     // Evidence rows
     const evidenceRowEls = [...document.querySelectorAll('#evidence-list .evidence-row')];
@@ -668,9 +668,9 @@ function generateBBCode() {
 [altdivbox=transparent,1,black,1,0,0][/altdivbox]
 [table2=0,black,transparent,Roboto]
 [tr]
-[tdwidth=1,black,transparent,top,left,45,4][b]SUSPECT NAME (LAST, FIRST)[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,45,4][size=85][b]SUSPECT NAME (LAST, FIRST)[/b][/size][/tdwidth]
 [tdwidth=1,black,transparent,top,left,20,4]${sadcrCheck} SADCR #   ${idCheck} ID #[/tdwidth]
-[tdwidth=1,black,transparent,top,left,35,4][b]LOCATION OF SEARCH[/b][/tdwidth]
+[tdwidth=1,black,transparent,top,left,35,4][size=85][b]LOCATION OF SEARCH[/b][/size][/tdwidth]
 [/tr]
 [tr]
 [tdwidth=1,black,transparent,top,left,45,4]${suspectName}
@@ -680,7 +680,7 @@ ${nonParoleeCheck} NONPAROLEE/NONSUPERVISED PERSON[/tdwidth]
 [tdwidth=1,black,transparent,top,left,35,4]${location}[/tdwidth]
 [/tr]
 [/table2]
-[size=90]Receipt is hereby acknowledged by the undersigned for the following property seized by and/or stored on behalf of the person identified above on this day in the search of the premises and/or person identified above.[/size]
+[b]Receipt is hereby acknowledged by the undersigned for the following property seized by and/or stored on behalf of the person identified above on this day in the search of the premises and/or person identified above.[/b]
 [table2=0,black,transparent,Roboto]
 [tr]
 [tdwidth=1,black,transparent,top,center,10,4][b]ITEM #[/b][/tdwidth]
@@ -708,7 +708,8 @@ ${staffDate}[/tdwidth]
 [/tr]
 ${custodyRows}
 [/table2]
-Final disposition of property: ${finalDisp}
+[b]Final disposition of property:[/b]
+${finalDisp}
 
 [table2=0,black,transparent,Roboto]
 [tr]
